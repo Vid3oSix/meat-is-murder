@@ -307,7 +307,7 @@ input[type=file]{display:none}
       <span class="save-ind" id="save-ind">✓ GUARDADO</span>
       <button class="hbtn hbtn-s" onclick="resetChar()">↺ NUEVO</button>
       <button class="hbtn hbtn-g" onclick="genShare()">⇧ COMPARTIR</button>
-      <a href="index.html" class="hbtn hbtn-r" style="text-decoration:none">← CAMPAIGN</a>
+      <a href="./index.html" class="hbtn hbtn-r" style="text-decoration:none" onclick="goBack(event)">← CAMPAIGN</a>
     </div>
   </div>
 </header>
@@ -849,9 +849,25 @@ ALL_SKILLS.forEach(sk=>S.skillLvl[sk.n]=0);
 let statPts=62,skillPts=86;
 let cwFilter='all',editingCWIdx=-1;
 
+// VIEW MODE — set to true when viewing another player's sheet
+let isViewMode=false;
+
+// Navigate back to index safely regardless of domain
+function goBack(e){
+  if(e)e.preventDefault();
+  // Try history first, fall back to relative path
+  if(document.referrer&&!document.referrer.includes('personaje')){
+    window.location.href=document.referrer;
+  }else{
+    const base=window.location.href.split('/').slice(0,-1).join('/');
+    window.location.href=base+'/index.html';
+  }
+}
+
 // ===================== SAVE / LOAD =====================
 let saveTimer=null;
 function sc(){
+  if(isViewMode)return;
   if(saveTimer)clearTimeout(saveTimer);
   saveTimer=setTimeout(()=>{
     pullFormData();
@@ -876,13 +892,10 @@ function loadChar(){
     if(viewMode==='1'&&viewData){
       sessionStorage.removeItem('mim_view_mode');
       sessionStorage.removeItem('mim_view_char');
+      isViewMode=true;
       const decoded=JSON.parse(viewData);
       _applyCharData(decoded);
-      // Read-only banner
-      const banner=document.createElement('div');
-      banner.style.cssText='position:fixed;top:55px;left:0;right:0;background:rgba(93,173,226,.12);border-bottom:1px solid rgba(93,173,226,.3);padding:8px 20px;font-family:var(--font-m);font-size:9px;color:#85c1e9;letter-spacing:2px;z-index:150;text-align:center';
-      banner.textContent='👁 MODO VISUALIZACIÓN — '+((decoded.S&&decoded.S.name)||'Personaje')+'  ('+((decoded.playerName)||'Jugador')+') — Solo lectura';
-      document.body.appendChild(banner);
+      _activateViewMode(decoded);
       return;
     }
   }catch(e){}
@@ -944,7 +957,87 @@ function _applyCharData(d){
 function gv(id){const el=document.getElementById(id);return el?el.value:'';}
 function sv(id,val){const el=document.getElementById(id);if(el&&val!=null)el.value=val;}
 
-// ===================== PHOTO =====================
+function _activateViewMode(decoded){
+  // 1. Banner
+  const banner=document.createElement('div');
+  banner.id='view-mode-banner';
+  banner.style.cssText='position:fixed;top:55px;left:0;right:0;background:rgba(93,173,226,.15);border-bottom:2px solid rgba(93,173,226,.4);padding:10px 20px;font-family:var(--font-m);font-size:9px;color:#85c1e9;letter-spacing:2px;z-index:150;text-align:center;display:flex;align-items:center;justify-content:center;gap:16px';
+  const charName=(decoded.S&&decoded.S.name)||'Personaje';
+  const playerName=decoded.playerName||'Jugador';
+  banner.innerHTML=`<span>👁 MODO VISUALIZACIÓN — <b style="color:#fff">${charName}</b> (${playerName}) — Solo lectura</span><button onclick="goBack()" style="padding:4px 12px;background:rgba(93,173,226,.2);border:1px solid rgba(93,173,226,.4);color:#85c1e9;font-family:var(--font-m);font-size:8px;letter-spacing:2px;cursor:pointer">← VOLVER</button>`;
+  document.body.appendChild(banner);
+
+  // 2. Push main content down so banner doesn't cover tabs
+  document.querySelector('.main').style.paddingTop='56px';
+
+  // 3. Hide all action buttons (nav next/prev, save, reset, share)
+  document.querySelectorAll('.add-btn, .hbtn-g, .hbtn-s, .copy-btn, .lvl-btn').forEach(el=>{
+    el.style.display='none';
+  });
+
+  // 4. Hide the header save indicator and action area entirely
+  const hdrActions=document.querySelector('.header-actions');
+  if(hdrActions)hdrActions.style.display='none';
+
+  // 5. Disable all inputs, selects, textareas
+  document.querySelectorAll('input, select, textarea').forEach(el=>{
+    el.disabled=true;
+    el.style.opacity='0.6';
+    el.style.cursor='not-allowed';
+  });
+
+  // 6. Disable stat/skill +/- buttons
+  document.querySelectorAll('.sv button, .sk-c button, .hp-btn, .cwf, .cw-item, .ccw-item, .gi-del, .add-btn').forEach(el=>{
+    el.disabled=true;
+    el.style.pointerEvents='none';
+    el.style.opacity='0.4';
+  });
+
+  // 7. Replace tab navigation — allow browsing but hide edit controls after render
+  // Override nextTab and prevTab to just navigate without marking done or saving
+  window.nextTab=function(n){
+    const tabs=document.querySelectorAll('.htab');
+    if(n+1<tabs.length)goTab(n+1,tabs[n+1]);
+  };
+  window.prevTab=function(n){
+    const tabs=document.querySelectorAll('.htab');
+    if(n-1>=0)goTab(n-1,tabs[n-1]);
+  };
+
+  // 8. Re-add view-only nav buttons on each page after a short delay
+  //    (DOM needs to exist first from _applyCharData render calls)
+  setTimeout(()=>{
+    const pages=document.querySelectorAll('.page');
+    pages.forEach((page,i)=>{
+      // Remove any existing btn-rows
+      page.querySelectorAll('.add-btn').forEach(b=>b.style.display='none');
+      // Add simple prev/next view buttons
+      const navRow=document.createElement('div');
+      navRow.style.cssText='display:flex;gap:10px;margin-top:20px;flex-wrap:wrap';
+      if(i>0){
+        const prev=document.createElement('button');
+        prev.style.cssText='padding:10px 20px;background:transparent;border:1px solid rgba(93,173,226,.3);color:#85c1e9;font-family:var(--font-m);font-size:9px;letter-spacing:2px;cursor:pointer';
+        prev.textContent='← ANTERIOR';
+        prev.onclick=()=>goTab(i-1,document.querySelectorAll('.htab')[i-1]);
+        navRow.appendChild(prev);
+      }
+      if(i<pages.length-1){
+        const next=document.createElement('button');
+        next.style.cssText='padding:10px 20px;background:rgba(93,173,226,.1);border:1px solid rgba(93,173,226,.3);color:#85c1e9;font-family:var(--font-m);font-size:9px;letter-spacing:2px;cursor:pointer';
+        next.textContent='SIGUIENTE →';
+        next.onclick=()=>goTab(i+1,document.querySelectorAll('.htab')[i+1]);
+        navRow.appendChild(next);
+      }
+      page.appendChild(navRow);
+    });
+    // Disable stat/skill buttons that were rendered after load
+    document.querySelectorAll('.sv button, .sk-c button, .hp-btn, .cw-item, .ccw-item, .gi-del, .photo-zone').forEach(el=>{
+      el.style.pointerEvents='none';
+      el.style.opacity='0.4';
+      if(el.tagName==='BUTTON')el.disabled=true;
+    });
+  }, 300);
+}
 function loadPhoto(inp){
   const f=inp.files[0];if(!f)return;
   const r=new FileReader();
