@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="es">
+<!--
+=============================================================================
+  NITC_NET // NODO 7734 // CLASIFICADO NIVEL NEGRO
+  Cyberpunk RED: MEAT IS MURDER — v2.4.1
+  Arquitectura: I_Varela // Compilado: 2045.03.17 // Encriptado: AES-256
+=============================================================================
+
+        ____
+     _,-ddd888888bbb-._
+   d88888888888888888888b
+ d888888888888888888888888b
+6888888888888888888888888889
+68888b8""8q8888888p8""8d88889
+`d8887     p88888q     4888b'
+ `d8887    p88888q    4888b'
+   `d887   p88888q   488b'
+     `d8bod8888888dob8b'
+       `d88888888888d'
+         `d8888888b' hjw
+           `d8888b' `97
+             `bd'
+
+  [ENTIDAD NO IDENTIFICADA — ORIGEN DESCONOCIDO]
+  [PRIMERA DETECCIÓN: 2039.11.04 — SECTOR BADLANDS]
+  [ÚLTIMA DETECCIÓN: 2045.02.28 — NIGHT CITY, NIVEL -3]
+
+=============================================================================
+  LOG DE ACTIVIDAD INTERNA — NO DISTRIBUIR
+=============================================================================
+
+  > 2044.08.12 — Primer sujeto del Proyecto Anima rechaza instalación #43.
+    Ezra Dach. EMP actual: 6. Se le administra supresor de empatía experimental.
+    Resultado: EMP artificial sostenida en 8. Proyecto continúa.
+    Nota Varela: "No sabíamos lo que estábamos haciendo. Ahora sí."
+
+  > 2044.11.30 — Sujeto_17 desaparece del protocolo de seguimiento.
+    Nombre en archivo: LUNA REYES. Última localización: Distrito Japantown.
+    NOTA INTERNA: No está muerta. Está esperando.
+
+  > 2045.01.03 — Recibida transmisión de origen desconocido en frecuencia Militech.
+    Contenido: "los 17 no son los últimos. buscad el nivel -3."
+    Emisor: NO TRAZABLE.
+
+  > 2045.02.14 — La Dra. Varela solicita ampliar el Proyecto Anima a Fase 3.
+    Sujetos objetivo: NO ex-militares. Civiles. Sin historial.
+    "El cromo no es el problema. La elección lo es."
+
+=============================================================================
+  PISTAS PARA LOS MÁS CURIOSOS — (¿O ERRORES DEL SISTEMA?)
+=============================================================================
+
+  ¿Por qué Sable siempre lleva guantes?
+  ¿Qué pasó realmente en el Sector 7 de Militech el 14 de febrero?
+  El teniente Mora tiene una cicatriz detrás de la oreja izquierda.
+    No es un implante. Es una extracción.
+  "El Carnicero" no eligió ese nombre. Alguien se lo puso.
+    Alguien que lo conocía antes.
+  Los archivos del Proyecto Anima mencionan un "Sujeto_00".
+    No hay información adicional sobre él.
+    Solo una nota: "Control."
+
+=============================================================================
+  SEÑALES DE INTERFERENCIA — (PROBABLEMENTE NADA)
+=============================================================================
+
+  01001110 01101111 00100000 01100101 01110011 01110100 01100001
+  01110011 00100000 01110011 01101111 01101100 01101111 00101110
+
+  Frecuencia fantasma detectada: 88.7 FM // Night City underground
+  Señal activa desde: 2043 // Nunca identificada // Letras: M.I.M.
+
+=============================================================================
+  DISTRACCIÓN INTENCIONAL — IGNORA ESTO
+=============================================================================
+
+  PROTOCOLO FANTASMA iniciado por: user_7734
+  Acceso a archivos corporativos: DENEGADO (x847)
+  Intentos de hackeo registrados: 12
+  Origen de intentos: MISMO NODO QUE ESTÁS USANDO AHORA
+
+  El código de este archivo fue revisado por:
+  — Dra. I. Varela (autenticación: confirmada)
+  — Sable (autenticación: VACÍA — usuario fantasma)
+  — ??? (autenticación: SISTEMA NO RECONOCE ESTE USUARIO)
+
+  Si estás leyendo esto, ya llegaste demasiado lejos.
+  O no lo suficiente.
+
+=============================================================================
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEAT IS MURDER // NITC_NET</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --r:#C0392B;--r2:#E74C3C;--r3:#FF6B6B;
+  --y:#F1C40F;--y2:#F39C12;
+  --d:#060606;--d2:#0d0d0d;--d3:#141414;--d4:#1a1a1a;--d5:#222;
+  --g:#666;--g2:#3a3a3a;--g3:#222;
+  --t:#CCCCCC;--t2:#999;
+  --c:#5dade2;--c2:#85c1e9;
+  --green:#27ae60;
+  --font-m:'Share Tech Mono',monospace;
+  --font-b:'Rajdhani',sans-serif;
+  --font-t:'Orbitron',sans-serif;
+}
+html,body{background:var(--d);color:var(--t);font-family:var(--font-b);min-height:100vh;overflow-x:hidden}
+body::-webkit-scrollbar{width:3px}body::-webkit-scrollbar-track{background:var(--d3)}body::-webkit-scrollbar-thumb{background:var(--r)}
+
+/* BOOT */
+#boot{position:fixed;inset:0;background:#000;z-index:9999;display:flex;flex-direction:column;padding:28px 32px;font-family:var(--font-m);overflow:hidden}
+#boot-log{font-size:11px;line-height:2;flex:1;overflow:hidden}
+.bl{display:block;opacity:0}
+.bl.show{opacity:1}
+.ok{color:#22ff44}.err{color:#ff3333}.warn{color:#ffaa00}.dim{color:#1a5c1a}.sys{color:#5dade2}
+#boot-progress{height:2px;background:#111;margin-top:16px}
+#boot-bar{height:2px;background:#22ff44;width:0;transition:width .08s linear}
+#skip-boot{position:absolute;bottom:20px;right:28px;font-family:var(--font-m);font-size:10px;color:#1a5c1a;cursor:pointer;letter-spacing:2px;border:1px solid #1a5c1a;padding:4px 12px;transition:all .2s}
+#skip-boot:hover{color:#22ff44;border-color:#22ff44}
+@keyframes blink{50%{opacity:0}}
+.cursor{animation:blink .7s infinite}
+
+/* MAIN */
+#app{display:none}
+header{background:rgba(6,6,6,.98);border-bottom:1px solid #1a1a1a;position:sticky;top:0;z-index:200;backdrop-filter:blur(8px)}
+.header-inner{display:flex;align-items:stretch;max-width:1100px;margin:0 auto}
+.logo-block{padding:14px 20px;border-right:1px solid var(--g3);display:flex;flex-direction:column;justify-content:center;flex-shrink:0}
+.logo-main{font-family:var(--font-t);font-size:12px;color:var(--r);letter-spacing:4px;font-weight:900}
+.logo-sub{font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:2px;margin-top:2px}
+nav{display:flex;flex:1;overflow-x:auto}
+nav a{padding:16px 18px;color:var(--g);font-family:var(--font-m);font-size:9px;letter-spacing:2px;text-decoration:none;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;display:flex;align-items:center}
+nav a:hover{color:var(--t)}
+nav a.active{color:var(--r2);border-bottom-color:var(--r)}
+.header-action{padding:0 20px;display:flex;align-items:center;border-left:1px solid var(--g3);flex-shrink:0}
+.char-link{padding:9px 18px;background:var(--r);color:#fff;font-family:var(--font-m);font-size:9px;letter-spacing:2px;text-decoration:none;transition:background .15s;display:block}
+.char-link:hover{background:var(--r2)}
+
+/* SECTIONS */
+.sec{display:none;animation:fi .25s ease}
+.sec.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.inner{max-width:900px;margin:0 auto;padding:32px 24px 64px}
+
+/* SCANLINES */
+.scanlines{position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.08) 3px,rgba(0,0,0,.08) 4px);pointer-events:none;z-index:1;opacity:.5}
+
+/* GLITCH HERO */
+.hero{text-align:center;padding:72px 24px 56px;position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background:linear-gradient(rgba(192,57,43,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(192,57,43,.03) 1px,transparent 1px);background-size:44px 44px}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(192,57,43,.14) 0%,transparent 65%)}
+.glitch{font-family:var(--font-t);font-size:clamp(26px,6vw,64px);font-weight:900;color:#fff;letter-spacing:6px;text-transform:uppercase;line-height:1;position:relative;z-index:2;display:inline-block}
+.glitch::before{content:attr(data-t);position:absolute;left:0;width:100%;color:var(--r2);clip-path:polygon(0 0,100% 0,100% 35%,0 35%);animation:ga 5s infinite}
+.glitch::after{content:attr(data-t);position:absolute;left:0;width:100%;color:#0ff;clip-path:polygon(0 65%,100% 65%,100% 100%,0 100%);animation:gb 5s infinite}
+@keyframes ga{0%,90%,100%{transform:none}92%{transform:translate(-4px,1px)}95%{transform:translate(3px,-2px)}}
+@keyframes gb{0%,87%,100%{transform:none}89%{transform:translate(4px,-1px)}93%{transform:translate(-3px,2px)}}
+.hero-sub{font-family:var(--font-m);font-size:10px;color:var(--g);letter-spacing:4px;margin-bottom:14px;position:relative;z-index:2}
+.hero-tag{display:inline-block;background:var(--r);color:#fff;font-family:var(--font-m);font-size:9px;letter-spacing:3px;padding:5px 20px;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);position:relative;z-index:2;margin:12px 0}
+.hero-blink{font-family:var(--font-m);font-size:11px;color:var(--r3);animation:pulse 2.5s infinite;letter-spacing:2px;position:relative;z-index:2;margin-top:10px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* CARDS */
+.crt{background:var(--d2);border:1px solid var(--g3);padding:22px 24px;margin-bottom:16px;position:relative}
+.crt[data-tag]::before{content:attr(data-tag);position:absolute;top:-1px;left:0;background:var(--r);color:#fff;font-family:var(--font-m);font-size:8px;letter-spacing:3px;padding:3px 12px}
+.crt p{font-size:14px;color:var(--t2);line-height:1.9;margin-top:8px}
+.crt p+p{margin-top:10px}
+.hl{color:var(--r3);font-weight:700}
+.it{color:var(--c);font-style:italic}
+
+/* WARN */
+.warn{display:flex;gap:14px;background:rgba(192,57,43,.07);border:1px solid rgba(192,57,43,.3);padding:16px 20px;margin:16px 0}
+.warn-i{font-family:var(--font-m);color:var(--r2);font-size:22px;line-height:1.1;flex-shrink:0}
+.warn-t{font-family:var(--font-m);font-size:10px;color:var(--r3);line-height:1.9;letter-spacing:.3px}
+
+/* SECTION HEADER */
+.sh{font-family:var(--font-t);font-size:10px;color:var(--r2);letter-spacing:3px;margin:24px 0 12px;display:flex;align-items:center;gap:8px}
+.sh::before{content:'//';font-family:var(--font-m);color:var(--g)}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.chip{background:var(--d3);border:1px solid var(--g3);border-left:2px solid var(--r);padding:5px 12px;font-family:var(--font-m);font-size:9px;color:var(--t2)}
+
+/* NPC CLASSIFIED */
+.npc{background:var(--d3);border:1px solid var(--g3);margin-bottom:8px;overflow:hidden}
+.npc-hdr{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;transition:background .15s;user-select:none}
+.npc-hdr:hover{background:rgba(255,255,255,.02)}
+.npc-dot{width:7px;height:7px;flex-shrink:0}
+.npc-id{font-family:var(--font-m);font-size:10px;color:var(--g);letter-spacing:1.5px;flex:1}
+.npc-badge{font-family:var(--font-m);font-size:8px;color:var(--r2);background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.25);padding:3px 10px;letter-spacing:1px}
+.npc-body{display:none;padding:0 16px 16px;border-top:1px solid var(--g3)}
+.npc-body.open{display:block}
+.pw-row{display:flex;gap:8px;padding:12px 0 8px;align-items:center;flex-wrap:wrap}
+.pw-in{background:var(--d4);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);font-size:12px;padding:8px 14px;outline:none;width:200px;letter-spacing:3px;transition:border-color .15s}
+.pw-in:focus{border-color:var(--r)}
+.pw-btn{padding:8px 18px;background:var(--r);color:#fff;border:none;font-family:var(--font-m);font-size:9px;letter-spacing:2px;cursor:pointer;transition:background .15s}
+.pw-btn:hover{background:var(--r2)}
+.pw-err{font-family:var(--font-m);font-size:9px;color:var(--r2);display:none;letter-spacing:1px;padding-top:4px}
+.npc-data{display:none;font-family:var(--font-m);font-size:11px;line-height:2;animation:fi .3s ease}
+.npc-data.show{display:block}
+.npc-data span.lbl{color:var(--r2)}
+
+/* INFO GRID */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:16px 0}
+.info-box{background:var(--d3);border:1px solid var(--g3);padding:14px;text-align:center}
+.info-lbl{font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:2px;margin-bottom:7px}
+.info-val{font-family:var(--font-t);font-size:18px;font-weight:700}
+
+/* ACTS */
+.act-grid{display:grid;gap:8px}
+.act{background:var(--d3);border:1px solid var(--g3);overflow:hidden}
+.act-hdr{display:flex;align-items:center;gap:14px;padding:14px 16px;cursor:pointer;transition:background .15s;user-select:none}
+.act-hdr:hover{background:rgba(255,255,255,.02)}
+.act-num{font-family:var(--font-m);font-size:20px;color:var(--r);font-weight:700;min-width:32px}
+.act-info{flex:1}
+.act-title{font-family:var(--font-b);font-size:15px;color:#fff;font-weight:700}
+.act-code{font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;margin-top:2px}
+.act-body{display:none;padding:0 16px 16px;border-top:1px solid var(--g3)}
+.act-body.open{display:block}
+.act-body p{font-size:13px;color:var(--t2);line-height:1.85;margin-top:12px}
+.act-body b{color:var(--t)}
+
+/* TUTORIAL */
+.tut-tabs{display:flex;gap:4px;margin-bottom:20px;flex-wrap:wrap}
+.tt{padding:8px 14px;background:var(--d3);border:1px solid var(--g3);color:var(--g);font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;cursor:pointer;transition:all .15s}
+.tt.active{border-color:var(--y2);color:var(--y)}
+.tpage{display:none;animation:fi .2s ease}
+.tpage.active{display:block}
+.rule{background:var(--d2);border:1px solid var(--g3);border-left:3px solid var(--y2);padding:18px 20px;margin-bottom:14px}
+.rule h3{font-family:var(--font-t);font-size:10px;color:var(--y);letter-spacing:2px;margin-bottom:10px}
+.rule p,.rule li{font-size:13px;color:var(--t2);line-height:1.85}
+.rule ul{padding-left:18px;margin:6px 0}
+.rule li{margin-bottom:5px}
+.formula{background:var(--d4);border:1px solid var(--g3);padding:10px 16px;font-family:var(--font-m);font-size:12px;color:var(--y);text-align:center;letter-spacing:1px;margin:10px 0}
+
+/* DICE ROLLER */
+.dice-roller{background:var(--d2);border:1px solid var(--g2);padding:22px;text-align:center;margin-bottom:16px}
+.d-btns{display:flex;justify-content:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.d-btn{width:52px;height:52px;background:var(--d3);border:2px solid var(--g3);color:var(--t);font-family:var(--font-t);font-size:12px;cursor:pointer;transition:all .15s}
+.d-btn:hover,.d-btn.act{border-color:var(--y2);color:var(--y);background:rgba(241,196,15,.06)}
+.d-res-wrap{min-height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.d-num{font-family:var(--font-t);font-size:52px;font-weight:900;color:var(--y);line-height:1}
+.d-det{font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;margin-top:3px}
+.roll-btn{margin-top:12px;padding:10px 30px;background:var(--y2);color:#000;font-family:var(--font-t);font-size:12px;font-weight:700;border:none;cursor:pointer;letter-spacing:2px}
+.roll-btn:hover{background:var(--y)}
+
+/* PH SIM */
+.ph-bar-wrap{height:16px;background:var(--d4);border:1px solid var(--g3);margin:8px 0;overflow:hidden}
+.ph-bar{height:100%;background:linear-gradient(90deg,#e74c3c,#f39c12 50%,#27ae60);transition:width .3s}
+.ph-state{background:var(--d3);border:1px solid var(--g3);padding:14px;font-family:var(--font-m);font-size:11px;line-height:1.9;min-height:80px}
+
+/* DEPLOY GUIDE */
+.deploy-step{background:var(--d2);border:1px solid var(--g3);border-left:3px solid var(--c);padding:18px 20px;margin-bottom:12px}
+.deploy-step h3{font-family:var(--font-t);font-size:10px;color:var(--c);letter-spacing:2px;margin-bottom:10px}
+.deploy-step p,.deploy-step li{font-size:13px;color:var(--t2);line-height:1.85}
+.deploy-step ul,.deploy-step ol{padding-left:18px;margin:8px 0}
+.deploy-step li{margin-bottom:6px}
+.code-block{background:var(--d4);border:1px solid var(--g3);padding:12px 16px;font-family:var(--font-m);font-size:11px;color:#22ff44;line-height:2;margin:10px 0;overflow-x:auto;white-space:pre}
+.deploy-note{background:rgba(93,173,226,.07);border:1px solid rgba(93,173,226,.25);padding:12px 16px;font-family:var(--font-m);font-size:10px;color:var(--c2);line-height:1.8;margin:10px 0}
+
+/* PLAYERS HUB */
+.player-card{background:var(--d3);border:1px solid var(--g3);padding:16px;display:flex;align-items:center;gap:14px;margin-bottom:8px;transition:border-color .15s}
+.player-card:hover{border-color:var(--g)}
+.player-avatar{width:44px;height:44px;background:var(--d4);border:1px solid var(--g3);display:flex;align-items:center;justify-content:center;font-family:var(--font-t);font-size:14px;color:var(--r2);flex-shrink:0;overflow:hidden}
+.player-avatar img{width:100%;height:100%;object-fit:cover}
+.player-info{flex:1}
+.player-name{font-family:var(--font-b);font-size:15px;color:#fff;font-weight:700}
+.player-role{font-family:var(--font-m);font-size:9px;color:var(--y);letter-spacing:1px;margin-top:2px}
+.player-status{font-family:var(--font-m);font-size:9px;color:var(--g);margin-top:2px}
+.player-link{padding:7px 14px;background:transparent;border:1px solid var(--g3);color:var(--t2);font-family:var(--font-m);font-size:9px;letter-spacing:1px;text-decoration:none;transition:all .15s;flex-shrink:0}
+.player-link:hover{border-color:var(--r);color:var(--r2)}
+.online-dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;margin-right:6px;box-shadow:0 0 6px var(--green)}
+
+/* ONLINE ROOMS */
+.room-input{background:var(--d4);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);font-size:12px;padding:10px 14px;width:100%;outline:none;margin-bottom:10px;transition:border-color .15s}
+.room-input:focus{border-color:var(--r)}
+.btn{padding:10px 22px;border:none;cursor:pointer;font-family:var(--font-m);font-size:10px;letter-spacing:2px;transition:all .15s;display:inline-block;text-decoration:none}
+.btn-r{background:var(--r);color:#fff}.btn-r:hover{background:var(--r2)}
+.btn-s{background:transparent;border:1px solid var(--g3);color:var(--t)}.btn-s:hover{border-color:var(--r);color:var(--r2)}
+.btn-y{background:var(--y2);color:#000}.btn-y:hover{background:var(--y)}
+.btn-c{background:rgba(93,173,226,.12);border:1px solid rgba(93,173,226,.3);color:var(--c)}.btn-c:hover{background:rgba(93,173,226,.2)}
+
+/* LIVE INDICATOR */
+.live-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-m);font-size:9px;color:var(--green);letter-spacing:1px;padding:4px 10px;border:1px solid rgba(39,174,96,.3);background:rgba(39,174,96,.07)}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:livepulse 1.5s infinite}
+@keyframes livepulse{0%,100%{box-shadow:0 0 0 0 rgba(39,174,96,.5)}50%{box-shadow:0 0 0 5px rgba(39,174,96,0)}}
+
+/* SHARE MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--d2);border:1px solid var(--g3);border-top:2px solid var(--r);padding:28px 32px;max-width:480px;width:95%;position:relative}
+.modal-title{font-family:var(--font-t);font-size:13px;color:var(--r2);letter-spacing:3px;margin-bottom:18px}
+.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--g);font-size:20px;cursor:pointer;line-height:1}
+.modal-close:hover{color:var(--r2)}
+.share-url{background:var(--d4);border:1px solid var(--g3);color:var(--c);font-family:var(--font-m);font-size:11px;padding:10px 14px;width:100%;word-break:break-all;line-height:1.6;cursor:text;user-select:all}
+.copy-btn{margin-top:10px;width:100%;padding:11px;background:var(--r);color:#fff;border:none;font-family:var(--font-m);font-size:10px;letter-spacing:2px;cursor:pointer;transition:background .15s}
+.copy-btn:hover{background:var(--r2)}
+.copy-ok{color:var(--green);font-family:var(--font-m);font-size:10px;letter-spacing:1px;text-align:center;margin-top:8px;display:none}
+
+@media(max-width:600px){.glitch{font-size:28px;letter-spacing:3px}.inner{padding:20px 16px 48px}}
+</style>
+</head>
+<body>
+
+<!-- BOOT -->
+<div id="boot">
+  <div id="boot-log"></div>
+  <div id="boot-progress"><div id="boot-bar"></div></div>
+  <div id="skip-boot" onclick="skipBoot()">[ SALTAR ]</div>
+</div>
+
+<!-- APP -->
+<div id="app">
+<div class="scanlines"></div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-block">
+      <div class="logo-main">MIM//</div>
+      <div class="logo-sub">MEAT IS MURDER · 2045</div>
+    </div>
+    <nav>
+      <a href="#" class="active" onclick="showSec('inv',this);return false">ARCHIVO</a>
+      <a href="#" onclick="showSec('act',this);return false">ACTOS</a>
+      <a href="#" onclick="showSec('npc',this);return false">EXPEDIENTES</a>
+      <a href="#" onclick="showSec('hub',this);return false">JUGADORES</a>
+      <a href="#" onclick="showSec('tut',this);return false">MANUAL</a>
+    </nav>
+    <div class="header-action">
+      <a href="personaje.html" class="char-link" target="_blank">+ PERSONAJE</a>
+    </div>
+  </div>
+</header>
+
+<!-- INVITATION -->
+<div id="inv" class="sec active">
+  <div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-sub">// NITC_NET NODO 7734 — CLASIFICADO //</div>
+    <div class="glitch" data-t="MEAT IS MURDER">MEAT IS MURDER</div>
+    <div><span class="hero-tag">CYBERPSYCHOSIS ARC — NIGHT CITY 2045</span></div>
+    <div class="hero-blink">>> ARCHIVO NEGRO — PROTOCOLO ANIMA <<</div>
+  </div>
+
+  <div class="inner">
+    <div class="crt" data-tag="// TRANSMISIÓN INTERCEPTADA">
+      <p>Night City, 2045. <span class="hl">Alguien está abriendo personas.</span> Los callejones del norte acumulan cuerpos sin cromo — no robado, sino <span class="hl">quirúrgicamente extraído</span> con precisión clínica. Sin huellas. Sin testigos. Solo carne y cicatrices limpias.</p>
+      <p>Las calles lo llaman <span class="hl">el Carnicero</span>. La Psicofuerza no comenta. <span class="it">Eso dice todo.</span></p>
+      <p>Alguien los contrató para investigar. O eso creen. Night City nunca te da la verdad completa.</p>
+    </div>
+
+    <div class="warn">
+      <div class="warn-i">!</div>
+      <div class="warn-t">CONTENIDO SENSIBLE — Esta campaña aborda cyberpsicosis como metáfora de trauma y disociación. El antagonista no es un monstruo: es un espejo. Se requiere Sesión Cero. El cromo no causa la psicosis; es el abandono del sistema lo que lo hace.</div>
+    </div>
+
+    <div class="sh">Temas</div>
+    <div class="chips">
+      <span class="chip">¿Dónde termina el humano?</span>
+      <span class="chip">Identidad bajo el cromo</span>
+      <span class="chip">Trauma y disociación</span>
+      <span class="chip">El estado como cómplice</span>
+      <span class="chip">Adicción al cromo</span>
+      <span class="chip">Compasión vs justicia</span>
+    </div>
+
+    <div class="sh">Datos de Campaña</div>
+    <div class="info-grid">
+      <div class="info-box"><div class="info-lbl">ACTOS</div><div class="info-val" style="color:var(--r2)">IV</div></div>
+      <div class="info-box"><div class="info-lbl">TONO</div><div class="info-val" style="color:var(--c);font-size:14px">NOIR / HORROR</div></div>
+      <div class="info-box"><div class="info-lbl">ESTADO</div><div class="info-val" style="color:var(--green);font-size:14px">ACTIVO</div></div>
+    </div>
+
+    <div style="text-align:center;margin-top:24px">
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:3px;margin-bottom:14px">// INICIALIZAR EDGERUNNER //</div>
+      <a href="personaje.html" class="btn btn-r" target="_blank">CREAR PERSONAJE →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ACTS -->
+<div id="act" class="sec">
+  <div class="inner">
+
+    <!-- LOGIN GATE -->
+    <div id="act-gate">
+      <div class="sh" style="margin-top:0">Estructura de Campaña — ACCESO RESTRINGIDO</div>
+      <div style="background:var(--d3);border:1px solid var(--g3);border-top:2px solid var(--r);padding:32px;max-width:420px;margin:0 auto;text-align:center">
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:3px;margin-bottom:6px">// AUTENTICACIÓN REQUERIDA //</div>
+        <div style="font-family:var(--font-t);font-size:14px;color:var(--r2);letter-spacing:2px;margin-bottom:4px">NIVEL DE ACCESO: GM</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;margin-bottom:24px">PROTOCOLO NEGRO — SOLO PERSONAL AUTORIZADO</div>
+        <div style="text-align:left;margin-bottom:12px">
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:5px">USUARIO</div>
+          <input class="pw-in" type="text" id="act-user" placeholder="IDENTIFICADOR" maxlength="30" style="width:100%" onkeydown="if(event.key==='Enter')document.getElementById('act-pass').focus()">
+        </div>
+        <div style="text-align:left;margin-bottom:18px">
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:5px">CONTRASEÑA</div>
+          <input class="pw-in" type="password" id="act-pass" placeholder="CÓDIGO DE ACCESO" maxlength="30" style="width:100%" onkeydown="if(event.key==='Enter')checkActLogin()">
+        </div>
+        <button class="pw-btn" onclick="checkActLogin()" style="width:100%;padding:11px">AUTENTICAR</button>
+        <div class="pw-err" id="act-err" style="margin-top:10px;text-align:center">// CREDENCIALES INCORRECTAS — INTENTO REGISTRADO</div>
+        <div style="font-family:var(--font-m);font-size:8px;color:var(--g2);margin-top:16px;letter-spacing:1px">ACCESO DENEGADO A PERSONAL NO AUTORIZADO<br>TODOS LOS INTENTOS QUEDAN REGISTRADOS</div>
+      </div>
+    </div>
+
+    <!-- ACTS CONTENT (hidden until login) -->
+    <div id="act-content" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+        <div class="sh" style="margin:0">Estructura de Campaña — CLASIFICADO GM</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-family:var(--font-m);font-size:9px;color:var(--green);letter-spacing:1px">✓ SESIÓN ACTIVA: I_Varela</span>
+          <button onclick="logoutActs()" style="background:none;border:1px solid var(--g3);color:var(--g);font-family:var(--font-m);font-size:8px;padding:4px 10px;cursor:pointer;letter-spacing:1px;transition:all .15s" onmouseover="this.style.borderColor='var(--r)';this.style.color='var(--r2)'" onmouseout="this.style.borderColor='var(--g3)';this.style.color='var(--g)'">CERRAR SESIÓN</button>
+        </div>
+      </div>
+      <div class="warn" style="margin-bottom:16px">
+        <div class="warn-i">!</div>
+        <div class="warn-t">Esta sección contiene spoilers completos de la campaña. Los jugadores acceden solo a sus expedientes NPC mediante contraseña individual.</div>
+      </div>
+      <div class="act-grid">
+        <div class="act">
+          <div class="act-hdr" onclick="toggleAct(this)">
+            <div class="act-num">01</div>
+            <div class="act-info"><div class="act-title">Cromo y Sangre</div><div class="act-code">// ACTO I — CONTACTO INICIAL</div></div>
+            <span style="font-family:var(--font-m);font-size:12px;color:var(--g)">▾</span>
+          </div>
+          <div class="act-body">
+            <p>Los personajes son contratados por la fixer <b>Sable</b> para investigar la desaparición de un netrunner llamado <b>Korvach</b>. La pista los lleva a un callejón donde encuentran su cuerpo: el ojo de cromo y el brazo de combate, arrancados con precisión quirúrgica. Una niña de la calle vio al Carnicero: <b>"Lloraba mientras lo hacía"</b>.</p>
+            <p><b>Escenas clave:</b> Investigación forense del escenario · Entrevistas en el mercado negro de cromo · Primer contacto tenso con Psicofuerza · Los archivos encriptados de Korvach mencionan "Proyecto Anima".</p>
+            <p><b>Hook de cada personaje:</b> El GM debe vincular el caso al trasfondo de cada PJ. El netrunner conocía a Korvach. El medtech trató a una víctima anterior. El solo fue contratado para proteger a alguien que acaba de convertirse en objetivo.</p>
+          </div>
+        </div>
+        <div class="act">
+          <div class="act-hdr" onclick="toggleAct(this)">
+            <div class="act-num">02</div>
+            <div class="act-info"><div class="act-title">El Archivo Anima</div><div class="act-code">// ACTO II — LA CONSPIRACIÓN</div></div>
+            <span style="font-family:var(--font-m);font-size:12px;color:var(--g)">▾</span>
+          </div>
+          <div class="act-body">
+            <p>Los archivos de Korvach revelan el <b>Proyecto Anima</b>: programa secreto de Militech para crear soldados de cromo total ignorando el umbral de humanidad. Sujeto principal: <b>Ezra Dach</b>, ex-edgerunner, 47 implantes, PH registrada en 2. Oficialmente muerto.</p>
+            <p>Militech viene por los archivos. La Psicofuerza tiene órdenes de <b>liquidar al sujeto</b>, no capturarlo. Los personajes están atrapados entre dos fuerzas que los superan — y una tercera que los observa.</p>
+            <p><b>Giro:</b> El Carnicero los salva de un ataque de Militech en el Metro Elevado. Y desaparece sin palabras.</p>
+          </div>
+        </div>
+        <div class="act">
+          <div class="act-hdr" onclick="toggleAct(this)">
+            <div class="act-num">03</div>
+            <div class="act-info"><div class="act-title">Lo que Queda del Hombre</div><div class="act-code">// ACTO III — EL ENCUENTRO</div></div>
+            <span style="font-family:var(--font-m);font-size:12px;color:var(--g)">▾</span>
+          </div>
+          <div class="act-body">
+            <p>Los personajes localizan a <b>Ezra Dach</b> en los sótanos del Hospital del Distrito abandonado. Lo que encuentran no es un monstruo: es un hombre que <b>recuerda todo</b> lo que ha hecho y lleva el peso de ello. Solo roba cromo a personas que, según su lógica fracturada, "no merecen tenerlo". Su razonamiento está roto pero reconocible.</p>
+            <p>Ezra les revela: <b>17 sujetos más</b> del Proyecto Anima siguen activos en Night City, todos acercándose al límite. La Dra. Varela los monitorea. Los usará de nuevo si puede.</p>
+            <p><b>Escena central:</b> Conversación con Ezra. No hay respuestas fáciles. El GM debe preparar esta escena para que los jugadores sientan que podría ser cualquiera de sus personajes en esa silla.</p>
+          </div>
+        </div>
+        <div class="act">
+          <div class="act-hdr" onclick="toggleAct(this)">
+            <div class="act-num">04</div>
+            <div class="act-info"><div class="act-title">Meat Is Murder</div><div class="act-code">// ACTO IV — RESOLUCIÓN</div></div>
+            <span style="font-family:var(--font-m);font-size:12px;color:var(--g)">▾</span>
+          </div>
+          <div class="act-body">
+            <p>Climax: Los personajes deben decidir el destino de Ezra y exponer el Proyecto Anima antes de que Militech borre toda evidencia. <b>Tres finales canónicos:</b></p>
+            <p><b>Redención:</b> Ezra ayuda a localizar a los otros sujetos. Muere haciéndolo. Su historia llega a los medios. Night City lo recuerda como víctima.</p>
+            <p><b>Justicia:</b> Ezra es entregado a la Psicofuerza. El sistema lo procesa. Militech sale limpio. Los personajes cargan con esa decisión.</p>
+            <p><b>Cenizas:</b> Ezra desaparece. Militech borra los archivos y a los personajes. Night City sigue igual. El cromo sigue matando almas. Nadie sabe que ocurrió.</p>
+            <p><b>Extensiones (sesiones 5-6):</b> Cada uno de los 17 sujetos restantes es una mini-historia. El Medtech puede desarrollar una cura. El Corpo puede filtrar el escándalo. El Netrunner puede hackear el archivo completo a los medios libres.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- NPC FILES -->
+<div id="npc" class="sec">
+  <div class="inner">
+    <div class="sh" style="margin-top:0">Expedientes de Sujetos — Acceso Restringido</div>
+    <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;margin-bottom:16px">// CONTRASEÑAS DISTRIBUIDAS POR EL GM EN SESIÓN CERO //</div>
+    <div id="npc-list">
+      <div class="npc">
+        <div class="npc-hdr" onclick="toggleNpc(this)">
+          <div class="npc-dot" style="background:var(--r2)"></div>
+          <div class="npc-id">SUJETO_01 — IDENTIDAD: ██████ DAC█ · ESTADO: ACTIVO · PELIGRO: EXTREMO</div>
+          <div class="npc-badge">🔒 NIVEL 5</div>
+        </div>
+        <div class="npc-body">
+          <div class="pw-row">
+            <input class="pw-in" type="password" placeholder="CONTRASEÑA" maxlength="30" onkeydown="if(event.key==='Enter')checkNpc(this,'protocolo_dach')">
+            <button class="pw-btn" onclick="checkNpc(this,'protocolo_dach')">ACCEDER</button>
+          </div>
+          <div class="pw-err">// CONTRASEÑA INCORRECTA — ACCESO DENEGADO</div>
+          <div class="npc-data">
+            <span class="lbl">NOMBRE:</span> Ezra Dach — alias "El Carnicero"<br>
+            <span class="lbl">EDAD:</span> 38 · <span class="lbl">EMP REGISTRADA:</span> 2 · <span class="lbl">IMPLANTES:</span> 47 (cromo total)<br>
+            <span class="lbl">ORIGEN:</span> Ex-Solo de Militech · Proyecto Anima, Sujeto Principal<br>
+            <span class="lbl">PH ACTUAL:</span> 8-12 (fluctuante) · <span class="lbl">ESTADO:</span> Cyberpsicosis intermitente<br>
+            <span class="lbl">PATRÓN:</span> Solo extrae cromo de personas que considera "indignas". Nunca mata a nadie que no lo "merezca" según su lógica fracturada<br>
+            <span class="lbl">NOTA CLASIFICADA:</span> Recuerda cada acto. Lleva el peso. No es el monstruo de esta historia.
+          </div>
+        </div>
+      </div>
+      <div class="npc">
+        <div class="npc-hdr" onclick="toggleNpc(this)">
+          <div class="npc-dot" style="background:var(--y2)"></div>
+          <div class="npc-id">SUJETO_02 — FIXER: █████ · AGENDA: CLASIFICADA · NIVEL DE CONFIANZA: 2/5</div>
+          <div class="npc-badge">🔒 NIVEL 3</div>
+        </div>
+        <div class="npc-body">
+          <div class="pw-row">
+            <input class="pw-in" type="password" placeholder="CONTRASEÑA" maxlength="30" onkeydown="if(event.key==='Enter')checkNpc(this,'fixer_sable77')">
+            <button class="pw-btn" onclick="checkNpc(this,'fixer_sable77')">ACCEDER</button>
+          </div>
+          <div class="pw-err">// CONTRASEÑA INCORRECTA — ACCESO DENEGADO</div>
+          <div class="npc-data">
+            <span class="lbl">ALIAS:</span> Sable · <span class="lbl">NOMBRE REAL:</span> Desconocido<br>
+            <span class="lbl">ROL:</span> Fixer / Contratante de los PJs<br>
+            <span class="lbl">AFILIACIÓN REAL:</span> [REDACTADO — PENDIENTE DE INVESTIGACIÓN]<br>
+            <span class="lbl">AGENDA:</span> Recuperar archivos del Proyecto Anima antes que Militech. No para exponerlos: para venderlos.<br>
+            <span class="lbl">SECRETO:</span> Conoce a Ezra Dach desde antes del Proyecto. Quizá eran partners. Quizá algo más.<br>
+            <span class="lbl">NOTA:</span> Los contrató. Sabe más de lo que dice. Siempre.
+          </div>
+        </div>
+      </div>
+      <div class="npc">
+        <div class="npc-hdr" onclick="toggleNpc(this)">
+          <div class="npc-dot" style="background:var(--c)"></div>
+          <div class="npc-id">SUJETO_03 — MILITECH CORP · CIENTÍFICA JEFE · PROYECTO ANIMA</div>
+          <div class="npc-badge">🔒 NIVEL 4</div>
+        </div>
+        <div class="npc-body">
+          <div class="pw-row">
+            <input class="pw-in" type="password" placeholder="CONTRASEÑA" maxlength="30" onkeydown="if(event.key==='Enter')checkNpc(this,'anima_varela')">
+            <button class="pw-btn" onclick="checkNpc(this,'anima_varela')">ACCEDER</button>
+          </div>
+          <div class="pw-err">// CONTRASEÑA INCORRECTA — ACCESO DENEGADO</div>
+          <div class="npc-data">
+            <span class="lbl">NOMBRE:</span> Dra. Irina Varela · <span class="lbl">EDAD:</span> 52<br>
+            <span class="lbl">CARGO:</span> Científica Jefe, División de Mejora Humana — Militech<br>
+            <span class="lbl">PROYECTO:</span> Anima — 18 sujetos totales (1 activo "libre", 17 en seguimiento)<br>
+            <span class="lbl">OBJETIVO ACTUAL:</span> Recuperar datos experimentales, neutralizar filtraciones<br>
+            <span class="lbl">SECRETO:</span> El Proyecto Anima no terminó. Está en Fase 2. Los sujetos de Night City son el grupo de control.<br>
+            <span class="lbl">NOTA:</span> Creó al Carnicero. Duerme bien por las noches. Eso la hace más peligrosa que cualquier cyberpsicótico.
+          </div>
+        </div>
+      </div>
+      <div class="npc">
+        <div class="npc-hdr" onclick="toggleNpc(this)">
+          <div class="npc-dot" style="background:var(--g)"></div>
+          <div class="npc-id">SUJETO_04 — PSICOFUERZA ESPECIAL · TENIENTE █████ MORA</div>
+          <div class="npc-badge">🔒 NIVEL 2</div>
+        </div>
+        <div class="npc-body">
+          <div class="pw-row">
+            <input class="pw-in" type="password" placeholder="CONTRASEÑA" maxlength="30" onkeydown="if(event.key==='Enter')checkNpc(this,'psifuerza_mora')">
+            <button class="pw-btn" onclick="checkNpc(this,'psifuerza_mora')">ACCEDER</button>
+          </div>
+          <div class="pw-err">// CONTRASEÑA INCORRECTA — ACCESO DENEGADO</div>
+          <div class="npc-data">
+            <span class="lbl">NOMBRE:</span> Teniente Diego Mora · <span class="lbl">UNIDAD:</span> Psicofuerza Especial Nocturna<br>
+            <span class="lbl">ÓRDENES OFICIALES:</span> Localizar y neutralizar al sujeto conocido como "El Carnicero"<br>
+            <span class="lbl">ÓRDENES REALES:</span> Asegurarse de que no llegue a juicio. Borrar conexiones con Militech.<br>
+            <span class="lbl">SECRETO:</span> Fue oficial de seguridad en las primeras sesiones del Proyecto Anima. Firmó los formularios de consentimiento que los sujetos nunca vieron.<br>
+            <span class="lbl">HOOK:</span> Aliado potencial si los personajes encuentran algo con qué presionarlo.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="font-family:var(--font-m);font-size:9px;color:var(--g2);letter-spacing:1px;margin-top:10px;text-align:center">// CONTRASEÑAS INDIVIDUALES DISTRIBUIDAS POR EL GM EN SESIÓN CERO //</div>
+  </div>
+</div>
+
+<!-- PLAYERS HUB -->
+<div id="hub" class="sec">
+  <div class="inner">
+
+    <!-- SUPABASE CONFIG BANNER — shown when not configured -->
+    <div id="sb-setup-banner" style="display:none;background:rgba(241,196,15,.06);border:1px solid rgba(241,196,15,.3);border-left:3px solid var(--y2);padding:20px 22px;margin-bottom:20px">
+      <div style="font-family:var(--font-t);font-size:10px;color:var(--y2);letter-spacing:2px;margin-bottom:10px">⚙ SUPABASE NO CONFIGURADO</div>
+      <p style="font-size:13px;color:var(--t2);line-height:1.8;margin-bottom:14px">Para activar la sincronización en tiempo real, introduce las credenciales de tu proyecto Supabase. Solo el GM necesita hacer esto una vez — los jugadores se conectan automáticamente.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div>
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:5px">PROJECT URL</div>
+          <input class="room-input" id="sb-url" placeholder="https://xxxx.supabase.co" style="margin:0;font-size:11px">
+        </div>
+        <div>
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:5px">ANON PUBLIC KEY</div>
+          <input class="room-input" id="sb-key" placeholder="eyJhbGciOiJIUzI1NiIs..." style="margin:0;font-size:11px">
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <button class="btn btn-y" onclick="saveSupabaseConfig()">GUARDAR Y CONECTAR</button>
+        <div id="sb-conn-err" style="font-family:var(--font-m);font-size:9px;color:var(--r2);display:none;letter-spacing:1px"></div>
+      </div>
+      <details style="margin-top:16px">
+        <summary style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;cursor:pointer;user-select:none">▾ CÓMO OBTENER LAS CREDENCIALES</summary>
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--t2);line-height:2;margin-top:12px;padding-left:12px;border-left:2px solid var(--g3)">
+          1. Ve a <b style="color:var(--c)">supabase.com</b> y crea una cuenta gratuita<br>
+          2. Crea un nuevo proyecto (nombre: meat-is-murder, región: la más cercana)<br>
+          3. Espera ~2 min a que se inicialice<br>
+          4. Ve a <b style="color:var(--c)">Project Settings → API</b><br>
+          5. Copia <b style="color:var(--y)">Project URL</b> y <b style="color:var(--y)">anon public key</b> en los campos de arriba<br>
+          6. Ve a <b style="color:var(--c)">Table Editor → New Table</b> y crea una tabla con estos campos:<br>
+          <div style="background:var(--d4);border:1px solid var(--g3);padding:10px 14px;margin:8px 0;color:#22ff44;line-height:2">
+            Tabla: <b>personajes</b><br>
+            id → uuid (Primary Key, default: gen_random_uuid())<br>
+            player_name → text<br>
+            char_name → text<br>
+            role → text<br>
+            role_ability → text<br>
+            hp → int4<br>
+            hp_max → int4<br>
+            ph_curr → int4<br>
+            ph_max → int4<br>
+            level → int4<br>
+            xp → int4<br>
+            photo → text<br>
+            full_data → text<br>
+            updated_at → timestamptz (default: now())<br>
+          </div>
+          7. En <b style="color:var(--c)">Authentication → Policies</b>, añade una política "Allow all" en la tabla personajes (para uso en campaña privada)<br>
+          8. ¡Listo! Pega las credenciales arriba y pulsa GUARDAR.
+        </div>
+      </details>
+    </div>
+
+    <!-- STATUS BAR -->
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+      <div class="sh" style="margin:0">Sala de Campaña</div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div id="sb-status-badge" class="live-badge" style="display:none"><div class="live-dot"></div>SUPABASE CONECTADO</div>
+        <div id="sb-offline-badge" style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;padding:4px 10px;border:1px solid var(--g3)">SIN CONEXIÓN</div>
+        <div id="gm-mode-badge" style="display:none;font-family:var(--font-m);font-size:9px;color:var(--r2);letter-spacing:1px;padding:4px 10px;border:1px solid rgba(192,57,43,.4);background:rgba(192,57,43,.08)">GM ACTIVO</div>
+        <button id="gm-login-btn" onclick="toggleGmLogin()" style="background:none;border:1px solid var(--g3);color:var(--g);font-family:var(--font-m);font-size:8px;padding:4px 10px;cursor:pointer;letter-spacing:1px;transition:all .15s" onmouseover="this.style.borderColor='var(--r)';this.style.color='var(--r2)'" onmouseout="this.style.borderColor='var(--g3)';this.style.color='var(--g)'">GM LOGIN</button>
+        <button id="sb-config-btn" onclick="toggleSbSetup()" style="background:none;border:1px solid var(--g3);color:var(--g);font-family:var(--font-m);font-size:8px;padding:4px 10px;cursor:pointer;letter-spacing:1px;transition:all .15s" onmouseover="this.style.borderColor='var(--y2)';this.style.color='var(--y2)'" onmouseout="this.style.borderColor='var(--g3)';this.style.color='var(--g)'">⚙ CONFIGURAR</button>
+      </div>
+    </div>
+
+    <!-- GM LOGIN PANEL -->
+    <div id="gm-login-panel" style="display:none;background:var(--d3);border:1px solid var(--r);border-left:3px solid var(--r);padding:18px 20px;margin-bottom:16px">
+      <div style="font-family:var(--font-t);font-size:10px;color:var(--r2);letter-spacing:2px;margin-bottom:12px">AUTENTICACIÓN GM</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+        <div style="flex:1;min-width:130px">
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:4px">USUARIO</div>
+          <input class="room-input" type="text" id="gm-user-inp" placeholder="Usuario GM" style="margin:0" onkeydown="if(event.key==='Enter')document.getElementById('gm-pass-inp').focus()">
+        </div>
+        <div style="flex:1;min-width:130px">
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:4px">CONTRASEÑA</div>
+          <input class="room-input" type="password" id="gm-pass-inp" placeholder="Contraseña" style="margin:0" onkeydown="if(event.key==='Enter')loginGM()">
+        </div>
+        <button class="btn btn-r" onclick="loginGM()" style="flex-shrink:0">ENTRAR</button>
+        <button class="btn btn-s" onclick="logoutGM()" id="gm-logout-btn" style="display:none;flex-shrink:0">SALIR</button>
+      </div>
+      <div id="gm-login-err" style="font-family:var(--font-m);font-size:9px;color:var(--r2);margin-top:8px;display:none;letter-spacing:1px">// CREDENCIALES INCORRECTAS</div>
+    </div>
+
+    <!-- REALTIME PLAYER ROSTER -->
+    <div class="sh" style="margin-top:0">Personajes en Tiempo Real</div>
+    <div id="realtime-roster">
+      <div style="background:var(--d3);border:1px solid var(--g3);padding:24px;text-align:center">
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--g);letter-spacing:2px;margin-bottom:10px">// ESPERANDO CONEXIÓN //</div>
+        <p style="font-size:13px;color:var(--t2)">Configura Supabase arriba para ver los personajes de todos los jugadores en tiempo real.<br>Una vez configurado, este panel se actualiza automáticamente cada vez que alguien guarda su ficha.</p>
+      </div>
+    </div>
+    <div id="roster-grid" style="display:grid;gap:10px;margin-top:10px"></div>
+
+    <!-- MANUAL FALLBACK -->
+    <div class="sh">Acceso Manual por Código</div>
+    <div style="background:var(--d3);border:1px solid var(--g3);padding:18px;margin-bottom:16px">
+      <p style="font-size:13px;color:var(--t2);margin-bottom:12px;font-family:var(--font-b)">Si un jugador comparte un código MIM, pégalo aquí para ver su ficha:</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <input class="room-input" id="view-code" placeholder="Código MIM:..." style="flex:1;min-width:160px;margin:0">
+        <button class="btn btn-c" onclick="loadFromCode()">VER FICHA</button>
+      </div>
+      <div id="view-result" style="display:none;margin-top:14px"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL (global, outside hub div) -->
+<div id="del-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:600;align-items:center;justify-content:center">
+  <div style="background:var(--d2);border:1px solid var(--g3);border-top:2px solid var(--r);padding:28px 32px;max-width:420px;width:90%">
+    <div style="font-family:var(--font-t);font-size:11px;color:var(--r2);letter-spacing:2px;margin-bottom:14px">CONFIRMAR ELIMINACIÓN</div>
+    <div id="del-modal-msg" style="font-family:var(--font-m);font-size:11px;color:var(--t2);line-height:1.9;margin-bottom:20px"></div>
+    <div style="display:flex;gap:10px">
+      <button onclick="executeDelete()" style="flex:1;padding:11px;background:var(--r);color:#fff;border:none;font-family:var(--font-m);font-size:9px;letter-spacing:2px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='var(--r2)'" onmouseout="this.style.background='var(--r)'">SÍ, ELIMINAR</button>
+      <button onclick="document.getElementById('del-modal').style.display='none'" style="flex:1;padding:11px;background:transparent;border:1px solid var(--g3);color:var(--t2);font-family:var(--font-m);font-size:9px;letter-spacing:2px;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--g)'" onmouseout="this.style.borderColor='var(--g3)'">CANCELAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- DEPLOY REMOVED -->
+<div id="deploy" class="sec" style="display:none!important">
+  <div class="inner">
+    <div class="sh" style="margin-top:0">Sección eliminada</div>
+    <div class="warn" style="margin-bottom:20px">
+      <div class="warn-i">★</div>
+      <div class="warn-t">Esta guía te permite publicar la web completa gratis con GitHub Pages. Una vez en línea, todos los jugadores acceden desde cualquier dispositivo y los personajes se comparten con una URL.</div>
+    </div>
+
+    <div class="deploy-step">
+      <h3>PASO 1 — CREAR CUENTA EN GITHUB</h3>
+      <ol>
+        <li>Ve a <b>github.com</b> y crea una cuenta gratuita (si no tienes una)</li>
+        <li>Confirma tu email para activar la cuenta</li>
+        <li>El nombre de usuario que elijas formará parte de la URL de tu web</li>
+      </ol>
+      <div class="deploy-note">Ejemplo: si tu usuario es "gonzo2045", tu web quedará en: <b>gonzo2045.github.io/meat-is-murder</b></div>
+    </div>
+
+    <div class="deploy-step">
+      <h3>PASO 2 — CREAR REPOSITORIO</h3>
+      <ol>
+        <li>En GitHub, haz clic en el botón verde <b>"New"</b> o el botón <b>"+"</b> arriba a la derecha</li>
+        <li>Nombre del repositorio: <b>meat-is-murder</b> (exactamente así, en minúsculas)</li>
+        <li>Asegúrate de que esté en <b>Public</b> (público)</li>
+        <li>Marca la casilla <b>"Add a README file"</b></li>
+        <li>Haz clic en <b>"Create repository"</b></li>
+      </ol>
+    </div>
+
+    <div class="deploy-step">
+      <h3>PASO 3 — SUBIR LOS ARCHIVOS</h3>
+      <ol>
+        <li>En tu repositorio, haz clic en <b>"Add file" → "Upload files"</b></li>
+        <li>Arrastra y suelta los archivos que descargaste:<br><b>index.html</b> y <b>personaje.html</b></li>
+        <li>En el campo de "commit message" escribe algo como: <b>primera versión</b></li>
+        <li>Haz clic en <b>"Commit changes"</b></li>
+      </ol>
+      <div class="deploy-note">Asegúrate de que index.html y personaje.html estén en la raíz del repositorio (no dentro de carpetas).</div>
+    </div>
+
+    <div class="deploy-step">
+      <h3>PASO 4 — ACTIVAR GITHUB PAGES</h3>
+      <ol>
+        <li>En tu repositorio, haz clic en <b>Settings</b> (arriba a la derecha, ícono de engranaje)</li>
+        <li>En el menú lateral izquierdo, busca <b>Pages</b></li>
+        <li>En <b>Source</b>, selecciona <b>"Deploy from a branch"</b></li>
+        <li>En <b>Branch</b>, selecciona <b>"main"</b> y carpeta <b>"/ (root)"</b></li>
+        <li>Haz clic en <b>Save</b></li>
+        <li>Espera 2-5 minutos. GitHub construirá tu web.</li>
+      </ol>
+      <div class="code-block">Tu URL será: https://TU_USUARIO.github.io/meat-is-murder</div>
+    </div>
+
+    <div class="deploy-step">
+      <h3>PASO 5 — ACTUALIZAR LA WEB</h3>
+      <p>Cada vez que descargues una versión nueva de los archivos:</p>
+      <ol>
+        <li>Ve a tu repositorio en GitHub</li>
+        <li>Haz clic en el archivo que quieres actualizar (ej: index.html)</li>
+        <li>Haz clic en el ícono del lápiz (✏️) para editarlo</li>
+        <li>O usa <b>"Add file" → "Upload files"</b> para reemplazar los archivos completos</li>
+        <li>Los cambios se publican automáticamente en 1-2 minutos</li>
+      </ol>
+    </div>
+
+    <div class="deploy-step" style="border-left-color:var(--y2)">
+      <h3>INTERCONECTIVIDAD EN TIEMPO REAL (AVANZADO)</h3>
+      <p>Para que los personajes se sincronicen en tiempo real entre jugadores sin backend, hay dos opciones gratuitas:</p>
+      <br>
+      <p><b>Opción A — Firebase Realtime Database (recomendado):</b></p>
+      <ol>
+        <li>Crea cuenta en <b>firebase.google.com</b> (gratuito)</li>
+        <li>Crea un proyecto nuevo → Realtime Database → Modo test</li>
+        <li>Copia tu URL de base de datos (formato: <b>tu-proyecto.firebaseio.com</b>)</li>
+        <li>En los archivos HTML, busca la variable <b>FIREBASE_URL</b> y reemplaza con tu URL</li>
+        <li>Los personajes se guardan y sincronizan automáticamente</li>
+      </ol>
+      <br>
+      <p><b>Opción B — Compartir por código (incluido sin configuración):</b></p>
+      <ol>
+        <li>Cada jugador genera su código desde la sección "Jugadores"</li>
+        <li>El GM pega los códigos para ver todas las fichas</li>
+        <li>No requiere configuración adicional, funciona desde el día uno</li>
+      </ol>
+      <div class="deploy-note">Con la Opción B (códigos), no hay sincronización en tiempo real pero cualquiera puede ver la ficha actual de un jugador. Para una campaña de 3-5 personas es suficiente.</div>
+    </div>
+
+    <div class="deploy-step" style="border-left-color:var(--green)">
+      <h3>CHECKLIST FINAL</h3>
+      <ul>
+        <li>☐ Cuenta de GitHub creada</li>
+        <li>☐ Repositorio "meat-is-murder" creado (público)</li>
+        <li>☐ index.html y personaje.html subidos</li>
+        <li>☐ GitHub Pages activado en Settings → Pages</li>
+        <li>☐ URL compartida con todos los jugadores</li>
+        <li>☐ Cada jugador crea su personaje y genera su código</li>
+        <li>☐ GM recibe los códigos y los registra en la sección Jugadores</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TUTORIAL -->
+<div id="tut" class="sec">
+  <div class="inner">
+    <div style="font-family:var(--font-t);font-size:18px;color:var(--y);letter-spacing:3px;text-align:center;margin-bottom:6px">MANUAL DEL EDGERUNNER</div>
+    <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;text-align:center;margin-bottom:24px">// GUÍA RÁPIDA — CYBERPUNK RED //</div>
+    <div class="tut-tabs">
+      <button class="tt active" onclick="showTut('basics',this)">LO BÁSICO</button>
+      <button class="tt" onclick="showTut('dice',this)">DADOS</button>
+      <button class="tt" onclick="showTut('combat',this)">COMBATE</button>
+      <button class="tt" onclick="showTut('cyber',this)">CYBERPSICOSIS</button>
+      <button class="tt" onclick="showTut('tips',this)">MESA</button>
+    </div>
+    <div class="tpage active" id="tut-basics">
+      <div class="rule"><h3>¿QUÉ ES CYBERPUNK RED?</h3><p>Un juego de rol de mesa. Un jugador es el <b>Game Master (GM)</b> que narra la historia. El resto controla personajes y toma decisiones que afectan el resultado. Ambientado en Night City, 2045 — ciudad donde el cromo corre por las venas de todos.</p></div>
+      <div class="rule"><h3>EL FLUJO</h3><ul><li>El GM describe la situación</li><li>Los jugadores declaran sus acciones</li><li>Si hay incertidumbre, se tiran dados</li><li>El GM narra el resultado y la historia avanza</li></ul></div>
+      <div class="rule"><h3>LA FÓRMULA CENTRAL</h3><div class="formula">1d10 + STAT + HABILIDAD ≥ DV (Dificultad)</div><p>DV 9 = fácil · DV 13 = difícil · DV 17 = casi imposible · DV 21+ = legendario</p></div>
+    </div>
+    <div class="tpage" id="tut-dice">
+      <div class="rule"><h3>EL D10</h3><p>El dado principal de Cyberpunk RED. 1d10 por tirada estándar.<br><b>Crítico:</b> Sacas 10 → tira otro d10 y suma (puede encadenarse).<br><b>Fumble:</b> Sacas 1 → tira otro d10, si sale 1 de nuevo, algo malo ocurre.</p></div>
+      <div class="dice-roller">
+        <div class="d-btns">
+          <button class="d-btn act" onclick="selDice(10,this)">d10</button>
+          <button class="d-btn" onclick="selDice(6,this)">d6</button>
+          <button class="d-btn" onclick="selDice(20,this)">d20</button>
+        </div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--g);margin-bottom:8px">Cantidad: <input type="number" id="dc" value="1" min="1" max="10" style="width:44px;background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);padding:3px 6px;font-size:10px;outline:none"></div>
+        <div class="d-res-wrap"><div class="d-num" id="d-res">—</div><div class="d-det" id="d-det">Presiona TIRAR</div></div>
+        <button class="roll-btn" onclick="rollDice()">⚄ TIRAR</button>
+      </div>
+      <div class="rule"><h3>DAÑO POR ARMA</h3><ul><li>Pistola ligera / SMG: 2d6</li><li>Pistola pesada / Escopeta: 3d6</li><li>Rifle de Asalto: 5d6</li><li>Francotirador: 5d6</li><li>Puño / Patada: 1d6 · Arma CaC: 1d6-2d6</li></ul></div>
+    </div>
+    <div class="tpage" id="tut-combat">
+      <div class="rule"><h3>INICIATIVA</h3><div class="formula">INICIATIVA = 1d10 + REF</div><p>Cada turno: <b>Mover + Acción</b>. Movimiento = MOVE × 3 metros.</p></div>
+      <div class="rule"><h3>ATACAR</h3><div class="formula">1d10 + REF + Habilidad de Arma vs. DV del Objetivo</div><p>DV base en combate: 15. Cobertura añade +2 a +6. Si aciertas, tira daño menos la Armadura (SP) del objetivo.</p></div>
+      <div class="rule"><h3>HP Y DAÑO CRÍTICO</h3><p><b>HP = 10 + BODY×5</b>. A mitad de HP: −2 a todas las tiradas. Con 8+ daño de un golpe → posible Critical Injury (efectos graves y duraderos).</p></div>
+    </div>
+    <div class="tpage" id="tut-cyber">
+      <div class="rule"><h3>CYBERPSICOSIS</h3><p>Demasiado cromo disocia tu psique. Pierdes empatía, te vuelves paranoico y violento. La <b>PH (Puntuación de Humanidad)</b> mide cuánto queda de humano en ti.</p><div class="formula">PH Máxima = EMP × 10</div></div>
+      <div style="background:var(--d2);border:1px solid var(--g3);padding:16px;margin-bottom:14px">
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;margin-bottom:10px">// SIMULADOR DE HUMANIDAD //</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <input type="range" id="ph-sim" min="0" max="100" value="75" oninput="updPhSim(this.value)" style="flex:1">
+          <span id="ph-sim-v" style="font-family:var(--font-t);font-size:16px;color:var(--y);min-width:38px">75%</span>
+        </div>
+        <div class="ph-bar-wrap"><div class="ph-bar" id="ph-sim-bar" style="width:75%"></div></div>
+        <div class="ph-state" id="ph-sim-state"></div>
+      </div>
+    </div>
+    <div class="tpage" id="tut-tips">
+      <div class="rule"><h3>FALLA CON ESTILO</h3><p>Cuando fallas, aprovecha el drama. Las mejores historias nacen cuando todo sale mal.</p></div>
+      <div class="rule"><h3>EL CROMO NO TE DEFINE</h3><p>La trampa clásica: hacerte una lista de implantes. Tu personaje son sus miedos, motivaciones y contradicciones — no su inventario de cromo.</p></div>
+      <div class="rule"><h3>EL CARNICERO ES UN ESPEJO</h3><p>Ezra Dach no es un monstruo que matar. Es lo que pasa cuando nadie ayuda. La pregunta de la campaña no es "¿cómo lo detenemos?" — es "¿cómo nos aseguramos de que ninguno de nosotros llegue ahí?"</p></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<!-- SHARE MODAL -->
+<div class="modal-bg" id="share-modal">
+  <div class="modal">
+    <div class="modal-title">COMPARTIR FICHA</div>
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<script>
+// === BOOT ===
+const BOOT=[
+  {c:'dim',t:'NITC_NET KERNEL v2.4.1 // (c) 2045 NIGHT CITY SYSTEMS'},
+  {c:'ok', t:'[OK] PROCESADOR NEURAL x12 @ 4.8GHz ... NOMINAL'},
+  {c:'ok', t:'[OK] PUENTE CROMO-MÁQUINA ... CARGADO'},
+  {c:'err',t:'[ERR] SECTOR 0x3F7A — DATOS CORRUPTOS RECUPERADOS'},
+  {c:'ok', t:'[OK] DRIVERS DE CROMO ... 47 DISPOSITIVOS DETECTADOS'},
+  {c:'warn',t:'[WARN] ÍNDICE DE HUMANIDAD BAJO UMBRAL — MONITORIZANDO'},
+  {c:'ok', t:'[OK] ENLACE PSICOFUERZA ... BLOQUEADO (FIREWALL ACTIVO)'},
+  {c:'err',t:'[ERR] WATCHDOG MILITECH — TERMINADO EXITOSAMENTE'},
+  {c:'ok', t:'[OK] NODO BASE DE DATOS CLASIFICADO_7734 ... MONTADO'},
+  {c:'warn',t:'[WARN] ARCHIVOS PROYECTO ANIMA — DESCIFRADO PARCIAL'},
+  {c:'sys', t:'DESCIFRANDO SECTOR ... ........ COMPLETO'},
+  {c:'ok', t:'[OK] DECK DE INTERFACE NETRUNNER ... EN LÍNEA'},
+  {c:'err',t:'[ERR] UBICACIÓN SUJETO_01 — DESCONOCIDA'},
+  {c:'ok', t:'[OK] CARGANDO CAMPAÑA: MEAT_IS_MURDER.arc'},
+  {c:'ok', t:'[OK] ALMACENAMIENTO DE PERSONAJES — NODO LOCAL LISTO'},
+  {c:'warn',t:'[WARN] BARRIDO PSICOFUERZA DETECTADO — RUTEANDO'},
+  {c:'ok', t:'[OK] CIFRADO ACTIVO — CLAVE MILITECH ROBADA 2048bit'},
+  {c:'dim', t:'>> TODOS LOS SISTEMAS NOMINALES'},
+  {c:'ok', t:'>> BIENVENIDO A NIGHT CITY, EDGERUNNER'},
+  {c:'ok', t:'>> MEAT IS MURDER // INICIALIZANDO...'},
+];
+let bi=0,done=false;
+function bootStep(){
+  if(bi>=BOOT.length){document.getElementById('boot-bar').style.width='100%';setTimeout(finishBoot,400);return;}
+  const l=BOOT[bi],log=document.getElementById('boot-log');
+  const s=document.createElement('span');s.className='bl '+l.c;s.textContent=l.t;
+  if(bi===BOOT.length-1)s.innerHTML+=` <span class="cursor"> </span>`;
+  log.appendChild(s);requestAnimationFrame(()=>s.classList.add('show'));
+  document.getElementById('boot-bar').style.width=(bi/BOOT.length*100)+'%';
+  bi++;setTimeout(bootStep,Math.random()*80+25);
+}
+function finishBoot(){if(done)return;done=true;const b=document.getElementById('boot');b.style.transition='opacity .5s';b.style.opacity='0';setTimeout(()=>{b.style.display='none';document.getElementById('app').style.display='block';},500);}
+function skipBoot(){finishBoot();}
+setTimeout(bootStep,200);
+
+// === ACT LOGIN ===
+const ACT_USER='I_Varela';
+const ACT_PASS='NCbutcher45';
+function checkActLogin(){
+  const u=document.getElementById('act-user').value.trim();
+  const p=document.getElementById('act-pass').value.trim();
+  const err=document.getElementById('act-err');
+  if(u===ACT_USER && p===ACT_PASS){
+    document.getElementById('act-gate').style.display='none';
+    document.getElementById('act-content').style.display='block';
+    err.style.display='none';
+    try{sessionStorage.setItem('mim_act_auth','1');}catch(e){}
+  }else{
+    err.style.display='block';
+    document.getElementById('act-pass').value='';
+    setTimeout(()=>err.style.display='none',3000);
+  }
+}
+function logoutActs(){
+  document.getElementById('act-gate').style.display='block';
+  document.getElementById('act-content').style.display='none';
+  document.getElementById('act-user').value='';
+  document.getElementById('act-pass').value='';
+  try{sessionStorage.removeItem('mim_act_auth');}catch(e){}
+}
+// Restore session if already authenticated this session
+(function(){
+  try{if(sessionStorage.getItem('mim_act_auth')==='1'){
+    const g=document.getElementById('act-gate');const c=document.getElementById('act-content');
+    if(g&&c){g.style.display='none';c.style.display='block';}
+  }}catch(e){}
+})();
+
+// === NAV ===
+function showSec(id,el){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(el)el.classList.add('active');
+  window.scrollTo(0,0);
+}
+function toggleAct(hdr){const b=hdr.nextElementSibling;b.classList.toggle('open');}
+function toggleNpc(hdr){const b=hdr.nextElementSibling;b.classList.toggle('open');}
+function checkNpc(btn,pass){
+  const body=btn.closest('.npc-body');
+  const inp=body.querySelector('.pw-in');
+  const err=body.querySelector('.pw-err');
+  const data=body.querySelector('.npc-data');
+  if(inp.value.trim().toLowerCase()===pass){
+    data.classList.add('show');err.style.display='none';
+    inp.style.display='none';btn.style.display='none';
+  }else{err.style.display='block';inp.value='';}
+}
+
+// === TUTORIAL ===
+let selDiceN=10;
+function selDice(n,btn){selDiceN=n;document.querySelectorAll('.d-btn').forEach(b=>b.classList.remove('act'));btn.classList.add('act');}
+function rollDice(){
+  const cnt=parseInt(document.getElementById('dc').value)||1;
+  let res=[],tot=0;
+  for(let i=0;i<cnt;i++){const r=Math.floor(Math.random()*selDiceN)+1;res.push(r);tot+=r;}
+  const rEl=document.getElementById('d-res'),dEl=document.getElementById('d-det');
+  rEl.textContent=tot;
+  rEl.style.color=tot===selDiceN&&cnt===1?'#ff4444':tot===1&&cnt===1?'var(--c)':'var(--y)';
+  dEl.textContent=cnt>1?'['+res.join('+')+'] = '+tot:tot===selDiceN?'¡CRÍTICO!':tot===1?'¡FUMBLE!':'1d'+selDiceN+' → '+tot;
+}
+function showTut(id,btn){
+  document.querySelectorAll('.tpage').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tt').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tut-'+id).classList.add('active');btn.classList.add('active');
+}
+function updPhSim(v){
+  document.getElementById('ph-sim-v').textContent=v+'%';
+  document.getElementById('ph-sim-bar').style.width=v+'%';
+  const p=parseInt(v);let s='',c='var(--t)';
+  if(p>80){s='ESTABLE (PH >80%) — Funciona con normalidad. EMP intacta. Leve irritabilidad ante estrés extremo.';c='var(--y)';}
+  else if(p>60){s='TENSO (PH 60-80%) — Paranoia leve. Dificultad para empatizar. Los NPCs cercanos lo notan.';c='var(--y2)';}
+  else if(p>40){s='INESTABLE (PH 40-60%) — Episodios de disociación. Los demás no parecen reales. Tiradas de control en estrés.';c='#d4843a';}
+  else if(p>20){s='PELIGROSO (PH 20-40%) — Violencia impredecible. Si fallas la tirada de control, el GM toma tu personaje.';c:'#cc5c3a';}
+  else if(p>5){s='CRÍTICO (PH 5-20%) — Cada momento es una lucha. Autoridad narrativa parcial del GM. Busca terapia YA.';c='var(--r2)';}
+  else{s='CYBERPSICÓTICO (PH 0%) — No eres un jugador. Eres un NPC. El GM tiene control total. La Psicofuerza viene.';c='var(--r)';}
+  const el=document.getElementById('ph-sim-state');if(el){el.style.color=c;el.textContent=s;}
+}
+updPhSim(75);
+
+// === SUPABASE INTEGRATION ===
+let sbClient = null;
+let sbChannel = null;
+let _rosterData = [];  // cache of last loaded roster rows
+
+function getSbConfig(){
+  try{return JSON.parse(localStorage.getItem('mim_sb_config')||'null');}catch(e){return null;}
+}
+function saveSbConfig(url,key){
+  localStorage.setItem('mim_sb_config',JSON.stringify({url,key}));
+}
+
+async function initSupabase(url, key){
+  // Dynamically load Supabase JS CDN
+  if(!window.supabase){
+    await new Promise((res,rej)=>{
+      const s=document.createElement('script');
+      s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+      s.onload=res;s.onerror=rej;document.head.appendChild(s);
+    });
+  }
+  sbClient=window.supabase.createClient(url,key);
+  // Test connection
+  const {error}=await sbClient.from('personajes').select('id').limit(1);
+  if(error)throw error;
+  return sbClient;
+}
+
+async function saveSupabaseConfig(){
+  const url=document.getElementById('sb-url').value.trim();
+  const key=document.getElementById('sb-key').value.trim();
+  const errEl=document.getElementById('sb-conn-err');
+  if(!url||!key){errEl.textContent='// Rellena los dos campos';errEl.style.display='block';return;}
+  errEl.style.display='none';
+  const btn=document.querySelector('#sb-setup-banner .btn-y');
+  btn.textContent='CONECTANDO...';btn.disabled=true;
+  try{
+    await initSupabase(url,key);
+    saveSbConfig(url,key);
+    btn.textContent='GUARDAR Y CONECTAR';btn.disabled=false;
+    onSbConnected();
+    document.getElementById('sb-setup-banner').style.display='none';
+  }catch(e){
+    errEl.textContent='// ERROR: '+((e&&e.message)||'Credenciales incorrectas o tabla no creada');
+    errEl.style.display='block';
+    btn.textContent='GUARDAR Y CONECTAR';btn.disabled=false;
+  }
+}
+
+function onSbConnected(){
+  document.getElementById('sb-status-badge').style.display='flex';
+  document.getElementById('sb-offline-badge').style.display='none';
+  document.getElementById('realtime-roster').style.display='none';
+  loadRoster();
+  subscribeRealtime();
+}
+
+async function loadRoster(){
+  if(!sbClient)return;
+  const {data,error}=await sbClient
+    .from('personajes')
+    .select('player_name,char_name,role,role_ability,hp,hp_max,ph_curr,ph_max,level,xp,photo,full_data,updated_at')
+    .order('updated_at',{ascending:false});
+  if(error){console.error('Roster load error',error);return;}
+  renderRoster(data||[]);
+}
+
+function renderRoster(rows){
+  _rosterData=rows;  // cache for viewFullChar
+  const grid=document.getElementById('roster-grid');
+  if(!rows.length){
+    grid.innerHTML=`<div style="background:var(--d3);border:1px solid var(--g3);padding:20px;text-align:center;font-family:var(--font-m);font-size:10px;color:var(--g);letter-spacing:2px">// SIN PERSONAJES AÚN — Los jugadores aparecerán aquí cuando guarden su ficha //</div>`;
+    return;
+  }
+  let localPlayerName='';
+  try{
+    const raw=localStorage.getItem('cpred_mim_char');
+    if(raw){const d=JSON.parse(raw);localPlayerName=(d.S&&d.S.playerName)||'';}
+  }catch(e){}
+
+  grid.innerHTML=rows.map((r,idx)=>{
+    const hpPct=r.hp_max>0?Math.round((r.hp/r.hp_max)*100):100;
+    const phPct=r.ph_max>0?Math.round((r.ph_curr/r.ph_max)*100):100;
+    const hpColor=hpPct>50?'var(--green)':hpPct>25?'var(--y2)':'var(--r2)';
+    const ago=r.updated_at?timeAgo(r.updated_at):'—';
+    const avatar=r.photo
+      ?`<img src="${r.photo}" style="width:100%;height:100%;object-fit:cover">`
+      :`<span style="font-family:var(--font-t);font-size:16px;color:var(--r2)">${(r.char_name||'?').charAt(0).toUpperCase()}</span>`;
+    const isOwn=localPlayerName&&r.player_name&&localPlayerName.trim().toLowerCase()===r.player_name.trim().toLowerCase();
+    const canDelete=gmModeActive||isOwn;
+    const deleteBtn=canDelete
+      ?`<button onclick="confirmDeleteChar('${(r.player_name||'').replace(/'/g,"\\'")}','${(r.char_name||'').replace(/'/g,"\\'")}') " style="padding:4px 10px;background:transparent;border:1px solid var(--r);color:var(--r2);font-family:var(--font-m);font-size:8px;letter-spacing:1px;cursor:pointer;transition:all .15s" onmouseover="this.style.background='var(--r)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='var(--r2)'">${gmModeActive&&!isOwn?'✕ BORRAR (GM)':'✕ BORRAR'}</button>`
+      :'';
+
+    return `<div class="player-card" style="flex-direction:column;align-items:stretch;padding:0;overflow:hidden;${gmModeActive?'border-color:rgba(192,57,43,.3)':''}">
+      <div style="display:flex;align-items:center;gap:14px;padding:14px 16px">
+        <div class="player-avatar">${avatar}</div>
+        <div style="flex:1;min-width:0">
+          <div class="player-name">${r.char_name||'SIN NOMBRE'}</div>
+          <div class="player-role">${r.role||''} ${r.role_ability?'— '+r.role_ability:''}</div>
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--g);margin-top:2px">Jugador: ${r.player_name||'?'} · Nv.${r.level||1} · ${r.xp||0} IP</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end;flex-shrink:0">
+          <div class="live-badge" style="font-size:8px;padding:2px 7px"><div class="live-dot" style="width:5px;height:5px"></div>${ago}</div>
+          ${r.full_data?`<button onclick="viewFullChar(${idx})" style="padding:5px 12px;background:var(--r);color:#fff;border:none;font-family:var(--font-m);font-size:8px;letter-spacing:1px;cursor:pointer">VER FICHA</button>`:''}
+          ${deleteBtn}
+        </div>
+      </div>
+      <div style="padding:0 16px 14px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <div style="font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:1px;margin-bottom:4px">HP ${r.hp||0}/${r.hp_max||10}</div>
+            <div style="height:8px;background:var(--d4);border:1px solid var(--g3);overflow:hidden">
+              <div style="height:100%;width:${hpPct}%;background:${hpColor};transition:width .3s"></div>
+            </div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:1px;margin-bottom:4px">PH ${r.ph_curr||0}/${r.ph_max||0}</div>
+            <div style="height:8px;background:var(--d4);border:1px solid var(--g3);overflow:hidden">
+              <div style="height:100%;width:${phPct}%;background:linear-gradient(90deg,#e74c3c,#f39c12 50%,#27ae60);clip-path:inset(0 ${100-phPct}% 0 0)"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// === GM MODE ===
+let gmModeActive=false;
+const GM_USER='I_Varela';
+const GM_PASS='NCbutcher45';
+
+function toggleGmLogin(){
+  const p=document.getElementById('gm-login-panel');
+  p.style.display=p.style.display==='none'?'block':'none';
+}
+function loginGM(){
+  const u=document.getElementById('gm-user-inp').value.trim();
+  const p=document.getElementById('gm-pass-inp').value.trim();
+  const err=document.getElementById('gm-login-err');
+  if(u===GM_USER&&p===GM_PASS){
+    gmModeActive=true;
+    document.getElementById('gm-mode-badge').style.display='inline-flex';
+    document.getElementById('gm-login-btn').style.display='none';
+    document.getElementById('gm-logout-btn').style.display='';
+    document.getElementById('gm-login-panel').style.display='none';
+    document.getElementById('gm-login-err').style.display='none';
+    try{sessionStorage.setItem('mim_gm_mode','1');}catch(e){}
+    loadRoster(); // re-render with delete buttons
+  }else{
+    err.style.display='block';
+    document.getElementById('gm-pass-inp').value='';
+    setTimeout(()=>err.style.display='none',3000);
+  }
+}
+function logoutGM(){
+  gmModeActive=false;
+  document.getElementById('gm-mode-badge').style.display='none';
+  document.getElementById('gm-login-btn').style.display='';
+  document.getElementById('gm-logout-btn').style.display='none';
+  document.getElementById('gm-user-inp').value='';
+  document.getElementById('gm-pass-inp').value='';
+  try{sessionStorage.removeItem('mim_gm_mode');}catch(e){}
+  loadRoster();
+}
+// Restore GM session
+(function(){
+  try{if(sessionStorage.getItem('mim_gm_mode')==='1'){
+    gmModeActive=true;
+    const b=document.getElementById('gm-mode-badge');
+    const lb=document.getElementById('gm-login-btn');
+    const lo=document.getElementById('gm-logout-btn');
+    if(b)b.style.display='inline-flex';
+    if(lb)lb.style.display='none';
+    if(lo)lo.style.display='';
+  }}catch(e){}
+})();
+
+// === DELETE CHARACTER ===
+let pendingDelete={playerName:'',charName:''};
+
+function confirmDeleteChar(playerName,charName){
+  if(!sbClient){showHubNotif('Supabase no conectado.');return;}
+  pendingDelete={playerName,charName};
+  const isOwn=playerName===getLocalPlayerName();
+  const who=gmModeActive&&!isOwn?'el GM':'tú';
+  document.getElementById('del-modal-msg').innerHTML=
+    `Vas a eliminar el personaje <b style="color:#fff">${charName}</b> del jugador <b style="color:#fff">${playerName}</b>.<br><br>`+
+    `<span style="color:var(--r2)">Esta acción no se puede deshacer.</span>`;
+  document.getElementById('del-modal').style.display='flex';
+}
+
+async function executeDelete(){
+  document.getElementById('del-modal').style.display='none';
+  if(!sbClient||!pendingDelete.charName)return;
+  try{
+    const {error}=await sbClient
+      .from('personajes')
+      .delete()
+      .eq('player_name',pendingDelete.playerName)
+      .eq('char_name',pendingDelete.charName);
+    if(error)throw error;
+    showHubNotif('Personaje eliminado.');
+    setTimeout(()=>loadRoster(),400);
+  }catch(e){
+    showHubNotif('Error al borrar: '+(e&&e.message||'desconocido'));
+  }
+  pendingDelete={playerName:'',charName:''};
+}
+
+function getLocalPlayerName(){
+  try{
+    const raw=localStorage.getItem('cpred_mim_char');
+    if(raw){const d=JSON.parse(raw);return(d.S&&d.S.playerName)||'';}
+  }catch(e){}
+  return '';
+}
+
+function showHubNotif(msg){
+  // Reuse a simple temporary message near the roster
+  const el=document.createElement('div');
+  el.style.cssText='position:fixed;bottom:20px;right:20px;background:var(--d2);border:1px solid var(--r);padding:12px 18px;font-family:var(--font-m);font-size:10px;color:var(--t);z-index:400;letter-spacing:1px';
+  el.textContent=msg;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),2800);
+}
+
+function subscribeRealtime(){
+  if(!sbClient)return;
+  if(sbChannel)sbChannel.unsubscribe();
+  sbChannel=sbClient
+    .channel('personajes-cambios')
+    .on('postgres_changes',{event:'*',schema:'public',table:'personajes'},()=>loadRoster())
+    .subscribe();
+}
+
+function viewFullChar(idx){
+  // idx is the row index in the last loaded roster data
+  const r=_rosterData[idx];
+  if(!r||!r.full_data){showHubNotif('Sin datos de ficha disponibles.');return;}
+  try{
+    // Store with a dedicated key that personaje.html checks first
+    sessionStorage.setItem('mim_view_char', r.full_data);
+    sessionStorage.setItem('mim_view_mode','1');
+    window.open('personaje.html?view=1','_blank');
+  }catch(e){showHubNotif('Error al abrir ficha: '+e.message);}
+}
+
+function timeAgo(ts){
+  const diff=Math.floor((Date.now()-new Date(ts).getTime())/1000);
+  if(diff<60)return diff+'s';
+  if(diff<3600)return Math.floor(diff/60)+'m';
+  if(diff<86400)return Math.floor(diff/3600)+'h';
+  return Math.floor(diff/86400)+'d';
+}
+
+function toggleSbSetup(){
+  const b=document.getElementById('sb-setup-banner');
+  b.style.display=b.style.display==='none'?'block':'none';
+}
+
+// Auto-init if config saved
+(async function(){
+  const cfg=getSbConfig();
+  if(cfg){
+    try{
+      await initSupabase(cfg.url,cfg.key);
+      onSbConnected();
+    }catch(e){
+      document.getElementById('sb-setup-banner').style.display='block';
+    }
+  }else{
+    document.getElementById('sb-setup-banner').style.display='block';
+  }
+})();
+
+// === MANUAL CODE FALLBACK ===
+function loadFromCode(){
+  const code=document.getElementById('view-code').value.trim();
+  const resEl=document.getElementById('view-result');
+  if(!code.startsWith('MIM:')){
+    resEl.style.display='block';
+    resEl.innerHTML='<div style="font-family:var(--font-m);font-size:10px;color:var(--r2)">// CÓDIGO INVÁLIDO — FORMATO INCORRECTO</div>';
+    return;
+  }
+  try{
+    const decoded=JSON.parse(decodeURIComponent(escape(atob(code.slice(4)))));
+    const S=decoded.S||decoded;
+    const emp=S.stats?S.stats.EMP:0;
+    const maxPH=emp*10;
+    const cwCosts=[7,14,21,7,14,14,7,14,7,21,28,14,21,35,14,28,14,7,21,14,7,7,14,7,14,21,7,14];
+    const cwCost=(S.cyberware||[]).reduce((a,i)=>a+(cwCosts[i]||0),0);
+    const currPH=Math.max(0,maxPH-cwCost);
+    resEl.style.display='block';
+    resEl.innerHTML=`<div style="background:var(--d3);border:1px solid var(--r);padding:18px">
+      <div style="font-family:var(--font-t);font-size:16px;color:#fff;letter-spacing:2px;margin-bottom:6px">${S.name||'SIN NOMBRE'}</div>
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--r2);letter-spacing:2px;margin-bottom:10px">${S.role||'SIN ROL'} — ${S.roleAbility||''}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-family:var(--font-m);font-size:10px;color:var(--t2);margin-bottom:10px">
+        <div>HP: <span style="color:var(--y)">${S.hp||10}/${S.hpMax||10}</span></div>
+        <div>PH: <span style="color:var(--y)">${currPH}/${maxPH}</span></div>
+        <div>Nivel: <span style="color:var(--y)">${S.level||1}</span></div>
+        <div>IP: <span style="color:var(--y)">${S.xp||0}</span></div>
+      </div>
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--g);margin-bottom:10px">Jugador: ${decoded.playerName||'—'}</div>
+      <button onclick="window.open('personaje.html?code='+encodeURIComponent('${code.replace(/'/g,"\\'")}'),'_blank')" style="padding:8px 18px;background:var(--r);color:#fff;border:none;font-family:var(--font-m);font-size:9px;letter-spacing:2px;cursor:pointer">VER FICHA COMPLETA →</button>
+    </div>`;
+  }catch(e){
+    resEl.style.display='block';
+    resEl.innerHTML='<div style="font-family:var(--font-m);font-size:10px;color:var(--r2)">// ERROR AL DECODIFICAR — CÓDIGO CORRUPTO</div>';
+  }
+}
+function closeModal(){document.getElementById('share-modal').classList.remove('open');}
+function renderCampaignChars(){}
+function genShareCode(){}
+function copyShareCode(){}
+</script>
+</body>
+</html>

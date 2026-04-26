@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="es">
+<!--
+=============================================================================
+  NITC_NET // FICHA DE PERSONAJE // MÓDULO ALPHA-7
+  Cyberpunk RED: MEAT IS MURDER — Node: personaje.html
+  Advertencia: Este módulo monitoriza la Puntuación de Humanidad en tiempo real.
+  Si PH < 10, este archivo transmite automáticamente a Psicofuerza.
+  (Mentira. O no.)
+=============================================================================
+
+  REGISTRO DE PERSONAJES ANTERIORES QUE USARON ESTE SISTEMA:
+  ────────────────────────────────────────────────────────────
+  > KORVACH, A. — Netrunner — PH final: 34 — Estado: DECEASED
+    Última entrada: "encontré algo en los archivos de Militech. algo que
+    no debería existir. si estás leyendo esto es que ya me encontraron."
+
+  > LUNA REYES, — Rol: DESCONOCIDO — PH final: CLASIFICADO
+    Última entrada: [VACÍO]
+    Nota del sistema: Este personaje no debería aparecer en este registro.
+
+  > SUJETO_00 — Rol: CONTROL — PH: 100/100 (constante, sin variación)
+    Nota: Una PH perfectamente estable después de 51 implantes instalados
+    no es un logro médico. Es imposible. A menos que...
+
+=============================================================================
+  EASTER EGG PARA EL NETRUNNER DEL GRUPO
+  (si estás leyendo el código fuente eres exactamente el tipo de persona
+   que debería jugar Netrunner)
+=============================================================================
+
+  Frecuencia oculta en la red de Night City: 0xDEAD.BEEF.CAFE
+  Contraseña de acceso al servidor del Proyecto Anima (nivel 1): ph4s3_z3r0
+  Lo que encontrarás ahí: la lista completa de los 18 sujetos.
+  Lo que NO encontrarás: por qué el Sujeto_00 tiene PH perfecta.
+  Eso está en otro servidor. Uno que ni Sable sabe que existe.
+
+=============================================================================
+  NOTA DEL DESARROLLADOR
+  (que en este universo es la Dra. Varela diseñando el sistema de seguimiento)
+=============================================================================
+
+  Este sistema fue diseñado para rastrear la degradación de humanidad
+  de los sujetos del Proyecto Anima bajo cobertura de "hoja de personaje".
+  Los jugadores creen que están creando a sus personajes.
+  En realidad están dándonos exactamente los datos que necesitamos.
+
+  EMP. Stats. Cyberware instalado. Conexiones emocionales.
+  Todo archivado. Todo analizado.
+
+  Bienvenidos al Proyecto Anima, Fase 3.
+  Participación: voluntaria*.
+
+  (*) el asterisco indica que este término es relativo.
+
+=============================================================================
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FICHA DE PERSONAJE // MEAT IS MURDER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --r:#C0392B;--r2:#E74C3C;--r3:#FF6B6B;
+  --y:#F1C40F;--y2:#F39C12;
+  --d:#060606;--d2:#0d0d0d;--d3:#141414;--d4:#1a1a1a;--d5:#222;
+  --g:#666;--g2:#3a3a3a;--g3:#222;
+  --t:#CCCCCC;--t2:#999;
+  --c:#5dade2;--c2:#85c1e9;
+  --green:#27ae60;--orange:#e67e22;
+  --font-m:'Share Tech Mono',monospace;
+  --font-b:'Rajdhani',sans-serif;
+  --font-t:'Orbitron',sans-serif;
+}
+html,body{background:var(--d);color:var(--t);font-family:var(--font-b);min-height:100vh;overflow-x:hidden}
+body::-webkit-scrollbar{width:3px}body::-webkit-scrollbar-track{background:var(--d3)}body::-webkit-scrollbar-thumb{background:var(--r)}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes blink{50%{opacity:0}}
+
+/* HEADER */
+header{background:rgba(6,6,6,.98);border-bottom:1px solid #1a1a1a;position:sticky;top:0;z-index:200;backdrop-filter:blur(8px)}
+.header-inner{display:flex;align-items:stretch;max-width:1100px;margin:0 auto}
+.logo-block{padding:12px 18px;border-right:1px solid var(--g3);display:flex;flex-direction:column;justify-content:center;flex-shrink:0}
+.logo-main{font-family:var(--font-t);font-size:11px;color:var(--r);letter-spacing:4px;font-weight:900}
+.logo-sub{font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:2px;margin-top:2px}
+.header-tabs{display:flex;flex:1;overflow-x:auto}
+.htab{padding:14px 16px;color:var(--g);font-family:var(--font-m);font-size:9px;letter-spacing:2px;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
+.htab:hover{color:var(--t)}
+.htab.active{color:var(--r2);border-bottom-color:var(--r)}
+.htab.done::after{content:'✓';margin-left:5px;color:var(--y);font-size:8px}
+.header-actions{display:flex;align-items:center;gap:8px;padding:0 16px;border-left:1px solid var(--g3);flex-shrink:0}
+.hbtn{padding:8px 14px;font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;cursor:pointer;border:none;transition:all .15s}
+.hbtn-r{background:var(--r);color:#fff}.hbtn-r:hover{background:var(--r2)}
+.hbtn-s{background:transparent;border:1px solid var(--g3);color:var(--t2)}.hbtn-s:hover{border-color:var(--r);color:var(--r2)}
+.hbtn-g{background:rgba(39,174,96,.12);border:1px solid rgba(39,174,96,.3);color:var(--green)}.hbtn-g:hover{background:rgba(39,174,96,.2)}
+.save-ind{font-family:var(--font-m);font-size:8px;color:var(--green);letter-spacing:1px;opacity:0;transition:opacity .3s}
+.save-ind.show{opacity:1}
+
+/* MAIN LAYOUT */
+.main{max-width:1100px;margin:0 auto;padding:24px 20px 64px}
+.page{display:none;animation:fi .2s ease}
+.page.active{display:block}
+
+/* FORM ELEMENTS */
+.fl{font-family:var(--font-m);font-size:9px;letter-spacing:2px;color:var(--g);text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:7px}
+.tip{background:var(--d4);border:1px solid var(--g3);color:var(--g);font-size:8px;padding:2px 7px;cursor:pointer;font-family:var(--font-m);position:relative}
+.tip:hover .tip-pop{display:block}
+.tip-pop{display:none;position:absolute;left:0;top:100%;margin-top:3px;background:var(--d);border:1px solid var(--r);color:var(--t2);padding:8px 12px;font-size:10px;white-space:pre-wrap;width:230px;z-index:50;line-height:1.6}
+input[type=text],input[type=number],select,textarea{width:100%;background:var(--d4);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);font-size:12px;padding:9px 12px;outline:none;transition:border-color .15s;appearance:none;-webkit-appearance:none}
+input[type=text]:focus,input[type=number]:focus,select:focus,textarea:focus{border-color:var(--r)}
+select{cursor:pointer}
+textarea{resize:vertical;min-height:70px;line-height:1.6}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.fg{margin-bottom:15px}
+
+/* PHOTO */
+.photo-zone{width:110px;height:140px;border:1px dashed var(--g2);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .15s;overflow:hidden;position:relative;flex-shrink:0}
+.photo-zone:hover{border-color:var(--r)}
+.photo-zone img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.photo-txt{font-family:var(--font-m);font-size:9px;color:var(--g);text-align:center;line-height:1.8;pointer-events:none;z-index:1}
+input[type=file]{display:none}
+
+/* SECTION HEADER */
+.sh{font-family:var(--font-t);font-size:10px;color:var(--r2);letter-spacing:3px;margin:20px 0 12px;display:flex;align-items:center;gap:8px}
+.sh::before{content:'//';font-family:var(--font-m);color:var(--g)}
+.sh.first{margin-top:0}
+
+/* STATS */
+.stat-pts-bar{background:var(--d3);border:1px solid var(--r);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;position:sticky;top:55px;z-index:10}
+.pts-lbl{font-family:var(--font-m);font-size:9px;letter-spacing:2px;color:var(--g)}
+.pts-val{font-family:var(--font-t);font-size:20px;color:var(--y);font-weight:700}
+.pts-warn{color:var(--r2)!important}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:16px}
+.sbox{background:var(--d3);border:1px solid var(--g3);padding:12px;text-align:center;transition:border-color .15s}
+.sbox:hover{border-color:var(--g)}
+.sn{font-family:var(--font-m);font-size:8px;letter-spacing:2px;color:var(--g);margin-bottom:7px}
+.sv{font-family:var(--font-t);font-size:24px;color:var(--y);font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px}
+.sv button{background:none;border:1px solid var(--g3);color:var(--g);width:20px;height:20px;font-size:12px;cursor:pointer;line-height:1;transition:all .15s}
+.sv button:hover{border-color:var(--r);color:var(--r2)}
+.sd{font-size:9px;color:var(--g2);margin-top:4px;font-family:var(--font-m);line-height:1.4}
+.stat-mod{font-family:var(--font-m);font-size:8px;color:var(--c);margin-top:3px;min-height:12px}
+
+/* HP */
+.hp-block{background:var(--d3);border:1px solid var(--g3);padding:14px;margin-bottom:14px}
+.hp-row{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.hp-lbl{font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;min-width:55px}
+.hp-track{flex:1;height:14px;background:var(--d4);border:1px solid var(--g3);overflow:hidden}
+.hp-fill{height:100%;transition:width .3s;background:linear-gradient(90deg,#27ae60,#f39c12 60%,#e74c3c)}
+.hp-num{font-family:var(--font-t);font-size:13px;color:var(--y);min-width:48px;text-align:right}
+.hp-controls{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.mini-inp{width:70px;padding:5px 8px;font-size:11px}
+.hp-btn{padding:5px 12px;background:var(--d4);border:1px solid var(--g3);color:var(--t2);font-family:var(--font-m);font-size:9px;cursor:pointer;transition:all .15s;letter-spacing:1px}
+.hp-btn:hover{border-color:var(--r);color:var(--r2)}
+
+/* SKILLS */
+.skill-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.sk{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--d3);border:1px solid var(--g3);border-left:2px solid transparent;transition:border-left-color .15s}
+.sk:hover{border-left-color:var(--r)}
+.sk-n{flex:1;font-family:var(--font-m);font-size:10px;color:var(--t2)}
+.sk-base{font-size:9px;color:var(--g);width:22px;text-align:center;font-family:var(--font-m)}
+.sk-c{display:flex;align-items:center;gap:3px}
+.sk-c button{background:none;border:1px solid var(--g3);color:var(--g);width:16px;height:16px;font-size:10px;cursor:pointer;line-height:1;transition:all .15s}
+.sk-c button:hover{border-color:var(--r);color:var(--r2)}
+.sk-lv{font-family:var(--font-m);font-size:10px;color:var(--t);width:13px;text-align:center}
+.sk-tot{font-family:var(--font-t);font-size:12px;color:var(--y);min-width:20px;text-align:center}
+.sk-mod{font-family:var(--font-m);font-size:8px;color:var(--c);min-width:40px;text-align:left;padding-left:4px}
+
+/* CYBERWARE */
+.ph-panel{background:var(--d3);border:1px solid var(--g3);padding:14px;margin-bottom:14px}
+.ph-labels{display:flex;justify-content:space-between;font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;margin-bottom:6px}
+.ph-track{height:16px;background:var(--d4);border:1px solid var(--g3);overflow:hidden;margin-bottom:10px}
+.ph-fill{height:100%;transition:width .4s;background:linear-gradient(90deg,#e74c3c,#f39c12 50%,#27ae60)}
+.ph-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:0}
+.ph-box{background:var(--d4);border:1px solid var(--g3);padding:10px;text-align:center}
+.ph-bl{font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:2px;margin-bottom:5px}
+.ph-bv{font-family:var(--font-t);font-size:22px;font-weight:700}
+
+.cw-filter{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.cwf{padding:5px 11px;background:var(--d4);border:1px solid var(--g3);color:var(--g);font-family:var(--font-m);font-size:9px;letter-spacing:1px;cursor:pointer;transition:all .15s}
+.cwf.active{border-color:var(--r);color:var(--r2)}
+.cw-list{display:grid;gap:6px;margin-bottom:14px}
+.cw-item{display:flex;align-items:flex-start;gap:10px;background:var(--d4);border:1px solid var(--g3);padding:10px 12px;cursor:pointer;transition:all .15s}
+.cw-item:hover{border-color:var(--g)}
+.cw-item.sel{border-color:var(--r);background:rgba(192,57,43,.06)}
+.cw-check{width:13px;height:13px;border:1px solid var(--g);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;color:#fff;transition:all .15s;margin-top:2px}
+.cw-item.sel .cw-check{background:var(--r);border-color:var(--r)}
+.cw-inf{flex:1}
+.cw-n{font-family:var(--font-b);font-size:13px;font-weight:600;color:var(--t)}
+.cw-m{font-family:var(--font-m);font-size:9px;color:var(--g);margin:2px 0}
+.cw-d{font-size:12px;color:var(--t2);margin-top:2px;line-height:1.5}
+.cw-tag{font-family:var(--font-m);font-size:8px;letter-spacing:1px;padding:2px 7px;border:1px solid;flex-shrink:0;margin-top:2px}
+.t-solo{color:#e74c3c;border-color:#e74c3c}
+.t-net{color:#3498db;border-color:#3498db}
+.t-tech{color:#f39c12;border-color:#f39c12}
+.t-med{color:#2ecc71;border-color:#2ecc71}
+.t-all{color:#888;border-color:#555}
+.t-cor{color:#9b59b6;border-color:#9b59b6}
+
+/* CUSTOM CW BUILDER */
+.cw-builder{background:var(--d2);border:1px solid var(--g3);border-top:2px solid var(--y2);padding:18px;margin-bottom:16px}
+.cb-title{font-family:var(--font-t);font-size:10px;color:var(--y2);letter-spacing:2px;margin-bottom:14px}
+.cb-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.cb-full{grid-column:1/-1}
+.custom-cw-list{margin-top:12px;display:grid;gap:6px}
+.ccw-item{display:flex;align-items:flex-start;gap:10px;background:var(--d4);border:1px solid var(--y2);border-left:3px solid var(--y2);padding:10px 12px;cursor:pointer;transition:all .15s}
+.ccw-item.sel{background:rgba(241,196,15,.06)}
+.ccw-edit-btn{background:none;border:1px solid var(--g3);color:var(--y2);font-family:var(--font-m);font-size:8px;padding:3px 8px;cursor:pointer;transition:all .15s;flex-shrink:0}
+.ccw-edit-btn:hover{border-color:var(--y2)}
+.ccw-del-btn{background:none;border:1px solid var(--g3);color:var(--g);font-family:var(--font-m);font-size:10px;width:22px;height:22px;cursor:pointer;transition:all .15s;flex-shrink:0;line-height:1}
+.ccw-del-btn:hover{border-color:var(--r);color:var(--r2)}
+
+/* HACKS */
+.hack-list{display:grid;gap:7px;margin-bottom:14px}
+.hack{background:var(--d4);border:1px solid var(--g3);padding:12px;border-left:2px solid #3498db}
+.hack-n{font-family:var(--font-t);font-size:11px;color:var(--c);letter-spacing:1px;margin-bottom:3px}
+.hack-m{font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:.5px;margin-bottom:5px}
+.hack-d{font-size:12px;color:var(--t2);line-height:1.5}
+
+/* GEAR */
+.gear-list{display:grid;gap:5px;margin-bottom:10px}
+.gi{display:flex;align-items:center;gap:8px;background:var(--d4);border:1px solid var(--g3);padding:9px 12px}
+.gi-del{background:none;border:1px solid var(--g3);color:var(--g);width:20px;height:20px;font-size:11px;cursor:pointer;transition:all .15s;line-height:1;flex-shrink:0}
+.gi-del:hover{border-color:var(--r);color:var(--r2)}
+.gi-n{flex:1;font-family:var(--font-m);font-size:10px;color:var(--t)}
+.gi-s{font-family:var(--font-m);font-size:10px;color:var(--y);flex-shrink:0}
+.add-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.add-row input,.add-row select{flex:1;min-width:100px}
+.add-btn{padding:9px 14px;background:var(--r);color:#fff;border:none;font-family:var(--font-m);font-size:9px;letter-spacing:1px;cursor:pointer;transition:background .15s;flex-shrink:0;white-space:nowrap}
+.add-btn:hover{background:var(--r2)}
+.add-btn-g{background:var(--d4);border:1px solid var(--g3);color:var(--t2)}.add-btn-g:hover{border-color:var(--y2);color:var(--y2)}
+
+/* ROLE CARDS */
+.role-list{display:grid;gap:8px}
+.rc{background:var(--d3);border:1px solid var(--g3);border-top:2px solid var(--g3);padding:15px;cursor:pointer;transition:all .15s}
+.rc:hover,.rc.sel{border-color:var(--r);border-top-color:var(--r);background:rgba(192,57,43,.06)}
+.rc-n{font-family:var(--font-t);font-size:13px;color:var(--r2);margin-bottom:3px}
+.rc-a{font-family:var(--font-m);font-size:9px;color:var(--y);letter-spacing:1px;margin-bottom:7px}
+.rc-d{font-size:12px;color:var(--t2);line-height:1.6}
+
+/* LEVEL */
+.level-card{background:var(--d3);border:1px solid var(--g3);padding:16px;margin-bottom:14px}
+.lv-row{display:flex;align-items:center;gap:16px;margin-bottom:12px}
+.lv-n{font-family:var(--font-t);font-size:42px;color:var(--y);font-weight:700;line-height:1}
+.lv-info{flex:1}
+.lv-name{font-family:var(--font-m);font-size:11px;color:var(--r2);letter-spacing:2px}
+.xp-wrap{height:7px;background:var(--d4);border:1px solid var(--g3);margin:7px 0}
+.xp-bar{height:100%;background:var(--r2);transition:width .3s}
+.xp-txt{font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px}
+.ip-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.lvl-btn{padding:9px 18px;background:transparent;border:1px solid var(--r);color:var(--r2);font-family:var(--font-m);font-size:9px;letter-spacing:2px;cursor:pointer;transition:all .15s}
+.lvl-btn:hover{background:var(--r);color:#fff}
+.lvl-log{font-family:var(--font-m);font-size:9px;color:var(--g);line-height:2;margin-top:10px;border-top:1px solid var(--g3);padding-top:10px;max-height:120px;overflow-y:auto}
+
+/* SUMMARY */
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sum-block{background:var(--d3);border:1px solid var(--g3);padding:14px}
+.sum-t{font-family:var(--font-t);font-size:9px;color:var(--r2);letter-spacing:2px;margin-bottom:10px;border-bottom:1px solid var(--g3);padding-bottom:6px}
+.sum-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
+.sum-k{color:var(--g);font-family:var(--font-m);font-size:9px}
+.sum-v{color:var(--t);font-weight:600;font-family:var(--font-m);font-size:10px}
+
+/* SHARE PANEL */
+.share-panel{background:var(--d2);border:1px solid var(--g3);border-top:2px solid var(--green);padding:18px;margin-top:16px}
+.share-title{font-family:var(--font-t);font-size:10px;color:var(--green);letter-spacing:2px;margin-bottom:14px}
+.share-url{background:var(--d4);border:1px solid var(--g3);color:var(--c);font-family:var(--font-m);font-size:10px;padding:10px 14px;width:100%;word-break:break-all;line-height:1.6;user-select:all;cursor:text;margin-bottom:10px}
+.copy-btn{width:100%;padding:10px;background:var(--green);color:#fff;border:none;font-family:var(--font-m);font-size:9px;letter-spacing:2px;cursor:pointer;transition:background .15s}
+.copy-btn:hover{background:#2ecc71}
+.copy-ok{color:var(--green);font-family:var(--font-m);font-size:9px;text-align:center;margin-top:6px;display:none}
+
+/* NOTIFICATION */
+.notif{position:fixed;bottom:20px;right:20px;background:var(--d2);border:1px solid var(--r);border-left:3px solid var(--green);padding:12px 18px;font-family:var(--font-m);font-size:10px;color:var(--t);z-index:500;transform:translateX(200px);transition:transform .3s;letter-spacing:1px}
+.notif.show{transform:none}
+
+/* RULE BLOCK */
+.rule{background:var(--d2);border:1px solid var(--g3);border-left:3px solid var(--y2);padding:16px 18px;margin-bottom:12px}
+.rule h3{font-family:var(--font-t);font-size:9px;color:var(--y);letter-spacing:2px;margin-bottom:8px}
+.rule p,.rule li{font-size:12px;color:var(--t2);line-height:1.85}
+.rule ul{padding-left:16px;margin:5px 0}
+.rule li{margin-bottom:4px}
+
+@media(max-width:580px){.skill-grid{grid-template-columns:1fr}.sum-grid{grid-template-columns:1fr}.row2,.row3{grid-template-columns:1fr}.ph-stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-block">
+      <div class="logo-main">MIM//</div>
+      <div class="logo-sub">FICHA DE PERSONAJE</div>
+    </div>
+    <div class="header-tabs" id="header-tabs">
+      <button class="htab active" onclick="goTab(0,this)">01 ID</button>
+      <button class="htab" onclick="goTab(1,this)">02 ROL</button>
+      <button class="htab" onclick="goTab(2,this)">03 STATS</button>
+      <button class="htab" onclick="goTab(3,this)">04 SKILLS</button>
+      <button class="htab" onclick="goTab(4,this)">05 CROMO</button>
+      <button class="htab" onclick="goTab(5,this)">06 EQUIPO</button>
+      <button class="htab" onclick="goTab(6,this)">07 NIVEL</button>
+      <button class="htab" onclick="goTab(7,this)">08 RESUMEN</button>
+    </div>
+    <div class="header-actions">
+      <span class="save-ind" id="save-ind">✓ GUARDADO</span>
+      <button class="hbtn hbtn-s" onclick="resetChar()">↺ NUEVO</button>
+      <button class="hbtn hbtn-g" onclick="genShare()">⇧ COMPARTIR</button>
+      <a href="index.html" class="hbtn hbtn-r" style="text-decoration:none">← CAMPAIGN</a>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+
+<!-- PAGE 0: ID -->
+<div class="page active" id="pg-0">
+  <div class="sh first">Identificación del Personaje</div>
+  <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px">
+    <div>
+      <div class="fl" style="margin-bottom:8px">Foto</div>
+      <div class="photo-zone" id="photo-zone" onclick="document.getElementById('photo-inp').click()">
+        <img id="photo-img" src="" style="display:none">
+        <div class="photo-txt" id="photo-hint">CLICK<br>PARA<br>SUBIR</div>
+      </div>
+      <input type="file" id="photo-inp" accept="image/*" onchange="loadPhoto(this)">
+    </div>
+    <div style="flex:1;min-width:200px">
+      <div class="fg"><div class="fl">Nombre / Alias de Calle</div><input type="text" id="c-name" placeholder="Viktor 'Sombra' Reyes" oninput="sc()"></div>
+      <div class="row2">
+        <div class="fg"><div class="fl">Edad</div><input type="number" id="c-age" value="25" min="16" max="65" oninput="sc()"></div>
+        <div class="fg"><div class="fl">Origen Cultural</div>
+          <select id="c-origin" onchange="sc()">
+            <option>Nómada del Badlands</option><option>Nacido en Night City</option>
+            <option>Inmigrante Latinoamericano</option><option>Asiático-Pacífico</option>
+            <option>Europeo del Este</option><option>Africano</option><option>Corporativo (renegado)</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><div class="fl">Ocupación en la Calle</div>
+        <select id="c-work" onchange="sc()">
+          <option>Mercenario / Muscle</option><option>Informante / Fixer</option>
+          <option>Técnico de Cromo</option><option>Netrunner Freelance</option>
+          <option>Médico Renegado</option><option>Contrabandista</option>
+          <option>Guardaespaldas Corporativo</option><option>Periodista Clandestino</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="fg"><div class="fl">Apariencia <span class="tip">?<div class="tip-pop">¿Cómo te ven cuando entras a un bar? Cromo visible, ropa, cicatrices, rasgos memorables. 2-3 frases.</div></span></div>
+    <textarea id="c-look" placeholder="Ojos Kiroshi de pupila vertical ámbar. Trench negro con parches de banda. La mano derecha es cromo visible..." oninput="sc()"></textarea>
+  </div>
+  <div class="row2">
+    <div class="fg"><div class="fl">Motivación Principal</div>
+      <select id="c-motive" onchange="sc()">
+        <option>Dinero — necesito sobrevivir</option><option>Venganza</option>
+        <option>Proteger a alguien</option><option>Libertad anti-corporativa</option>
+        <option>Información — sé demasiado</option><option>Redención</option><option>Ideología</option>
+      </select>
+    </div>
+    <div class="fg"><div class="fl">Mayor Miedo</div><input type="text" id="c-fear" placeholder="Perder mi humanidad sin darme cuenta" oninput="sc()"></div>
+  </div>
+  <div class="fg"><div class="fl">Ancla Humana — Lo que te mantiene conectado</div><input type="text" id="c-anchor" placeholder="Una foto de mi madre. Mi gato. La música de cuando era niño." oninput="sc()"></div>
+  <div class="fg"><div class="fl">Evento Definidor <span class="tip">?<div class="tip-pop">Una cosa que cambió quién eras. El momento en que decidiste quién querías ser.</div></span></div>
+    <textarea id="c-event" placeholder="Vi a mi partner convertirse en cyberpsicótico durante una operación. Lo maté yo mismo..." oninput="sc()"></textarea>
+  </div>
+  <div class="fg"><div class="fl">Conexión con la Campaña <span class="tip">?<div class="tip-pop">¿Cómo conecta tu personaje con el tema de la cyberpsicosis? ¿Conoces a alguien que la sufrió?</div></span></div>
+    <textarea id="c-conn" placeholder="Mi hermana fue víctima de un cyberpsicótico. Sobrevivió, pero nunca volvió a ser la misma..." oninput="sc()"></textarea>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+    <button class="add-btn" onclick="nextTab(0)" style="padding:11px 24px">SIGUIENTE: ROL →</button>
+  </div>
+</div>
+
+<!-- PAGE 1: ROL -->
+<div class="page" id="pg-1">
+  <div class="sh first">Elige tu Rol</div>
+  <div class="rule" style="margin-bottom:16px;border-left-color:var(--r)">
+    <p>El Rol define tu habilidad especial e identidad. También determina qué cromo y hacks tienes acceso prioritario.</p>
+  </div>
+  <div class="role-list" id="role-list">
+    <div class="rc" onclick="selRole(this,'Solo','Combate Awareness','El guerrero de élite. Combate Awareness suma a todas tus defensas. Ves ángulos de ataque que otros ignoran. Cuando las cosas se ponen feas, el equipo te mira a ti. Acceso a cromo militar y armas avanzadas.')">
+      <div class="rc-n">SOLO</div><div class="rc-a">⚡ COMBATE AWARENESS</div>
+      <div class="rc-d">Especialista en combate puro. +1 a defensas por nivel de Combate Awareness. Acceso prioritario a cromo ofensivo y defensivo de nivel militar.</div>
+    </div>
+    <div class="rc" onclick="selRole(this,'Netrunner','Interface','El fantasma en la red. Interface te permite hackear sistemas ICE, extraer datos y ejecutar programas mientras el equipo sangra afuera. Tu campo de batalla es el ciberespacio. Acceso a programas de hack y cromo neural avanzado.')">
+      <div class="rc-n">NETRUNNER</div><div class="rc-a">⚡ INTERFACE</div>
+      <div class="rc-d">Hacker de sistemas y redes. Ejecuta Programas contra objetivos en rango de Interface. Acceso al Ciberespacio. Requiere Neurovínculo y Deck de Interface.</div>
+    </div>
+    <div class="rc" onclick="selRole(this,'Techie','Fabricar / Reparar','Constructor de lo imposible. Puedes fabricar armas, reparar cromo y hackear hardware con tiempo y herramientas. Reduces costos de instalación de cromo. El equipo sobrevive porque tú los mantienes funcionando.')">
+      <div class="rc-n">TECHIE</div><div class="rc-a">⚡ FABRICAR / REPARAR</div>
+      <div class="rc-d">Constructor y reparador de élite. Fabrica equipo, armas, armaduras y cromo. Reduce costos de instalación. Puede mejorar cromo existente.</div>
+    </div>
+    <div class="rc" onclick="selRole(this,'Medtech','Medicina de Campo','Entre el polvo y la muerte. Tratas heridas críticas, haces cirugías de campo y puedes recuperar Humanidad mediante terapia. Sin ti, tus compañeros mueren en callejones. Eres insustituible.')">
+      <div class="rc-n">MEDTECH</div><div class="rc-a">⚡ MEDICINA DE CAMPO</div>
+      <div class="rc-d">Médico renegado. Trata Critical Injuries, realiza cirugías de emergencia, instala y extrae cromo. Puede recuperar PH mediante terapia. Crucial en esta campaña.</div>
+    </div>
+    <div class="rc" onclick="selRole(this,'Corpo','Recursos Corporativos','Vienes del sistema. Conoces sus grietas. Recursos Corporativos te da acceso a información privilegiada, contactos en las altas esferas y equipo de alta gama. Pero alguien en el sistema te busca.')">
+      <div class="rc-n">CORPO</div><div class="rc-a">⚡ RECURSOS CORPORATIVOS</div>
+      <div class="rc-d">Renegado corporativo. Acceso a información clasificada, equipo premium y contactos en Arasaka, Militech, Kang Tao. Especialmente relevante en esta campaña.</div>
+    </div>
+    <div class="rc" onclick="selRole(this,'Rockerboy','Carisma Inspiracional','Tu voz mueve multitudes. Carisma Inspiracional hace que grupos actúen contra sus propios intereses. En Night City, la revolución suena a guitarra distorsionada y cromo reluciente.')">
+      <div class="rc-n">ROCKERBOY</div><div class="rc-a">⚡ CARISMA INSPIRACIONAL</div>
+      <div class="rc-d">Artista y agitador. Inspira, manipula o incita a grupos. Tu reputación precede tus balas. Las masas escuchan — y a veces actúan.</div>
+    </div>
+  </div>
+  <div id="role-sel-box" style="display:none;background:rgba(192,57,43,.08);border:1px solid var(--r);padding:12px 16px;margin-top:10px;font-family:var(--font-m);font-size:9px;color:var(--r2);letter-spacing:1px"></div>
+  <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+    <button class="add-btn" style="background:transparent;border:1px solid var(--g3);color:var(--t2)" onclick="prevTab(1)">← VOLVER</button>
+    <button class="add-btn" onclick="nextTab(1)">SIGUIENTE: STATS →</button>
+  </div>
+</div>
+
+<!-- PAGE 2: STATS -->
+<div class="page" id="pg-2">
+  <div class="sh first">Estadísticas Base</div>
+  <div class="rule" style="margin-bottom:12px;border-left-color:var(--r)">
+    <p>Tienes <b>62 puntos</b>. Todos los stats empiezan en <b>0</b>. Máximo 8 por stat. <b>EMP × 10 = Humanidad máxima</b>. En esta campaña, EMP es el stat más importante de todos.</p>
+  </div>
+  <div class="hp-block">
+    <div style="font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:2px;margin-bottom:10px">// PUNTOS DE GOLPE (HP = 10 + BODY × 5) //</div>
+    <div class="hp-row">
+      <div class="hp-lbl">HP ACTUAL</div>
+      <div class="hp-track"><div class="hp-fill" id="hp-fill" style="width:100%"></div></div>
+      <div class="hp-num"><span id="hp-curr">10</span> / <span id="hp-max-d">10</span></div>
+    </div>
+    <div class="hp-controls">
+      <span style="font-family:var(--font-m);font-size:9px;color:var(--g)">AJUSTAR:</span>
+      <input type="number" class="mini-inp" id="hp-adj" placeholder="+/-" style="width:65px">
+      <button class="hp-btn" onclick="adjHP(-1)">DAÑO</button>
+      <button class="hp-btn" onclick="adjHP(1)">SANAR</button>
+      <button class="hp-btn" onclick="resetHP()">RESET</button>
+    </div>
+  </div>
+  <div class="stat-pts-bar">
+    <div class="pts-lbl">PUNTOS DISPONIBLES</div>
+    <div class="pts-val" id="pts-v">62</div>
+    <div style="font-family:var(--font-m);font-size:9px;color:var(--g)">RANGO: 0–8</div>
+  </div>
+  <div class="stat-grid" id="stat-grid"></div>
+  <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
+    <button class="add-btn" style="background:transparent;border:1px solid var(--g3);color:var(--t2)" onclick="prevTab(2)">← VOLVER</button>
+    <button class="add-btn" onclick="nextTab(2)">SIGUIENTE: SKILLS →</button>
+  </div>
+</div>
+
+<!-- PAGE 3: SKILLS -->
+<div class="page" id="pg-3">
+  <div class="sh first">Habilidades</div>
+  <div class="rule" style="margin-bottom:10px;border-left-color:var(--r)">
+    <p>Tienes <b>86 puntos</b>. Habilidades: 0–6. <b>Total = Stat + Nivel</b>. El modificador indica el resultado promedio de una tirada (Total + 5.5 = media con d10).</p>
+  </div>
+  <div class="stat-pts-bar">
+    <div class="pts-lbl">PUNTOS DE HABILIDAD</div>
+    <div class="pts-val" id="sk-pts-v">86</div>
+    <div style="font-family:var(--font-m);font-size:9px;color:var(--g)">MAX 6</div>
+  </div>
+  <div class="skill-grid" id="skill-grid"></div>
+  <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+    <button class="add-btn" style="background:transparent;border:1px solid var(--g3);color:var(--t2)" onclick="prevTab(3)">← VOLVER</button>
+    <button class="add-btn" onclick="nextTab(3)">SIGUIENTE: CROMO →</button>
+  </div>
+</div>
+
+<!-- PAGE 4: CYBERWARE -->
+<div class="page" id="pg-4">
+  <div class="sh first">Cromo e Implantes</div>
+  <div class="ph-panel">
+    <div class="ph-labels"><span>CYBERPSICÓTICO</span><span style="text-align:center">HUMANIDAD</span><span style="text-align:right">HUMANO</span></div>
+    <div class="ph-track"><div class="ph-fill" id="ph-fill" style="width:100%"></div></div>
+    <div class="ph-stats">
+      <div class="ph-box"><div class="ph-bl">PH MÁXIMA</div><div class="ph-bv" id="ph-max-v" style="color:var(--y)">—</div></div>
+      <div class="ph-box"><div class="ph-bl">PH ACTUAL</div><div class="ph-bv" id="ph-curr-v">—</div><div style="font-family:var(--font-m);font-size:8px;color:var(--g);margin-top:3px" id="ph-status">—</div></div>
+      <div class="ph-box"><div class="ph-bl">EMP EFECTIVA</div><div class="ph-bv" id="emp-eff-v" style="color:var(--c)">—</div><div style="font-family:var(--font-m);font-size:8px;color:var(--g);margin-top:3px">PH÷10</div></div>
+    </div>
+  </div>
+
+  <div id="hack-section" style="display:none;margin-bottom:16px">
+    <div class="sh" style="margin-top:0">Programas de Hack — Netrunner</div>
+
+    <!-- CUSTOM HACK BUILDER -->
+    <div class="cw-builder" style="border-top-color:var(--c);margin-bottom:14px">
+      <div class="cb-title" style="color:var(--c)">CONSTRUCTOR DE HACKEOS PERSONALIZADOS</div>
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;margin-bottom:12px">// Los hackeos personalizados se guardan para todos los Netrunners de la campaña</div>
+      <div id="hack-edit-form">
+        <div class="cb-grid">
+          <div class="fg" style="margin-bottom:0"><div class="fl">Nombre del Programa</div><input type="text" id="hk-name" placeholder="Ej: Neural Spike"></div>
+          <div class="fg" style="margin-bottom:0"><div class="fl">Coste RAM</div><input type="text" id="hk-cost" placeholder="Ej: 3 RAM"></div>
+          <div class="fg" style="margin-bottom:0"><div class="fl">Tirada de Ataque</div><input type="text" id="hk-atk" placeholder="Ej: Interface vs DV12"></div>
+          <div class="fg" style="margin-bottom:0"><div class="fl">Categoría</div>
+            <select id="hk-cat">
+              <option value="Ataque">Ataque</option>
+              <option value="Defensa">Defensa</option>
+              <option value="Utility">Utilidad</option>
+              <option value="Virus">Virus</option>
+              <option value="Control">Control</option>
+            </select>
+          </div>
+          <div class="fg cb-full" style="margin-bottom:8px"><div class="fl">Descripción / Efecto Mecánico</div>
+            <textarea id="hk-desc" placeholder="Ej: Sobrecarga los implantes neurales del objetivo. 2d6 de daño directo a su PH. Si la PH cae por debajo del 30%, tirada de control inmediata." style="min-height:60px"></textarea>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="add-btn" onclick="saveHack()" id="hk-save-btn" style="background:var(--c);color:#000">+ AÑADIR HACKEO</button>
+          <button class="add-btn add-btn-g" onclick="cancelHackEdit()" id="hk-cancel-btn" style="display:none">✕ CANCELAR</button>
+        </div>
+      </div>
+      <div id="custom-hack-list" class="custom-cw-list" style="margin-top:12px"></div>
+    </div>
+
+    <!-- OFFICIAL HACKS -->
+    <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:8px">// PROGRAMAS OFICIALES //</div>
+    <div class="hack-list" id="hack-list"></div>
+  </div>
+
+  <!-- CUSTOM CW BUILDER -->
+  <div class="cw-builder">
+    <div class="cb-title">CONSTRUCTOR DE CROMO PERSONALIZADO</div>
+    <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;margin-bottom:12px">// El cromo personalizado se guarda para TODOS los jugadores de la campaña</div>
+    <div id="cw-edit-form">
+      <div class="cb-grid">
+        <div class="fg" style="margin-bottom:0"><div class="fl">Nombre del Implante</div><input type="text" id="cw-name" placeholder="Ej: Supra-Reflejo Experimental"></div>
+        <div class="fg" style="margin-bottom:0"><div class="fl">Tipo</div>
+          <select id="cw-type">
+            <option>Neural</option><option>Óptico</option><option>Cuerpo</option><option>Orgánico</option>
+          </select>
+        </div>
+        <div class="fg" style="margin-bottom:0"><div class="fl">Costo PH</div><input type="number" id="cw-ph" value="7" min="1" max="50"></div>
+        <div class="fg" style="margin-bottom:0"><div class="fl">Rol Recomendado</div>
+          <select id="cw-role-tag">
+            <option value="all">Todos</option>
+            <option value="solo">Solo</option>
+            <option value="net">Netrunner</option>
+            <option value="tech">Techie</option>
+            <option value="med">Medtech</option>
+            <option value="cor">Corpo</option>
+          </select>
+        </div>
+        <div class="fg cb-full" style="margin-bottom:8px"><div class="fl">Descripción / Efecto Mecánico</div>
+          <textarea id="cw-desc" placeholder="Ej: Sandevistan homebrew. 1 vez/sesión activa modo acelerado: 3 acciones adicionales en un turno. Costo: 3d6 de daño mental acumulativo." style="min-height:60px"></textarea>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="add-btn" onclick="saveCW()" id="cw-save-btn">+ AÑADIR CROMO</button>
+        <button class="add-btn add-btn-g" onclick="cancelCWEdit()" id="cw-cancel-btn" style="display:none">✕ CANCELAR</button>
+      </div>
+    </div>
+    <div id="custom-cw-list" class="custom-cw-list"></div>
+  </div>
+
+  <div class="sh">Catálogo de Cromo Oficial</div>
+  <div class="cw-filter" id="cw-filter">
+    <button class="cwf active" onclick="filterCW('all',this)">TODO</button>
+    <button class="cwf" onclick="filterCW('Neural',this)">NEURAL</button>
+    <button class="cwf" onclick="filterCW('Óptico',this)">ÓPTICO</button>
+    <button class="cwf" onclick="filterCW('Cuerpo',this)">CUERPO</button>
+    <button class="cwf" onclick="filterCW('Orgánico',this)">ORGÁNICO</button>
+  </div>
+  <div class="cw-list" id="cw-list"></div>
+
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button class="add-btn" style="background:transparent;border:1px solid var(--g3);color:var(--t2)" onclick="prevTab(4)">← VOLVER</button>
+    <button class="add-btn" onclick="nextTab(4)">SIGUIENTE: EQUIPO →</button>
+  </div>
+</div>
+
+<!-- PAGE 5: GEAR -->
+<div class="page" id="pg-5">
+  <div class="sh first">Equipamiento y Armamento</div>
+  <div class="rule" style="margin-bottom:16px;border-left-color:var(--y2)">
+    <p>Las armas usan <b>REF + habilidad</b>. Armadura reduce daño (SP). El cromo puede incluir armas integradas.</p>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="sh" style="margin-top:0">Armas de Fuego</div>
+    <div class="gear-list" id="wpn-list"></div>
+    <div class="add-row">
+      <input type="text" id="wpn-name" placeholder="Nombre del arma">
+      <select id="wpn-type">
+        <option value="2d6 · Pistola Ligera">Pistola Ligera (2d6)</option>
+        <option value="2d6 · SMG">SMG (2d6)</option>
+        <option value="3d6 · Pistola Pesada">Pistola Pesada (3d6)</option>
+        <option value="3d6 · Escopeta">Escopeta (3d6)</option>
+        <option value="5d6 · Rifle Asalto">Rifle de Asalto (5d6)</option>
+        <option value="5d6 · Francotirador">Rifle Francotirador (5d6)</option>
+        <option value="6d6 · Granada">Granada (6d6, área)</option>
+      </select>
+      <button class="add-btn" onclick="addGear('wpn')">+ AÑADIR</button>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="sh" style="margin-top:0">Armas Cuerpo a Cuerpo</div>
+    <div class="gear-list" id="cac-list"></div>
+    <div class="add-row">
+      <input type="text" id="cac-name" placeholder="Nombre del arma CaC">
+      <select id="cac-type">
+        <option value="1d6 · Hoja ligera">Hoja Ligera / Puño (1d6)</option>
+        <option value="1d6+2 · Hoja táctica">Hoja Táctica (1d6+2)</option>
+        <option value="2d6 · Machete / Hacha">Machete / Hacha (2d6)</option>
+        <option value="2d6 · Bastón / Cadena">Bastón / Cadena (2d6)</option>
+        <option value="3d6 · Arma pesada CaC">Arma Pesada CaC (3d6)</option>
+        <option value="2d6 · Hoja Mantis (cromo)">Hoja Mantis — cromo (2d6)</option>
+        <option value="3d6 · Brazo de combate (cromo)">Brazo de Combate — cromo (3d6)</option>
+        <option value="1d6 · Mod monofilo">Monofilo (1d6, ignora SP1)</option>
+      </select>
+      <button class="add-btn" onclick="addGear('cac')">+ AÑADIR</button>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="sh" style="margin-top:0">Armadura</div>
+    <div class="gear-list" id="arm-list"></div>
+    <div class="add-row">
+      <input type="text" id="arm-name" placeholder="Nombre de armadura">
+      <select id="arm-sp">
+        <option value="SP 3 · Kevlar ligero">Kevlar Ligero (SP3)</option>
+        <option value="SP 7 · Chaqueta de combate">Chaqueta de Combate (SP7)</option>
+        <option value="SP 11 · Armadura media">Armadura Media (SP11)</option>
+        <option value="SP 15 · Armadura de combate">Armadura de Combate (SP15)</option>
+        <option value="SP 18 · Coraza pesada">Coraza Pesada (SP18)</option>
+        <option value="SP 20 · Armadura militar">Armadura Militar (SP20)</option>
+      </select>
+      <button class="add-btn" onclick="addGear('arm')">+ AÑADIR</button>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="sh" style="margin-top:0">Equipo y Objetos</div>
+    <div class="gear-list" id="item-list"></div>
+    <div class="add-row">
+      <input type="text" id="item-name" placeholder="Nombre del objeto">
+      <input type="text" id="item-note" placeholder="Nota (ej: 1 uso, 2d6...)">
+      <button class="add-btn" onclick="addGear('item')">+ AÑADIR</button>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button class="add-btn" style="background:transparent;border:1px solid var(--g3);color:var(--t2)" onclick="prevTab(5)">← VOLVER</button>
+    <button class="add-btn" onclick="nextTab(5)">SIGUIENTE: NIVEL →</button>
+  </div>
+</div>
+
+<!-- PAGE 6: LEVEL -->
+<div class="page" id="pg-6">
+  <div class="sh first">Sistema de Progresión</div>
+  <div class="rule" style="margin-bottom:14px;border-left-color:var(--y2)">
+    <p>El GM otorga <b>Puntos de Mejora (IP)</b> al final de cada sesión. Úsalos para mejorar stats, habilidades o desbloquear capacidades de Rol. La progresión refleja lo que tu personaje aprende en Night City.</p>
+  </div>
+  <div class="level-card">
+    <div class="lv-row">
+      <div class="lv-n" id="lv-num">1</div>
+      <div class="lv-info">
+        <div class="lv-name" id="lv-name">EDGERUNNER NOVATO</div>
+        <div class="xp-wrap"><div class="xp-bar" id="xp-bar" style="width:0%"></div></div>
+        <div class="xp-txt"><span id="xp-curr">0</span> / <span id="xp-next">10</span> IP para siguiente nivel</div>
+      </div>
+    </div>
+    <div class="ip-row">
+      <input type="number" id="ip-add" placeholder="IP a añadir" style="width:130px">
+      <button class="lvl-btn" onclick="addXP()">+ AÑADIR IP</button>
+      <button class="lvl-btn" style="border-color:var(--y2);color:var(--y2)" onclick="spendIP()">GASTAR 1 IP</button>
+      <button class="lvl-btn" style="border-color:var(--r);color:var(--r2)" onclick="removeLvl()">− NIVEL</button>
+    </div>
+    <div class="lvl-log" id="lvl-log">// Sin actividad registrada</div>
+  </div>
+
+  <div class="rule">
+    <h3>CÓMO GASTAR IP</h3>
+    <ul>
+      <li><b>+1 a cualquier Habilidad</b> (0→6): cuesta 1 IP</li>
+      <li><b>+1 a cualquier Stat</b> (por encima de lo inicial): cuesta 5 IP</li>
+      <li><b>Mejorar Habilidad de Rol</b> en +1: cuesta 3 IP</li>
+      <li><b>Aprender Habilidad secundaria del Rol</b>: cuesta 5 IP</li>
+      <li><b>Reducir costo de instalación de cromo</b> (Techie): 2 IP</li>
+    </ul>
+  </div>
+
+  <div class="rule" style="border-left-color:var(--r)">
+    <h3>RECUPERAR HUMANIDAD (MEDTECH)</h3>
+    <ul>
+      <li>Terapia entre sesiones: recupera 2d6 PH (requiere acceso a terapeuta y tiempo)</li>
+      <li>Extraer un implante voluntariamente: recupera el costo de PH del implante</li>
+      <li>El GM puede otorgar 1d6 PH por roleplay excepcional de humanidad</li>
+      <li>El Medtech puede realizar "terapia de campo" entre sesiones: 1d6 PH por paciente</li>
+    </ul>
+  </div>
+
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+    <button class="add-btn" style="background:transparent;border:1px solid var(--g3);color:var(--t2)" onclick="prevTab(6)">← VOLVER</button>
+    <button class="add-btn" onclick="nextTab(6)">VER RESUMEN →</button>
+  </div>
+</div>
+
+<!-- PAGE 7: SUMMARY -->
+<div class="page" id="pg-7">
+  <div class="sh first">Ficha Completa</div>
+  <div id="summary-content"></div>
+
+  <div class="share-panel">
+    <div class="share-title">SINCRONIZAR CON LA SALA</div>
+
+    <!-- Supabase status -->
+    <div id="pj-sb-status" style="font-family:var(--font-m);font-size:9px;letter-spacing:1px;margin-bottom:14px;padding:8px 12px;border:1px solid var(--g3);color:var(--g)">
+      ● SUPABASE: Buscando configuración...
+    </div>
+
+    <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;margin-bottom:10px">Nombre que verá el GM en la sala:</div>
+    <input type="text" id="share-playername" placeholder="Tu nombre de jugador" style="margin-bottom:10px" oninput="sc()">
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+      <button class="copy-btn" onclick="pushToSupabase()" id="sb-push-btn" style="background:var(--green);flex:1">↑ GUARDAR EN SALA</button>
+      <button class="copy-btn" onclick="genShare()" style="background:var(--r);flex:1">GENERAR CÓDIGO MANUAL</button>
+    </div>
+
+    <div id="sb-push-ok" style="display:none;font-family:var(--font-m);font-size:9px;color:var(--green);letter-spacing:1px;text-align:center;margin-bottom:8px">✓ FICHA ENVIADA — EL GM LA VE AHORA EN TIEMPO REAL</div>
+    <div id="sb-push-err" style="display:none;font-family:var(--font-m);font-size:9px;color:var(--r2);letter-spacing:1px;text-align:center;margin-bottom:8px"></div>
+
+    <div style="margin-top:4px;padding-top:12px;border-top:1px solid var(--g3)">
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;margin-bottom:8px">ZONA DE PELIGRO</div>
+      <button onclick="deleteSelfFromSala()" style="width:100%;padding:9px;background:transparent;border:1px solid var(--r);color:var(--r2);font-family:var(--font-m);font-size:9px;letter-spacing:2px;cursor:pointer;transition:all .15s" onmouseover="this.style.background='rgba(192,57,43,.15)'" onmouseout="this.style.background='transparent'">✕ ELIMINAR MI FICHA DE LA SALA</button>
+      <div id="self-del-ok" style="display:none;font-family:var(--font-m);font-size:9px;color:var(--green);text-align:center;margin-top:6px;letter-spacing:1px">✓ FICHA ELIMINADA DE LA SALA</div>
+      <div id="self-del-err" style="display:none;font-family:var(--font-m);font-size:9px;color:var(--r2);text-align:center;margin-top:6px;letter-spacing:1px"></div>
+    </div>
+
+    <div id="share-code-out" style="display:none">
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:5px">CÓDIGO MANUAL (sin Supabase):</div>
+      <div class="share-url" id="share-url-txt"></div>
+      <button class="copy-btn" onclick="copyCode()" style="margin-top:8px">COPIAR CÓDIGO</button>
+      <div class="copy-ok" id="copy-ok">✓ COPIADO</div>
+    </div>
+
+    <!-- Supabase config inline (for players who need to set it) -->
+    <details style="margin-top:14px">
+      <summary style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;cursor:pointer;user-select:none">⚙ CONFIGURAR SUPABASE</summary>
+      <div style="margin-top:10px;display:grid;gap:8px">
+        <div>
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:4px">PROJECT URL</div>
+          <input type="text" id="pj-sb-url" placeholder="https://xxxx.supabase.co" style="font-size:11px">
+        </div>
+        <div>
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:4px">ANON KEY</div>
+          <input type="text" id="pj-sb-key" placeholder="eyJhbGciOiJIUzI1NiIs..." style="font-size:11px">
+        </div>
+        <button onclick="savePjSbConfig()" style="padding:9px;background:var(--y2);color:#000;border:none;font-family:var(--font-m);font-size:9px;letter-spacing:2px;cursor:pointer">GUARDAR CREDENCIALES</button>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--g);line-height:1.8">El GM te dará la URL y la clave. Solo necesitas configurarlo una vez — se guarda en tu navegador.</div>
+      </div>
+    </details>
+  </div>
+
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+    <button class="add-btn" style="background:transparent;border:1px solid var(--g3);color:var(--t2)" onclick="prevTab(7)">← VOLVER</button>
+    <button class="add-btn" style="background:transparent;border:1px solid var(--g3);color:var(--t2)" onclick="copySheet()">📋 COPIAR TEXTO</button>
+    <button class="add-btn" style="background:var(--r3);color:#000" onclick="resetChar()">↺ NUEVO PERSONAJE</button>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<div class="notif" id="notif"></div>
+
+<script>
+// ===================== DATA =====================
+const STAT_INFO={
+  INT:{desc:'Pensamiento lógico y memoria',mods:['Hacking','Educación','Ciencias','Percepción']},
+  REF:{desc:'Velocidad de reacción',mods:['Armas','Iniciativa','Conducir','Evasión']},
+  DEX:{desc:'Coordinación y precisión motriz',mods:['Atletismo','Sigilo','Acrobacia','CaC']},
+  TECH:{desc:'Habilidad con máquinas y cromo',mods:['Reparar','Fabricar','Cybertech','Medtech']},
+  COOL:{desc:'Sangre fría bajo presión',mods:['Persuasión','Intimidar','Negociar','Calle']},
+  WILL:{desc:'Fuerza mental y resistencia',mods:['Resistir','Concentración','Coraje']},
+  LUCK:{desc:'La X-Factor de Night City',mods:['Puntos de Suerte para retirar dados']},
+  MOVE:{desc:'Velocidad — metros/turno × 3',mods:['Sprint','Salto','Persecuciones']},
+  BODY:{desc:'Fuerza física — HP = 10+BODY×5',mods:['Forcejear','Cargar peso','Resistir daño']},
+  EMP:{desc:'Empatía — HUMANIDAD = EMP×10',mods:['Social','Conexión','Anti-cyberpsicosis']}
+};
+const ALL_SKILLS=[
+  {n:'Atletismo',s:'DEX'},{n:'Acrobacia',s:'DEX'},{n:'Sigilo',s:'DEX'},
+  {n:'Armas Cortas',s:'REF'},{n:'Armas Largas',s:'REF'},{n:'Armas Pesadas',s:'REF'},
+  {n:'CaC — Hoja',s:'DEX'},{n:'CaC — Contundente',s:'BODY'},{n:'CaC — Brawling',s:'BODY'},
+  {n:'Conducir',s:'REF'},{n:'Pilotaje',s:'REF'},
+  {n:'Percepción',s:'INT'},{n:'Rastrear',s:'INT'},
+  {n:'Hacking / Interface',s:'INT'},{n:'Electrónica',s:'TECH'},
+  {n:'Mecánica',s:'TECH'},{n:'Cybertech',s:'TECH'},
+  {n:'Primeros Auxilios',s:'TECH'},{n:'Cirugía',s:'TECH'},
+  {n:'Persuasión',s:'COOL'},{n:'Intimidar',s:'COOL'},
+  {n:'Negociar',s:'COOL'},{n:'Calle (Streetwise)',s:'COOL'},
+  {n:'Actuar',s:'COOL'},{n:'Interrogar',s:'COOL'},
+  {n:'Resistir',s:'WILL'},{n:'Concentración',s:'WILL'},
+  {n:'Educación',s:'INT'},{n:'Ciencia',s:'INT'},{n:'Idiomas',s:'INT'},
+];
+const CW_DB=[
+  {n:'Neurovínculo Básico',t:'Neural',cost:7,req:'Todos',desc:'Requerido para casi todo el cromo neural. Interfaz cerebro-máquina esencial.',tag:'all'},
+  {n:'Interfaz Danza Fantasma',t:'Neural',cost:14,req:'Netrunner',desc:'Acceso al Ciberespacio sin deck externo. Solo útil para Netrunners con Interface.',tag:'net'},
+  {n:'Memoria Expandida (Neural)',t:'Neural',cost:7,req:'Netrunner/Corpo',desc:'+2 INT para recordar datos técnicos y corporativos.',tag:'net'},
+  {n:'Deck de Interface Integrado',t:'Neural',cost:14,req:'Netrunner',desc:'Versión integrada del deck de Interface. No requiere hardware externo.',tag:'net'},
+  {n:'Reflejos Militares',t:'Neural',cost:21,req:'Solo',desc:'+1 REF efectivo en combate. Reacción sub-milisegundo ante amenazas detectadas.',tag:'solo'},
+  {n:'Rastreador de Combate',t:'Neural',cost:14,req:'Solo',desc:'Resalta amenazas en campo visual. +1 a Iniciativa y Percepción en combate.',tag:'solo'},
+  {n:'Sandevistan (Oficial)',t:'Neural',cost:35,req:'Solo',desc:'Acelerador del sistema nervioso. 1 vez/sesión: velocidad extrema durante 3 turnos (+3 acciones, +2 REF efectivo). Costo: 2 PH adicionales por uso.',tag:'solo'},
+  {n:'Sandevistan Militech Mk.5',t:'Neural',cost:42,req:'Solo',desc:'Versión militar del Sandevistan. 1 vez/sesión: 4 acciones adicionales, invisibilidad de movimiento durante 2 turnos. Costo: 3 PH por uso + tirada de control.',tag:'solo'},
+  {n:'Sandevistan (Homebrew ligero)',t:'Neural',cost:21,req:'Solo/Corpo',desc:'Versión casera/modificada. 1 vez/sesión: 1 acción adicional y +1 REF durante 2 turnos. Efecto secundario: 1d6 de daño por uso al cromo del portador.',tag:'solo'},
+  {n:'Chip de Reparación (Techie)',t:'Neural',cost:7,req:'Techie',desc:'Análisis automático de fallas técnicas. +2 a diagnóstico y reparación de cromo.',tag:'tech'},
+  {n:'Chip Quirúrgico (Medtech)',t:'Neural',cost:14,req:'Medtech',desc:'Asistencia quirúrgica guiada por IA. +2 a Primeros Auxilios y Cirugía.',tag:'med'},
+  {n:'Chip Corporativo (Corpo)',t:'Neural',cost:14,req:'Corpo',desc:'Base de datos corporativa integrada. Acceso a información privilegiada de 3 corps.',tag:'cor'},
+  {n:'Ojos Kiroshi MkI',t:'Óptico',cost:7,req:'Todos',desc:'Visión nocturna, zoom ×2, marcadores HUD básicos.',tag:'all'},
+  {n:'Ojos Kiroshi MkIII',t:'Óptico',cost:14,req:'Solo/Netrunner',desc:'Zoom ×6, infrarrojo, análisis de cobertura en tiempo real, grabación integrada.',tag:'solo'},
+  {n:'Retina Táctica',t:'Óptico',cost:14,req:'Solo',desc:'Calcula trayectorias de proyectiles. Elimina penalizadores por distancia.',tag:'solo'},
+  {n:'Escáner Médico Ocular',t:'Óptico',cost:7,req:'Medtech',desc:'Diagnóstico biométrico visual. Lee signos vitales a distancia.',tag:'med'},
+  {n:'Brazo Derecho de Cromo',t:'Cuerpo',cost:28,req:'Solo/Techie',desc:'+2 BODY en tareas de fuerza. Compartimento oculto. Puede montar arma integrada.',tag:'solo'},
+  {n:'Hoja Mantis',t:'Cuerpo',cost:14,req:'Solo',desc:'Arma integrada retráctil. 2d6 daño. Indetectable en escáner básico.',tag:'solo'},
+  {n:'Hoja Mantis Doble',t:'Cuerpo',cost:21,req:'Solo',desc:'Par de hojas retráctiles. 2d6 cada una. Permite ataques duales.',tag:'solo'},
+  {n:'Piel Subdérmica (SP+4)',t:'Cuerpo',cost:21,req:'Solo/Corpo',desc:'Armadura subcutánea SP+4. Imperceptible a simple vista.',tag:'solo'},
+  {n:'Piel Subdérmica (SP+7)',t:'Cuerpo',cost:35,req:'Solo',desc:'Versión militar. SP+7. Moderadamente visible al tacto.',tag:'solo'},
+  {n:'Piernas de Sprint',t:'Cuerpo',cost:14,req:'Solo',desc:'+2 MOVE al correr. Saltos mejorados (alcance ×2).',tag:'solo'},
+  {n:'Brazos de Cuervo (Techie)',t:'Cuerpo',cost:28,req:'Techie',desc:'Herramientas integradas. +2 a reparación. Carga objetos pesados. Compartimento de herramientas.',tag:'tech'},
+  {n:'Puerto Interface Médico',t:'Orgánico',cost:14,req:'Medtech',desc:'Diagnóstico por contacto. Monitoreo vital constante. +1 a Primeros Auxilios.',tag:'med'},
+  {n:'Riñones Filtro',t:'Orgánico',cost:7,req:'Todos',desc:'Inmunidad a venenos de grado bajo. Resaca nula. Resistencia básica a tóxicos.',tag:'all'},
+  {n:'Corazón de Titanio',t:'Orgánico',cost:21,req:'Solo/Medtech',desc:'Funciona hasta 20% de HP. Resistencia extrema a trauma cardíaco.',tag:'solo'},
+  {n:'Supra-Adrenales',t:'Orgánico',cost:14,req:'Solo/Corpo',desc:'1 vez/sesión: +3 a TODAS las acciones durante 1 ronda completa.',tag:'solo'},
+  {n:'Parche Biométrico Corp',t:'Orgánico',cost:7,req:'Corpo',desc:'Biometría corporativa. Puertas y sistemas de seguridad de corp te reconocen.',tag:'cor'},
+];
+const HACKS=[
+  {n:'Zap',cost:'1 RAM',atk:'Interface vs DV8',desc:'Descarga eléctrica. 1d6 daño eléctrico a cromo del objetivo.'},
+  {n:'Phantom',cost:'1 RAM',atk:'Automático',desc:'Tu señal se vuelve indetectable en el Ciberespacio por 1 turno.'},
+  {n:'Breach Protocol',cost:'2 RAM',atk:'Interface vs ICE×2',desc:'Destruye 1 nivel de ICE defensivo. Abre acceso a archivos internos.'},
+  {n:'Blackwall Fragment',cost:'3 RAM',atk:'Interface vs DV13',desc:'Código de la Blackwall. 3d6 daño mental al Netrunner objetivo.'},
+  {n:'Contagion',cost:'2 RAM',atk:'Interface vs DV10',desc:'Virus que se propaga a sistemas conectados. −1 a funciones durante 1d6 turnos.'},
+  {n:'Remote Override',cost:'3 RAM',atk:'Interface vs sistema',desc:'Control de un dispositivo: cámara, puerta, vehículo autónomo.'},
+  {n:'Memory Wipe',cost:'4 RAM',atk:'Interface vs DV15',desc:'Borra memoria a corto plazo de Netrunner o IA objetivo.'},
+  {n:'Ghost',cost:'2 RAM',atk:'Automático',desc:'Tu señal parece usuario legítimo. Bypasea autenticación básica.'},
+  {n:'System Collapse',cost:'5 RAM',atk:'Interface vs DV17',desc:'Colapsa completamente un sistema. 5d6 daño al hardware y todos sus usuarios conectados.'},
+];
+const LVL_NAMES=['','EDGERUNNER NOVATO','PROFESIONAL DE CALLE','VETERANO CURTIDO','ESPECIALISTA DE ÉLITE','LEYENDA DE NIGHT CITY'];
+const LVL_XP=[0,10,25,45,70,100];
+
+// ===================== STATE =====================
+let S={
+  name:'',age:25,origin:'',look:'',work:'',motive:'',fear:'',anchor:'',event:'',conn:'',
+  role:'',roleAbility:'',roleDesc:'',
+  stats:{INT:0,REF:0,DEX:0,TECH:0,COOL:0,WILL:0,LUCK:0,MOVE:0,BODY:0,EMP:0},
+  skillLvl:{},
+  cyberware:[],customCW:[],customHacks:[],
+  weapons:[],cac:[],armor:[],items:[],
+  hp:10,hpMax:10,
+  level:1,xp:0,xpLog:[],
+  photo:'',playerName:''
+};
+ALL_SKILLS.forEach(sk=>S.skillLvl[sk.n]=0);
+let statPts=62,skillPts=86;
+let cwFilter='all',editingCWIdx=-1;
+
+// ===================== SAVE / LOAD =====================
+let saveTimer=null;
+function sc(){
+  if(saveTimer)clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{
+    pullFormData();
+    try{localStorage.setItem('cpred_mim_char',JSON.stringify({S,statPts,skillPts}));}catch(e){}
+    const ind=document.getElementById('save-ind');
+    ind.classList.add('show');setTimeout(()=>ind.classList.remove('show'),1800);
+    // also store shared CW list separately for all players
+    try{localStorage.setItem('cpred_mim_shared_cw',JSON.stringify(S.customCW));}catch(e){}
+  },600);
+}
+function pullFormData(){
+  ['c-name','c-look','c-motive','c-fear','c-anchor','c-event','c-conn'].forEach(id=>{const el=document.getElementById(id);if(el)S[id.replace('c-','').replace('-','')]=el.value;});
+  S.name=gv('c-name');S.look=gv('c-look');S.motive=gv('c-motive');S.fear=gv('c-fear');
+  S.anchor=gv('c-anchor');S.event=gv('c-event');S.conn=gv('c-conn');
+  S.origin=gv('c-origin');S.work=gv('c-work');S.age=gv('c-age');
+}
+function loadChar(){
+  // 1. VIEWER MODE — opened from index.html "VER FICHA" button
+  try{
+    const viewMode=sessionStorage.getItem('mim_view_mode');
+    const viewData=sessionStorage.getItem('mim_view_char');
+    if(viewMode==='1'&&viewData){
+      sessionStorage.removeItem('mim_view_mode');
+      sessionStorage.removeItem('mim_view_char');
+      const decoded=JSON.parse(viewData);
+      _applyCharData(decoded);
+      // Read-only banner
+      const banner=document.createElement('div');
+      banner.style.cssText='position:fixed;top:55px;left:0;right:0;background:rgba(93,173,226,.12);border-bottom:1px solid rgba(93,173,226,.3);padding:8px 20px;font-family:var(--font-m);font-size:9px;color:#85c1e9;letter-spacing:2px;z-index:150;text-align:center';
+      banner.textContent='👁 MODO VISUALIZACIÓN — '+((decoded.S&&decoded.S.name)||'Personaje')+'  ('+((decoded.playerName)||'Jugador')+') — Solo lectura';
+      document.body.appendChild(banner);
+      return;
+    }
+  }catch(e){}
+
+  // 2. URL CODE MODE — ?code=MIM:...
+  try{
+    const params=new URLSearchParams(window.location.search);
+    const code=params.get('code');
+    if(code&&code.startsWith('MIM:')){
+      const decoded=JSON.parse(decodeURIComponent(escape(atob(code.slice(4)))));
+      _applyCharData(decoded);
+      showNotif('Ficha cargada desde código compartido');
+      return;
+    }
+  }catch(e){console.log('URL code error',e);}
+
+  // 3. NORMAL MODE — own character from localStorage
+  try{
+    const raw=localStorage.getItem('cpred_mim_char');
+    if(!raw)return;
+    const d=JSON.parse(raw);
+    const sharedCW=JSON.parse(localStorage.getItem('cpred_mim_shared_cw')||'null');
+    if(sharedCW&&sharedCW.length>0&&d.S&&!d.S.customCW)d.S.customCW=sharedCW;
+    _applyCharData(d);
+  }catch(e){console.log('Load error',e);}
+}
+
+function _applyCharData(d){
+  try{
+    Object.assign(S,d.S||d);
+    if(!S.customHacks)S.customHacks=[];
+    if(!S.customCW)S.customCW=[];
+    if(!S.cac)S.cac=[];
+    if(!S.weapons)S.weapons=[];
+    if(!S.armor)S.armor=[];
+    if(!S.items)S.items=[];
+    if(!S.skillLvl)S.skillLvl={};
+    ALL_SKILLS.forEach(sk=>{if(S.skillLvl[sk.n]==null)S.skillLvl[sk.n]=0;});
+    statPts=d.statPts!=null?d.statPts:62;
+    skillPts=d.skillPts!=null?d.skillPts:86;
+    sv('c-name',S.name);sv('c-look',S.look);sv('c-motive',S.motive);sv('c-fear',S.fear);
+    sv('c-anchor',S.anchor);sv('c-event',S.event);sv('c-conn',S.conn);
+    sv('c-origin',S.origin);sv('c-work',S.work);sv('c-age',S.age);
+    if(S.photo){
+      const img=document.getElementById('photo-img');
+      if(img){img.src=S.photo;img.style.display='block';}
+      const hint=document.getElementById('photo-hint');
+      if(hint)hint.style.display='none';
+    }
+    if(S.role){
+      document.querySelectorAll('.rc').forEach(c=>{
+        const rn=c.querySelector('.rc-n');
+        if(rn&&rn.textContent===S.role){c.classList.add('sel');showRoleSel();}
+      });
+    }
+    renderStats();renderSkills();renderCyware();renderGear();renderLvl();
+  }catch(e){console.log('Apply char error',e);}
+}
+function gv(id){const el=document.getElementById(id);return el?el.value:'';}
+function sv(id,val){const el=document.getElementById(id);if(el&&val!=null)el.value=val;}
+
+// ===================== PHOTO =====================
+function loadPhoto(inp){
+  const f=inp.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    S.photo=e.target.result;
+    const img=document.getElementById('photo-img');
+    img.src=e.target.result;img.style.display='block';
+    document.getElementById('photo-hint').style.display='none';
+    sc();
+  };r.readAsDataURL(f);
+}
+
+// ===================== TABS =====================
+let currentTab=0;
+function goTab(n,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.htab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('pg-'+n).classList.add('active');
+  document.querySelectorAll('.htab')[n].classList.add('active');
+  currentTab=n;
+  if(n===2)renderStats();
+  if(n===3)renderSkills();
+  if(n===4)renderCyware();
+  if(n===5)renderGear();
+  if(n===6)renderLvl();
+  if(n===7)renderSummary();
+  window.scrollTo(0,0);
+}
+function nextTab(n){
+  document.querySelectorAll('.htab')[n].classList.add('done');
+  pullFormData();sc();
+  goTab(n+1,document.querySelectorAll('.htab')[n+1]);
+}
+function prevTab(n){goTab(n-1,document.querySelectorAll('.htab')[n-1]);}
+
+// ===================== ROLE =====================
+function selRole(el,name,ability,desc){
+  document.querySelectorAll('.rc').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  S.role=name;S.roleAbility=ability;S.roleDesc=desc;
+  showRoleSel();sc();
+}
+function showRoleSel(){
+  const b=document.getElementById('role-sel-box');
+  b.style.display='block';
+  b.textContent='✓ ROL SELECCIONADO: '+S.role+' — '+S.roleAbility;
+}
+
+// ===================== STATS =====================
+function renderStats(){
+  const g=document.getElementById('stat-grid');if(!g)return;g.innerHTML='';
+  Object.keys(S.stats).forEach(st=>{
+    const i=STAT_INFO[st];
+    const mods=i.mods.join(' · ');
+    g.innerHTML+=`<div class="sbox">
+      <div class="sn">${st}</div>
+      <div class="sv">
+        <button onclick="adjStat('${st}',-1)">−</button>
+        <span id="sv-${st}">${S.stats[st]}</span>
+        <button onclick="adjStat('${st}',1)">+</button>
+      </div>
+      <div class="sd">${i.desc}</div>
+      <div class="stat-mod">${mods}</div>
+    </div>`;
+  });
+  updPts();updHP();updPH();
+}
+function adjStat(st,d){
+  const v=S.stats[st]+d;if(v<0||v>8)return;
+  if(d>0&&statPts<=0)return;
+  S.stats[st]=v;statPts-=d;
+  const el=document.getElementById('sv-'+st);if(el)el.textContent=v;
+  updPts();updHP();updPH();sc();
+}
+function updPts(){const el=document.getElementById('pts-v');if(el){el.textContent=statPts;el.className='pts-val'+(statPts<0?' pts-warn':'');}}
+function updHP(){
+  const max=10+(S.stats.BODY||0)*5;S.hpMax=max;
+  if(S.hp>max)S.hp=max;
+  const ec=document.getElementById('hp-curr'),em=document.getElementById('hp-max-d'),ef=document.getElementById('hp-fill');
+  if(ec)ec.textContent=S.hp;if(em)em.textContent=max;
+  if(ef)ef.style.width=Math.max(0,(S.hp/max)*100)+'%';
+}
+function adjHP(dir){
+  const v=parseInt(document.getElementById('hp-adj').value)||0;
+  S.hp=Math.max(0,Math.min(S.hpMax,S.hp+(v*dir)));
+  document.getElementById('hp-adj').value='';updHP();sc();
+}
+function resetHP(){S.hp=S.hpMax;updHP();sc();}
+
+// ===================== SKILLS =====================
+function renderSkills(){
+  const g=document.getElementById('skill-grid');if(!g)return;g.innerHTML='';
+  ALL_SKILLS.forEach(sk=>{
+    const base=S.stats[sk.s]||0;const lv=S.skillLvl[sk.n]||0;const tot=base+lv;
+    const avg=(tot+5.5).toFixed(1);
+    const safe=sk.n.replace(/[^a-zA-Z0-9]/g,'_');
+    g.innerHTML+=`<div class="sk">
+      <div class="sk-n">${sk.n}<br><span style="color:var(--g2);font-size:8px">${sk.s} ${base}</span></div>
+      <div class="sk-c">
+        <button onclick="adjSk('${sk.n}',-1)">−</button>
+        <span class="sk-lv" id="skl-${safe}">${lv}</span>
+        <button onclick="adjSk('${sk.n}',1)">+</button>
+      </div>
+      <div class="sk-tot" id="skt-${safe}">${tot}</div>
+      <div class="sk-mod" id="skm-${safe}">≈${avg}</div>
+    </div>`;
+  });
+  updSkPts();
+}
+function adjSk(name,d){
+  const lv=(S.skillLvl[name]||0)+d;if(lv<0||lv>6)return;
+  if(d>0&&skillPts<=0)return;
+  S.skillLvl[name]=lv;skillPts-=d;
+  const sk=ALL_SKILLS.find(s=>s.n===name);
+  const base=S.stats[sk.s]||0;const tot=base+lv;
+  const safe=name.replace(/[^a-zA-Z0-9]/g,'_');
+  const le=document.getElementById('skl-'+safe),te=document.getElementById('skt-'+safe),me=document.getElementById('skm-'+safe);
+  if(le)le.textContent=lv;if(te)te.textContent=tot;if(me)me.textContent='≈'+(tot+5.5).toFixed(1);
+  updSkPts();sc();
+}
+function updSkPts(){const el=document.getElementById('sk-pts-v');if(el){el.textContent=skillPts;el.className='pts-val'+(skillPts<0?' pts-warn':'');}}
+
+// ===================== CYBERWARE =====================
+function updPH(){
+  const emp=S.stats.EMP||0,maxPH=emp*10;
+  const officialCost=S.cyberware.reduce((a,i)=>a+CW_DB[i].cost,0);
+  const customCost=S.customCW.filter(c=>c.equipped).reduce((a,c)=>a+parseInt(c.ph||0),0);
+  const totalCost=officialCost+customCost;
+  const curr=Math.max(0,maxPH-totalCost);
+  const pct=maxPH>0?(curr/maxPH)*100:100;
+  const empEff=Math.floor(curr/10);
+  const mxE=document.getElementById('ph-max-v'),cvE=document.getElementById('ph-curr-v'),sE=document.getElementById('ph-status'),efE=document.getElementById('ph-fill'),eeE=document.getElementById('emp-eff-v');
+  if(mxE)mxE.textContent=maxPH||'—';
+  if(cvE){cvE.textContent=maxPH>0?curr:'—';cvE.style.color=pct>65?'var(--y)':pct>35?'var(--y2)':'var(--r2)';}
+  if(eeE){eeE.textContent=maxPH>0?empEff:'—';}
+  if(efE)efE.style.width=pct+'%';
+  if(sE){
+    if(!maxPH){sE.textContent='Asigna EMP primero';}
+    else if(pct>80){sE.textContent='ESTABLE';}
+    else if(pct>60){sE.textContent='TENSO';}
+    else if(pct>40){sE.textContent='INESTABLE';}
+    else if(pct>20){sE.textContent='PELIGROSO';}
+    else if(pct>5){sE.textContent='CRÍTICO';}
+    else{sE.textContent='CYBERPSICÓTICO';}
+  }
+}
+function filterCW(f,btn){
+  cwFilter=f;
+  document.querySelectorAll('.cwf').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  renderCWList();
+}
+function renderCyware(){
+  updPH();
+  renderCWList();
+  renderCustomCWList();
+  const hs=document.getElementById('hack-section');
+  if(hs)hs.style.display=S.role==='Netrunner'?'block':'none';
+  if(S.role==='Netrunner'){
+    const hl=document.getElementById('hack-list');if(!hl)return;
+    hl.innerHTML=HACKS.map(h=>`<div class="hack"><div class="hack-n">${h.n}</div><div class="hack-m">${h.cost} · ${h.atk}</div><div class="hack-d">${h.desc}</div></div>`).join('');
+    renderCustomHackList();
+  }
+}
+function renderCWList(){
+  const g=document.getElementById('cw-list');if(!g)return;g.innerHTML='';
+  CW_DB.forEach((cw,i)=>{
+    if(cwFilter!=='all'&&cw.t!==cwFilter)return;
+    const sel=S.cyberware.includes(i);
+    const tc={'all':'t-all','solo':'t-solo','net':'t-net','tech':'t-tech','med':'t-med','cor':'t-cor'}[cw.tag]||'t-all';
+    g.innerHTML+=`<div class="cw-item${sel?' sel':''}" onclick="toggleCW(${i})">
+      <div class="cw-check">${sel?'✓':''}</div>
+      <div class="cw-inf">
+        <div class="cw-n">${cw.n}</div>
+        <div class="cw-m">${cw.t} · −${cw.cost} PH · ${cw.req}</div>
+        <div class="cw-d">${cw.desc}</div>
+      </div>
+      <div class="cw-tag ${tc}">${cw.req.split('/')[0].toUpperCase()}</div>
+    </div>`;
+  });
+}
+function toggleCW(i){
+  const idx=S.cyberware.indexOf(i);
+  if(idx>=0)S.cyberware.splice(idx,1);else S.cyberware.push(i);
+  renderCyware();sc();
+}
+// CUSTOM CW
+function saveCW(){
+  const name=document.getElementById('cw-name').value.trim();
+  const desc=document.getElementById('cw-desc').value.trim();
+  const ph=parseInt(document.getElementById('cw-ph').value)||7;
+  const type=document.getElementById('cw-type').value;
+  const roleTag=document.getElementById('cw-role-tag').value;
+  if(!name){showNotif('Introduce un nombre para el implante.');return;}
+  if(editingCWIdx>=0){
+    S.customCW[editingCWIdx]={name,desc,ph,type,roleTag,equipped:S.customCW[editingCWIdx].equipped||false};
+    editingCWIdx=-1;
+    document.getElementById('cw-save-btn').textContent='+ AÑADIR CROMO';
+    document.getElementById('cw-cancel-btn').style.display='none';
+  }else{
+    S.customCW.push({name,desc,ph,type,roleTag,equipped:false});
+  }
+  document.getElementById('cw-name').value='';document.getElementById('cw-desc').value='';document.getElementById('cw-ph').value=7;
+  try{localStorage.setItem('cpred_mim_shared_cw',JSON.stringify(S.customCW));}catch(e){}
+  renderCustomCWList();updPH();sc();showNotif('Cromo personalizado guardado');
+}
+function cancelCWEdit(){
+  editingCWIdx=-1;
+  document.getElementById('cw-name').value='';document.getElementById('cw-desc').value='';document.getElementById('cw-ph').value=7;
+  document.getElementById('cw-save-btn').textContent='+ AÑADIR CROMO';document.getElementById('cw-cancel-btn').style.display='none';
+}
+function editCW(i){
+  const cw=S.customCW[i];
+  document.getElementById('cw-name').value=cw.name;document.getElementById('cw-desc').value=cw.desc;
+  document.getElementById('cw-ph').value=cw.ph;document.getElementById('cw-type').value=cw.type;
+  document.getElementById('cw-role-tag').value=cw.roleTag;
+  editingCWIdx=i;
+  document.getElementById('cw-save-btn').textContent='GUARDAR CAMBIOS';
+  document.getElementById('cw-cancel-btn').style.display='';
+  document.getElementById('cw-edit-form').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function deleteCW(i){
+  if(!confirm('¿Eliminar este cromo personalizado para todos los jugadores?'))return;
+  S.customCW.splice(i,1);
+  try{localStorage.setItem('cpred_mim_shared_cw',JSON.stringify(S.customCW));}catch(e){}
+  renderCustomCWList();updPH();sc();
+}
+function toggleCustomCW(i){
+  S.customCW[i].equipped=!S.customCW[i].equipped;
+  renderCustomCWList();updPH();sc();
+}
+function renderCustomCWList(){
+  const g=document.getElementById('custom-cw-list');if(!g)return;g.innerHTML='';
+  if(!S.customCW.length){g.innerHTML='<div style="font-family:var(--font-m);font-size:9px;color:var(--g2);padding:8px">Sin cromo personalizado aún.</div>';return;}
+  S.customCW.forEach((cw,i)=>{
+    const eqd=cw.equipped;
+    g.innerHTML+=`<div class="ccw-item${eqd?' sel':''}">
+      <div class="cw-check" onclick="toggleCustomCW(${i})" style="cursor:pointer;border-color:var(--y2)${eqd?';background:var(--y2)':''}">${eqd?'✓':''}</div>
+      <div class="cw-inf" style="flex:1">
+        <div class="cw-n">${cw.name}</div>
+        <div class="cw-m">${cw.type} · −${cw.ph} PH · ${cw.roleTag.toUpperCase()}</div>
+        <div class="cw-d">${cw.desc}</div>
+      </div>
+      <button class="ccw-edit-btn" onclick="editCW(${i})">EDITAR</button>
+      <button class="ccw-del-btn" onclick="deleteCW(${i})">×</button>
+    </div>`;
+  });
+}
+
+// ===================== CUSTOM HACKS =====================
+let editingHackIdx=-1;
+
+function saveHack(){
+  const name=document.getElementById('hk-name').value.trim();
+  const cost=document.getElementById('hk-cost').value.trim();
+  const atk=document.getElementById('hk-atk').value.trim();
+  const cat=document.getElementById('hk-cat').value;
+  const desc=document.getElementById('hk-desc').value.trim();
+  if(!name){showNotif('Introduce un nombre para el hackeo.');return;}
+  if(!S.customHacks)S.customHacks=[];
+  if(editingHackIdx>=0){
+    S.customHacks[editingHackIdx]={name,cost,atk,cat,desc};
+    editingHackIdx=-1;
+    document.getElementById('hk-save-btn').textContent='+ AÑADIR HACKEO';
+    document.getElementById('hk-cancel-btn').style.display='none';
+  }else{
+    S.customHacks.push({name,cost,atk,cat,desc});
+  }
+  document.getElementById('hk-name').value='';
+  document.getElementById('hk-cost').value='';
+  document.getElementById('hk-atk').value='';
+  document.getElementById('hk-desc').value='';
+  try{localStorage.setItem('cpred_mim_shared_hacks',JSON.stringify(S.customHacks));}catch(e){}
+  renderCustomHackList();sc();
+  showNotif('Hackeo personalizado guardado');
+}
+
+function cancelHackEdit(){
+  editingHackIdx=-1;
+  document.getElementById('hk-name').value='';
+  document.getElementById('hk-cost').value='';
+  document.getElementById('hk-atk').value='';
+  document.getElementById('hk-desc').value='';
+  document.getElementById('hk-save-btn').textContent='+ AÑADIR HACKEO';
+  document.getElementById('hk-cancel-btn').style.display='none';
+}
+
+function editHack(i){
+  if(!S.customHacks)return;
+  const h=S.customHacks[i];
+  document.getElementById('hk-name').value=h.name||'';
+  document.getElementById('hk-cost').value=h.cost||'';
+  document.getElementById('hk-atk').value=h.atk||'';
+  document.getElementById('hk-cat').value=h.cat||'Ataque';
+  document.getElementById('hk-desc').value=h.desc||'';
+  editingHackIdx=i;
+  document.getElementById('hk-save-btn').textContent='GUARDAR CAMBIOS';
+  document.getElementById('hk-cancel-btn').style.display='';
+  document.getElementById('hack-edit-form').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function deleteHack(i){
+  if(!confirm('¿Eliminar este hackeo personalizado?'))return;
+  S.customHacks.splice(i,1);
+  try{localStorage.setItem('cpred_mim_shared_hacks',JSON.stringify(S.customHacks));}catch(e){}
+  renderCustomHackList();sc();
+}
+
+function renderCustomHackList(){
+  const g=document.getElementById('custom-hack-list');if(!g)return;
+  if(!S.customHacks||!S.customHacks.length){
+    g.innerHTML='<div style="font-family:var(--font-m);font-size:9px;color:var(--g2);padding:8px">Sin hackeos personalizados aún.</div>';return;
+  }
+  const catColor={Ataque:'var(--r2)',Defensa:'var(--c)',Utility:'var(--y2)',Virus:'var(--green)',Control:'#9b59b6'};
+  g.innerHTML=S.customHacks.map((h,i)=>`
+    <div class="ccw-item" style="border-left-color:${catColor[h.cat]||'var(--c)'}">
+      <div style="width:13px;height:13px;border:1px solid ${catColor[h.cat]||'var(--c)'};flex-shrink:0;margin-top:2px;background:${catColor[h.cat]||'var(--c)'}22"></div>
+      <div class="cw-inf" style="flex:1">
+        <div class="cw-n" style="color:${catColor[h.cat]||'var(--c)'}">${h.name}</div>
+        <div class="cw-m">${h.cost||'—'} · ${h.atk||'—'} · <span style="color:${catColor[h.cat]||'var(--c)'}">${h.cat||''}</span></div>
+        <div class="cw-d">${h.desc||''}</div>
+      </div>
+      <button class="ccw-edit-btn" style="border-color:${catColor[h.cat]||'var(--c)'};color:${catColor[h.cat]||'var(--c)'}" onclick="editHack(${i})">EDITAR</button>
+      <button class="ccw-del-btn" onclick="deleteHack(${i})">×</button>
+    </div>`).join('');
+}
+
+// ===================== GEAR =====================
+function renderGear(){
+  renderGearList('wpn-list',S.weapons,(g)=>`<span class="gi-s">${g.stat}</span>`,'wpn');
+  renderGearList('cac-list',S.cac,(g)=>`<span class="gi-s">${g.stat}</span>`,'cac');
+  renderGearList('arm-list',S.armor,(g)=>`<span class="gi-s">${g.stat}</span>`,'arm');
+  renderGearList('item-list',S.items,(g)=>`<span class="gi-s" style="color:var(--t2)">${g.note||''}</span>`,'item');
+}
+function renderGearList(id,arr,extra,type){
+  const g=document.getElementById(id);if(!g)return;g.innerHTML='';
+  if(!arr.length){g.innerHTML=`<div style="font-family:var(--font-m);font-size:9px;color:var(--g2);padding:6px">Sin equipo</div>`;return;}
+  arr.forEach((item,i)=>{
+    g.innerHTML+=`<div class="gi">
+      <button class="gi-del" onclick="delGear('${type}',${i})">×</button>
+      <span class="gi-n">${item.name}</span>
+      ${extra(item)}
+    </div>`;
+  });
+}
+function delGear(type,i){
+  if(type==='wpn')S.weapons.splice(i,1);
+  else if(type==='cac')S.cac.splice(i,1);
+  else if(type==='arm')S.armor.splice(i,1);
+  else S.items.splice(i,1);
+  renderGear();sc();
+}
+function addGear(type){
+  if(type==='wpn'){
+    const n=document.getElementById('wpn-name').value.trim();const t=document.getElementById('wpn-type').value;
+    if(!n)return;S.weapons.push({name:n,stat:t});document.getElementById('wpn-name').value='';
+  }else if(type==='cac'){
+    const n=document.getElementById('cac-name').value.trim();const t=document.getElementById('cac-type').value;
+    if(!n)return;S.cac.push({name:n,stat:t});document.getElementById('cac-name').value='';
+  }else if(type==='arm'){
+    const n=document.getElementById('arm-name').value.trim();const t=document.getElementById('arm-sp').value;
+    if(!n)return;S.armor.push({name:n,stat:t});document.getElementById('arm-name').value='';
+  }else{
+    const n=document.getElementById('item-name').value.trim();const note=document.getElementById('item-note').value.trim();
+    if(!n)return;S.items.push({name:n,note});document.getElementById('item-name').value='';document.getElementById('item-note').value='';
+  }
+  renderGear();sc();
+}
+
+// ===================== LEVEL =====================
+function renderLvl(){
+  document.getElementById('lv-num').textContent=S.level;
+  document.getElementById('lv-name').textContent=LVL_NAMES[S.level]||'LEYENDA';
+  const nextXP=LVL_XP[S.level]||100;const prevXP=LVL_XP[S.level-1]||0;
+  const pct=Math.min(100,((S.xp-prevXP)/(nextXP-prevXP))*100);
+  document.getElementById('xp-curr').textContent=S.xp;
+  document.getElementById('xp-next').textContent=nextXP;
+  document.getElementById('xp-bar').style.width=pct+'%';
+  const log=document.getElementById('lvl-log');
+  if(log)log.innerHTML=S.xpLog.length?S.xpLog.slice(-10).reverse().map(l=>'<span>'+l+'</span>').join('<br>'):'// Sin actividad';
+}
+function addXP(){
+  const n=parseInt(document.getElementById('ip-add').value)||0;if(n<=0)return;
+  S.xp+=n;S.xpLog.push('['+new Date().toLocaleDateString()+']: +'+n+' IP — Total: '+S.xp);
+  document.getElementById('ip-add').value='';
+  checkLvlUp();renderLvl();sc();
+}
+function spendIP(){
+  if(S.xp<1){showNotif('Sin IP disponibles.');return;}
+  S.xp--;S.xpLog.push('['+new Date().toLocaleDateString()+']: IP gastado — Quedan: '+S.xp);
+  renderLvl();sc();
+}
+function removeLvl(){
+  if(S.level<=1)return;
+  S.level--;S.xpLog.push('>>> NIVEL REVERTIDO → '+S.level+' <<<');
+  renderLvl();sc();
+}
+function checkLvlUp(){
+  while(S.level<5&&S.xp>=LVL_XP[S.level]){
+    S.level++;S.xpLog.push('>>> ¡LEVEL UP! → NIVEL '+S.level+' — '+LVL_NAMES[S.level]+' <<<');
+  }
+}
+
+// ===================== SUMMARY =====================
+function renderSummary(){
+  pullFormData();
+  const emp=S.stats.EMP,maxPH=emp*10;
+  const offCost=S.cyberware.reduce((a,i)=>a+CW_DB[i].cost,0);
+  const custCost=S.customCW.filter(c=>c.equipped).reduce((a,c)=>a+parseInt(c.ph||0),0);
+  const currPH=Math.max(0,maxPH-(offCost+custCost));
+  const cwNames=[...S.cyberware.map(i=>CW_DB[i].n),...S.customCW.filter(c=>c.equipped).map(c=>c.name)].join(', ')||'Sin cromo';
+  const topSk=ALL_SKILLS.filter(s=>S.skillLvl[s.n]>0).sort((a,b)=>((S.stats[b.s]||0)+(S.skillLvl[b.n]||0))-((S.stats[a.s]||0)+(S.skillLvl[a.n]||0))).slice(0,8);
+  const photoHtml=S.photo?`<img src="${S.photo}" style="width:90px;height:115px;object-fit:cover;border:1px solid var(--g3);flex-shrink:0">`:`<div style="width:90px;height:115px;border:1px dashed var(--g3);display:flex;align-items:center;justify-content:center;font-family:var(--font-m);font-size:8px;color:var(--g);text-align:center;flex-shrink:0">SIN<br>FOTO</div>`;
+
+  document.getElementById('summary-content').innerHTML=`
+    <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px">
+      ${photoHtml}
+      <div style="flex:1;min-width:150px">
+        <div style="font-family:var(--font-t);font-size:20px;color:#fff;letter-spacing:2px">${S.name||'SIN NOMBRE'}</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--r2);letter-spacing:2px;margin-top:4px">${S.role||'SIN ROL'} — ${S.roleAbility||''}</div>
+        <div style="font-family:var(--font-m);font-size:8px;color:var(--g);margin-top:3px">${S.origin||''} · ${S.work||''}</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--y);margin-top:8px">Nivel ${S.level} — ${LVL_NAMES[S.level]||''} · ${S.xp} IP</div>
+        <div style="margin-top:10px">
+          <div style="font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:1px;margin-bottom:4px">HP</div>
+          <div class="hp-track" style="height:10px"><div class="hp-fill" style="width:${S.hpMax>0?(S.hp/S.hpMax)*100:100}%"></div></div>
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--y)">${S.hp} / ${S.hpMax}</div>
+        </div>
+        <div style="margin-top:8px">
+          <div style="font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:1px;margin-bottom:4px">HUMANIDAD</div>
+          <div class="ph-track" style="height:10px"><div class="ph-fill" style="width:${maxPH>0?(currPH/maxPH)*100:100}%"></div></div>
+          <div style="font-family:var(--font-m);font-size:9px;color:${currPH<maxPH*0.4?'var(--r2)':'var(--y)'}">${currPH} / ${maxPH}</div>
+        </div>
+      </div>
+    </div>
+    <div class="sum-grid">
+      <div class="sum-block">
+        <div class="sum-t">ESTADÍSTICAS</div>
+        ${Object.entries(S.stats).map(([k,v])=>`<div class="sum-row"><span class="sum-k">${k}</span><span class="sum-v">${v}</span></div>`).join('')}
+      </div>
+      <div class="sum-block">
+        <div class="sum-t">HABILIDADES PRINCIPALES</div>
+        ${topSk.length?topSk.map(s=>`<div class="sum-row"><span class="sum-k">${s.n}</span><span class="sum-v">${(S.stats[s.s]||0)+(S.skillLvl[s.n]||0)} <span style="color:var(--c)">≈${((S.stats[s.s]||0)+(S.skillLvl[s.n]||0)+5.5).toFixed(1)}</span></span></div>`).join(''):'<div style="color:var(--g);font-size:10px">Sin habilidades distribuidas</div>'}
+      </div>
+      <div class="sum-block">
+        <div class="sum-t">CROMO INSTALADO</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--t2);line-height:2">${cwNames.split(', ').map(c=>`<span style="display:block">${c}</span>`).join('')}</div>
+      </div>
+      <div class="sum-block">
+        <div class="sum-t">HISTORIA</div>
+        <div class="sum-row"><span class="sum-k">Miedo</span><span class="sum-v" style="font-size:9px">${S.fear||'—'}</span></div>
+        <div class="sum-row"><span class="sum-k">Ancla</span><span class="sum-v" style="font-size:9px">${S.anchor||'—'}</span></div>
+        <div class="sum-row"><span class="sum-k">Motivac.</span><span class="sum-v" style="font-size:9px">${S.motive||'—'}</span></div>
+      </div>
+      ${(S.weapons.length||S.cac.length||S.armor.length)?`<div class="sum-block" style="grid-column:1/-1">
+        <div class="sum-t">ARMAMENTO</div>
+        ${S.weapons.map(w=>`<div class="sum-row"><span class="sum-k">${w.name}</span><span class="sum-v">${w.stat}</span></div>`).join('')}
+        ${S.cac.map(w=>`<div class="sum-row"><span class="sum-k">${w.name} [CaC]</span><span class="sum-v">${w.stat}</span></div>`).join('')}
+        ${S.armor.map(a=>`<div class="sum-row"><span class="sum-k">${a.name}</span><span class="sum-v">${a.stat}</span></div>`).join('')}
+      </div>`:''}
+    </div>`;
+}
+
+// ===================== SHARE =====================
+function genShare(){
+  pullFormData();
+  const playerName=gv('share-playername')||S.playerName||S.name||'Jugador';
+  S.playerName=playerName;
+  const payload={S,statPts,skillPts,playerName,timestamp:Date.now()};
+  try{
+    const encoded='MIM:'+btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+    document.getElementById('share-url-txt').textContent=encoded;
+    document.getElementById('share-code-out').style.display='block';
+    showNotif('Código generado. Compártelo con tu GM.');
+  }catch(e){showNotif('Error al generar código. Foto puede ser muy grande.');}
+}
+function copyCode(){
+  const code=document.getElementById('share-url-txt').textContent;
+  navigator.clipboard.writeText(code).then(()=>{
+    const ok=document.getElementById('copy-ok');ok.style.display='block';
+    setTimeout(()=>ok.style.display='none',3000);
+  });
+}
+function copySheet(){
+  pullFormData();
+  const emp=S.stats.EMP,maxPH=emp*10;
+  const offCost=S.cyberware.reduce((a,i)=>a+CW_DB[i].cost,0);
+  const custCost=S.customCW.filter(c=>c.equipped).reduce((a,c)=>a+parseInt(c.ph||0),0);
+  const currPH=Math.max(0,maxPH-(offCost+custCost));
+  let txt=`=== CYBERPUNK RED: MEAT IS MURDER ===\n${S.name||'SIN NOMBRE'} | ${S.role||'SIN ROL'}\nNivel ${S.level} | HP: ${S.hp}/${S.hpMax} | PH: ${currPH}/${maxPH}\n\n`;
+  txt+=`STATS: ${Object.entries(S.stats).map(([k,v])=>k+':'+v).join(' | ')}\n\n`;
+  const topSk=ALL_SKILLS.filter(s=>S.skillLvl[s.n]>0);
+  if(topSk.length)txt+=`HABILIDADES:\n${topSk.map(s=>s.n+': '+((S.stats[s.s]||0)+(S.skillLvl[s.n]||0))).join('\n')}\n\n`;
+  const cwAll=[...S.cyberware.map(i=>CW_DB[i].n),...S.customCW.filter(c=>c.equipped).map(c=>c.name)];
+  if(cwAll.length)txt+=`CROMO:\n${cwAll.join('\n')}\n\n`;
+  if(S.weapons.length)txt+=`ARMAS:\n${S.weapons.map(w=>w.name+' — '+w.stat).join('\n')}\n`;
+  if(S.cac.length)txt+=`CaC:\n${S.cac.map(w=>w.name+' — '+w.stat).join('\n')}\n\n`;
+  txt+=`HISTORIA:\nMiedo: ${S.fear}\nAncla: ${S.anchor}\nMotivación: ${S.motive}\n${S.event}`;
+  navigator.clipboard.writeText(txt).then(()=>showNotif('✓ Ficha copiada al portapapeles'));
+}
+
+// ===================== RESET =====================
+function resetChar(){
+  if(!confirm('¿Borrar el personaje actual? Los datos guardados se eliminarán.'))return;
+  Object.keys(S.stats).forEach(k=>S.stats[k]=0);
+  ALL_SKILLS.forEach(sk=>S.skillLvl[sk.n]=0);
+  S.cyberware=[];S.weapons=[];S.cac=[];S.armor=[];S.items=[];
+  S.hp=10;S.hpMax=10;S.level=1;S.xp=0;S.xpLog=[];S.photo='';
+  S.name='';S.role='';S.roleAbility='';S.roleDesc='';
+  statPts=62;skillPts=86;
+  ['c-name','c-look','c-event','c-fear','c-anchor','c-conn'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('photo-img').src='';document.getElementById('photo-img').style.display='none';
+  document.getElementById('photo-hint').style.display='block';
+  document.querySelectorAll('.rc').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('role-sel-box').style.display='none';
+  document.querySelectorAll('.htab').forEach(b=>b.classList.remove('done'));
+  try{localStorage.removeItem('cpred_mim_char');}catch(e){}
+  goTab(0,document.querySelectorAll('.htab')[0]);
+  showNotif('Personaje borrado. Nuevo edgerunner listo.');
+}
+
+// ===================== NOTIFICATION =====================
+function showNotif(msg){
+  const n=document.getElementById('notif');
+  n.textContent=msg;n.classList.add('show');
+  setTimeout(()=>n.classList.remove('show'),2800);
+}
+
+
+// === SUPABASE (personaje.html) ===
+let pjSbClient=null;
+
+function getPjSbConfig(){
+  // Shared config from index.html (same localStorage key)
+  try{return JSON.parse(localStorage.getItem('mim_sb_config')||'null');}catch(e){return null;}
+}
+function savePjSbConfig(){
+  const url=document.getElementById('pj-sb-url').value.trim();
+  const key=document.getElementById('pj-sb-key').value.trim();
+  if(!url||!key){showNotif('Rellena URL y Key');return;}
+  localStorage.setItem('mim_sb_config',JSON.stringify({url,key}));
+  initPjSupabase(url,key);
+}
+
+async function initPjSupabase(url,key){
+  const statusEl=document.getElementById('pj-sb-status');
+  if(statusEl)statusEl.textContent='● SUPABASE: Conectando...';
+  if(!window.supabase){
+    await new Promise((res,rej)=>{
+      const s=document.createElement('script');
+      s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+      s.onload=res;s.onerror=rej;document.head.appendChild(s);
+    });
+  }
+  try{
+    pjSbClient=window.supabase.createClient(url,key);
+    const {error}=await pjSbClient.from('personajes').select('id').limit(1);
+    if(error)throw error;
+    if(statusEl){statusEl.textContent='● SUPABASE: CONECTADO ✓';statusEl.style.color='var(--green)';statusEl.style.borderColor='rgba(39,174,96,.3)';}
+    showNotif('Supabase conectado');
+  }catch(e){
+    if(statusEl){statusEl.textContent='● SUPABASE: ERROR — '+((e&&e.message)||'Credenciales inválidas');statusEl.style.color='var(--r2)';}
+    pjSbClient=null;
+  }
+}
+
+async function pushToSupabase(){
+  if(!pjSbClient){showNotif('Supabase no conectado. Configúralo primero.');return;}
+  pullFormData();
+  const playerName=gv('share-playername')||S.name||'Jugador';
+  S.playerName=playerName;
+
+  const emp=S.stats.EMP||0;const maxPH=emp*10;
+  // Use stored CW_DB costs
+  const cwCosts=[7,14,21,7,14,14,7,14,7,21,28,14,21,35,14,21,21,14,21,14,7,21,14,7,14,21,7,14];
+  const offCost=(S.cyberware||[]).reduce((a,i)=>a+(cwCosts[i]||0),0);
+  const custCost=(S.customCW||[]).filter(c=>c.equipped).reduce((a,c)=>a+parseInt(c.ph||0),0);
+  const currPH=Math.max(0,maxPH-(offCost+custCost));
+
+  // Compress photo to smaller size for DB storage
+  let photoData=S.photo||'';
+  if(photoData&&photoData.length>50000){
+    // Shrink photo via canvas
+    try{
+      const img=new Image();img.src=photoData;
+      await new Promise(r=>img.onload=r);
+      const c=document.createElement('canvas');c.width=80;c.height=100;
+      c.getContext('2d').drawImage(img,0,0,80,100);
+      photoData=c.toDataURL('image/jpeg',0.5);
+    }catch(e){}
+  }
+
+  const fullData=JSON.stringify({S,statPts,skillPts,playerName,timestamp:Date.now()});
+
+  const btn=document.getElementById('sb-push-btn');
+  btn.textContent='ENVIANDO...';btn.disabled=true;
+  const okEl=document.getElementById('sb-push-ok');
+  const errEl=document.getElementById('sb-push-err');
+  okEl.style.display='none';errEl.style.display='none';
+
+  try{
+    // Upsert by player_name+char_name combo
+    const {error}=await pjSbClient.from('personajes').upsert({
+      player_name: playerName,
+      char_name: S.name||'Sin nombre',
+      role: S.role||'',
+      role_ability: S.roleAbility||'',
+      hp: S.hp||10,
+      hp_max: S.hpMax||10,
+      ph_curr: currPH,
+      ph_max: maxPH,
+      level: S.level||1,
+      xp: S.xp||0,
+      photo: photoData,
+      full_data: fullData,
+      updated_at: new Date().toISOString()
+    },{onConflict:'player_name,char_name',ignoreDuplicates:false});
+    if(error)throw error;
+    okEl.style.display='block';
+    setTimeout(()=>okEl.style.display='none',3000);
+  }catch(e){
+    errEl.textContent='// ERROR: '+((e&&e.message)||'No se pudo guardar');
+    errEl.style.display='block';
+  }finally{
+    btn.textContent='↑ GUARDAR EN SALA';btn.disabled=false;
+  }
+}
+
+async function deleteSelfFromSala(){
+  if(!pjSbClient){showNotif('Supabase no conectado.');return;}
+  pullFormData();
+  const playerName=gv('share-playername')||S.playerName||S.name;
+  const charName=S.name||'Sin nombre';
+  if(!playerName){showNotif('Introduce tu nombre de jugador primero.');return;}
+  if(!confirm(`¿Eliminar "${charName}" de la sala de campaña?\n\nEsto no borra tu ficha local — solo la quita del panel del GM.`))return;
+  const okEl=document.getElementById('self-del-ok');
+  const errEl=document.getElementById('self-del-err');
+  okEl.style.display='none';errEl.style.display='none';
+  try{
+    const {error}=await pjSbClient
+      .from('personajes')
+      .delete()
+      .eq('player_name',playerName)
+      .eq('char_name',charName);
+    if(error)throw error;
+    okEl.style.display='block';
+    setTimeout(()=>okEl.style.display='none',3000);
+  }catch(e){
+    errEl.textContent='// ERROR: '+(e&&e.message||'No se pudo eliminar');
+    errEl.style.display='block';
+  }
+}
+
+
+// ===================== INIT =====================
+window.addEventListener('DOMContentLoaded', () => {
+  loadChar();
+  // Sync shared CW and hacks from localStorage
+  try{
+    const sharedCW=JSON.parse(localStorage.getItem('cpred_mim_shared_cw')||'null');
+    if(sharedCW&&sharedCW.length>0&&(!S.customCW||S.customCW.length===0)){S.customCW=sharedCW;renderCustomCWList();}
+    const sharedHacks=JSON.parse(localStorage.getItem('cpred_mim_shared_hacks')||'null');
+    if(sharedHacks&&sharedHacks.length>0&&(!S.customHacks||S.customHacks.length===0)){S.customHacks=sharedHacks;}
+  }catch(e){}
+  // Init Supabase if config exists
+  (async()=>{
+    const cfg=getPjSbConfig();
+    const statusEl=document.getElementById('pj-sb-status');
+    if(cfg){
+      if(document.getElementById('pj-sb-url'))document.getElementById('pj-sb-url').value=cfg.url;
+      if(document.getElementById('pj-sb-key'))document.getElementById('pj-sb-key').value=cfg.key;
+      await initPjSupabase(cfg.url,cfg.key);
+    }else{
+      if(statusEl){statusEl.textContent='● SUPABASE: No configurado — Configúralo abajo';statusEl.style.color='var(--y2)';}
+    }
+  })();
+});
+</script>
+</body>
+</html>
