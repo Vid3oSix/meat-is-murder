@@ -885,7 +885,7 @@ function pullFormData(){
   S.origin=gv('c-origin');S.work=gv('c-work');S.age=gv('c-age');
 }
 function loadChar(){
-  // 1. VIEWER MODE — opened from index.html "VER FICHA" button
+  // 1. VIEWER MODE — read-only, opened via "VER FICHA"
   try{
     const viewMode=sessionStorage.getItem('mim_view_mode');
     const viewData=sessionStorage.getItem('mim_view_char');
@@ -900,7 +900,33 @@ function loadChar(){
     }
   }catch(e){}
 
-  // 2. URL CODE MODE — ?code=MIM:...
+  // 2. EDIT MODE — full edit, opened via "EDITAR" button (owner or GM)
+  try{
+    const editMode=sessionStorage.getItem('mim_edit_mode');
+    const editData=sessionStorage.getItem('mim_edit_char');
+    const editByGm=sessionStorage.getItem('mim_edit_gm')==='1';
+    if(editMode==='1'&&editData){
+      sessionStorage.removeItem('mim_edit_mode');
+      sessionStorage.removeItem('mim_edit_char');
+      sessionStorage.removeItem('mim_edit_gm');
+      const decoded=JSON.parse(editData);
+      // Write to localStorage so sc() saves it as the active char
+      localStorage.setItem('cpred_mim_char',JSON.stringify(decoded));
+      _applyCharData(decoded);
+      // Show edit banner
+      const banner=document.createElement('div');
+      banner.style.cssText='position:fixed;top:55px;left:0;right:0;background:rgba(241,196,15,.1);border-bottom:2px solid rgba(241,196,15,.35);padding:9px 20px;font-family:var(--font-m);font-size:9px;color:var(--y2);letter-spacing:2px;z-index:150;text-align:center';
+      const charName=(decoded.S&&decoded.S.name)||'Personaje';
+      const byGmNote=editByGm?' <span style="color:var(--r2)">[EDICIÓN GM]</span>':'';
+      banner.innerHTML=`✏ EDITANDO — <b style="color:#fff">${charName}</b>${byGmNote} — Los cambios se guardan en la sala al pulsar GUARDAR EN SALA`;
+      document.body.appendChild(banner);
+      document.querySelector('.main').style.paddingTop='56px';
+      showNotif('Ficha cargada para edición');
+      return;
+    }
+  }catch(e){console.log('Edit mode error',e);}
+
+  // 3. URL CODE MODE — ?code=MIM:...
   try{
     const params=new URLSearchParams(window.location.search);
     const code=params.get('code');
@@ -912,7 +938,7 @@ function loadChar(){
     }
   }catch(e){console.log('URL code error',e);}
 
-  // 3. NORMAL MODE — own character from localStorage
+  // 4. NORMAL MODE — own character from localStorage
   try{
     const raw=localStorage.getItem('cpred_mim_char');
     if(!raw)return;
@@ -1569,8 +1595,13 @@ function showNotif(msg){
 let pjSbClient=null;
 
 function getPjSbConfig(){
-  // Shared config from index.html (same localStorage key)
-  try{return JSON.parse(localStorage.getItem('mim_sb_config')||'null');}catch(e){return null;}
+  // Embedded credentials — no manual setup needed
+  const _URL='https://fnmtkxxpimlvyqtcgily.supabase.co';
+  const _KEY='sb_publishable_rbzFrcJLnyuVk3smcJFW8g_6rl0eoUN';
+  try{
+    const stored=JSON.parse(localStorage.getItem('mim_sb_config')||'null');
+    return stored||{url:_URL,key:_KEY};
+  }catch(e){return{url:_URL,key:_KEY};}
 }
 function savePjSbConfig(){
   const url=document.getElementById('pj-sb-url').value.trim();
