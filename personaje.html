@@ -910,6 +910,14 @@ function loadChar(){
       sessionStorage.removeItem('mim_edit_char');
       sessionStorage.removeItem('mim_edit_gm');
       const decoded=JSON.parse(editData);
+      // Store original identifiers so pushToSupabase can UPDATE the correct row
+      // even if the user renames the character during editing
+      const origPlayerName=(decoded.S&&decoded.S.playerName)||decoded.playerName||'';
+      const origCharName=(decoded.S&&decoded.S.name)||'';
+      localStorage.setItem('mim_edit_orig', JSON.stringify({
+        player_name: origPlayerName,
+        char_name: origCharName
+      }));
       // Write to localStorage so sc() saves it as the active char
       localStorage.setItem('cpred_mim_char',JSON.stringify(decoded));
       _applyCharData(decoded);
@@ -1578,7 +1586,7 @@ function resetChar(){
   document.querySelectorAll('.rc').forEach(c=>c.classList.remove('sel'));
   document.getElementById('role-sel-box').style.display='none';
   document.querySelectorAll('.htab').forEach(b=>b.classList.remove('done'));
-  try{localStorage.removeItem('cpred_mim_char');}catch(e){}
+  try{localStorage.removeItem('cpred_mim_char');localStorage.removeItem('mim_edit_orig');}catch(e){}
   goTab(0,document.querySelectorAll('.htab')[0]);
   showNotif('Personaje borrado. Nuevo edgerunner listo.');
 }
@@ -1668,22 +1676,64 @@ async function pushToSupabase(){
   okEl.style.display='none';errEl.style.display='none';
 
   try{
-    // Upsert by player_name+char_name combo
-    const {error}=await pjSbClient.from('personajes').upsert({
-      player_name: playerName,
-      char_name: S.name||'Sin nombre',
-      role: S.role||'',
-      role_ability: S.roleAbility||'',
-      hp: S.hp||10,
-      hp_max: S.hpMax||10,
-      ph_curr: currPH,
-      ph_max: maxPH,
-      level: S.level||1,
-      xp: S.xp||0,
-      photo: photoData,
-      full_data: fullData,
-      updated_at: new Date().toISOString()
-    },{onConflict:'player_name,char_name',ignoreDuplicates:false});
+    // Check if we have original identifiers from an edit session
+    let origIdent=null;
+    try{origIdent=JSON.parse(localStorage.getItem('mim_edit_orig')||'null');}catch(e){}
+
+    let error;
+    if(origIdent&&origIdent.player_name&&origIdent.char_name){
+      // UPDATE the existing row using the original player_name+char_name
+      // This ensures renaming the character doesn't create a duplicate
+      ({error}=await pjSbClient.from('personajes')
+        .update({
+          player_name: playerName,
+          char_name: S.name||'Sin nombre',
+          role: S.role||'',
+          role_ability: S.roleAbility||'',
+          hp: S.hp||10,
+          hp_max: S.hpMax||10,
+          ph_curr: currPH,
+          ph_max: maxPH,
+          level: S.level||1,
+          xp: S.xp||0,
+          photo: photoData,
+          full_data: fullData,
+          updated_at: new Date().toISOString()
+        })
+        .eq('player_name', origIdent.player_name)
+        .eq('char_name', origIdent.char_name));
+      if(!error){
+        // Update stored original to reflect new names for subsequent saves
+        localStorage.setItem('mim_edit_orig', JSON.stringify({
+          player_name: playerName,
+          char_name: S.name||'Sin nombre'
+        }));
+      }
+    } else {
+      // INSERT new row (first time saving, or normal mode)
+      ({error}=await pjSbClient.from('personajes').upsert({
+        player_name: playerName,
+        char_name: S.name||'Sin nombre',
+        role: S.role||'',
+        role_ability: S.roleAbility||'',
+        hp: S.hp||10,
+        hp_max: S.hpMax||10,
+        ph_curr: currPH,
+        ph_max: maxPH,
+        level: S.level||1,
+        xp: S.xp||0,
+        photo: photoData,
+        full_data: fullData,
+        updated_at: new Date().toISOString()
+      },{onConflict:'player_name,char_name',ignoreDuplicates:false}));
+      if(!error){
+        // Store originals for any subsequent saves this session
+        localStorage.setItem('mim_edit_orig', JSON.stringify({
+          player_name: playerName,
+          char_name: S.name||'Sin nombre'
+        }));
+      }
+    }
     if(error)throw error;
     okEl.style.display='block';
     setTimeout(()=>okEl.style.display='none',3000);
