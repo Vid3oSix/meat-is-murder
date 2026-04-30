@@ -753,7 +753,7 @@ nav a.active{color:var(--r2);border-bottom-color:var(--r)}
 <!-- TUTORIAL -->
 <div id="tut" class="sec">
   <div class="inner">
-    <!-- 
+        <!-- 
     El teniente Mora tiene una cicatriz detrás de la oreja izquierda.
     No es un implante. Es una extracción.
   -->
@@ -761,37 +761,198 @@ nav a.active{color:var(--r2);border-bottom-color:var(--r)}
     <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;text-align:center;margin-bottom:24px">// GUÍA RÁPIDA — CYBERPUNK RED //</div>
     <div class="tut-tabs">
       <button class="tt active" onclick="showTut('basics',this)">LO BÁSICO</button>
-      <button class="tt" onclick="showTut('dice',this)">DADOS</button>
+      <button class="tt" onclick="showTut('dice',this)">TIRADAS</button>
       <button class="tt" onclick="showTut('combat',this)">COMBATE</button>
+      <button class="tt" onclick="showTut('netrun',this)">NETRUNNING</button>
       <button class="tt" onclick="showTut('cyber',this)">CYBERPSICOSIS</button>
+      <button class="tt" onclick="showTut('roles',this)">ROLES</button>
       <button class="tt" onclick="showTut('tips',this)">MESA</button>
     </div>
     <div class="tpage active" id="tut-basics">
-      <div class="rule"><h3>¿QUÉ ES CYBERPUNK RED?</h3><p>Un juego de rol de mesa. Un jugador es el <b>Game Master (GM)</b> que narra la historia. El resto controla personajes y toma decisiones que afectan el resultado. Ambientado en Night City, 2045 — ciudad donde el cromo corre por las venas de todos.</p></div>
-      <div class="rule"><h3>EL FLUJO</h3><ul><li>El GM describe la situación</li><li>Los jugadores declaran sus acciones</li><li>Si hay incertidumbre, se tiran dados</li><li>El GM narra el resultado y la historia avanza</li></ul></div>
-      <div class="rule"><h3>LA FÓRMULA CENTRAL</h3><div class="formula">1d10 + STAT + HABILIDAD ≥ DV (Dificultad)</div><p>DV 9 = fácil · DV 13 = difícil · DV 17 = casi imposible · DV 21+ = legendario</p></div>
+      <div class="rule"><h3>¿QUÉ ES CYBERPUNK RED?</h3><p>Un juego de rol de mesa. Un jugador es el <b>Game Master (GM)</b> que narra la historia. El resto controla personajes y toma decisiones que afectan el resultado. Ambientado en Night City, 2045.</p></div>
+      <div class="rule"><h3>EL FLUJO DE JUEGO</h3><ul><li>El GM describe la situación</li><li>Los jugadores declaran sus acciones</li><li>Si hay incertidumbre, se tiran dados</li><li>El GM narra el resultado y la historia avanza</li><li>Las consecuencias moldean el siguiente momento</li></ul></div>
+      <div class="rule"><h3>LA FÓRMULA CENTRAL</h3><div class="formula">1d10 + STAT + HABILIDAD ≥ DV (Dificultad)</div><p>DV 9 = fácil · DV 13 = difícil · DV 17 = casi imposible · DV 21+ = legendario · DV 24 = milagro</p></div>
+      <div class="rule"><h3>LOS DIEZ STATS</h3><ul>
+        <li><b style="color:var(--c)">INT</b> — Inteligencia: hacking, educación, ciencias, percepción</li>
+        <li><b style="color:var(--c)">REF</b> — Reflejos: armas, iniciativa, conducir, evasión</li>
+        <li><b style="color:var(--c)">DEX</b> — Destreza: atletismo, sigilo, acrobacia, CaC</li>
+        <li><b style="color:var(--c)">TECH</b> — Técnica: reparar, fabricar, cybertech, medtech</li>
+        <li><b style="color:var(--c)">COOL</b> — Sangre fría: persuasión, intimidar, calle</li>
+        <li><b style="color:var(--c)">WILL</b> — Voluntad: resistir daño mental, concentración</li>
+        <li><b style="color:var(--c)">LUCK</b> — Suerte: puntos para modificar cualquier tirada (se gastan)</li>
+        <li><b style="color:var(--c)">MOVE</b> — Movimiento: metros × 3 por turno</li>
+        <li><b style="color:var(--c)">BODY</b> — Cuerpo: fuerza, resistencia, HP = 10 + BODY×5</li>
+        <li><b style="color:var(--r3)">EMP</b> — Empatía: conexión humana, resistencia a cyberpsicosis. <b>PH = EMP×10</b></li>
+      </ul></div>
+      <div class="rule"><h3>PUNTOS DE SUERTE</h3><p>Tienes LUCK puntos de suerte por sesión. Gasta 1 para añadir +1 a cualquier tirada, antes o después de ver el resultado. No se recuperan hasta la siguiente sesión.</p></div>
     </div>
+
     <div class="tpage" id="tut-dice">
-      <div class="rule"><h3>EL D10</h3><p>El dado principal de Cyberpunk RED. 1d10 por tirada estándar.<br><b>Crítico:</b> Sacas 10 → tira otro d10 y suma (puede encadenarse).<br><b>Fumble:</b> Sacas 1 → tira otro d10, si sale 1 de nuevo, algo malo ocurre.</p></div>
+      <div class="rule"><h3>EL D10 — CRÍTICOS Y FUMBLES</h3><p><b>Crítico (10):</b> Tira otro d10 y suma. Si sale otro 10, sigue tirando.<br><b>Fumble (1):</b> Tira otro d10. Si sale 1 de nuevo → consecuencia negativa del GM.</p></div>
+
+      <!-- TIRADOR MEJORADO -->
       <div class="dice-roller">
-        <div class="d-btns">
-          <button class="d-btn act" onclick="selDice(10,this)">d10</button>
-          <button class="d-btn" onclick="selDice(6,this)">d6</button>
-          <button class="d-btn" onclick="selDice(20,this)">d20</button>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:10px">// TIPO DE TIRADA //</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:12px" id="roll-type-btns">
+          <button class="d-btn act" style="width:auto;padding:6px 14px;font-size:9px;letter-spacing:1px" onclick="setRollType('libre',this)">LIBRE</button>
+          <button class="d-btn" style="width:auto;padding:6px 14px;font-size:9px;letter-spacing:1px" onclick="setRollType('dv',this)">vs DV</button>
+          <button class="d-btn" style="width:auto;padding:6px 14px;font-size:9px;letter-spacing:1px" onclick="setRollType('daño',this)">DAÑO</button>
+          <button class="d-btn" style="width:auto;padding:6px 14px;font-size:9px;letter-spacing:1px" onclick="setRollType('iniciativa',this)">INICIATIVA</button>
+          <button class="d-btn" style="width:auto;padding:6px 14px;font-size:9px;letter-spacing:1px" onclick="setRollType('ph',this)">CONTROL PH</button>
         </div>
-        <div style="font-family:var(--font-m);font-size:9px;color:var(--g);margin-bottom:8px">Cantidad: <input type="number" id="dc" value="1" min="1" max="10" style="width:44px;background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);padding:3px 6px;font-size:10px;outline:none"></div>
-        <div class="d-res-wrap"><div class="d-num" id="d-res">—</div><div class="d-det" id="d-det">Presiona TIRAR</div></div>
+
+        <!-- LIBRE -->
+        <div id="roll-panel-libre">
+          <div class="d-btns">
+            <button class="d-btn act" onclick="selDice(10,this)">d10</button>
+            <button class="d-btn" onclick="selDice(6,this)">d6</button>
+            <button class="d-btn" onclick="selDice(20,this)">d20</button>
+          </div>
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--g);margin-bottom:8px">Cantidad: <input type="number" id="dc" value="1" min="1" max="10" style="width:44px;background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);padding:3px 6px;font-size:10px;outline:none"></div>
+        </div>
+
+        <!-- vs DV -->
+        <div id="roll-panel-dv" style="display:none">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">
+            <div><div style="font-family:var(--font-m);font-size:8px;color:var(--g);margin-bottom:4px">STAT</div>
+              <input type="number" id="dv-stat" value="5" min="0" max="10" style="background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);padding:6px 8px;font-size:12px;outline:none;width:100%"></div>
+            <div><div style="font-family:var(--font-m);font-size:8px;color:var(--g);margin-bottom:4px">HABILIDAD</div>
+              <input type="number" id="dv-skill" value="3" min="0" max="10" style="background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);padding:6px 8px;font-size:12px;outline:none;width:100%"></div>
+            <div><div style="font-family:var(--font-m);font-size:8px;color:var(--g);margin-bottom:4px">DV OBJETIVO</div>
+              <select id="dv-target" style="background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);padding:6px 8px;font-size:10px;outline:none;width:100%">
+                <option value="9">DV9 — Fácil</option>
+                <option value="13" selected>DV13 — Difícil</option>
+                <option value="15">DV15 — Combate</option>
+                <option value="17">DV17 — Imposible</option>
+                <option value="21">DV21 — Legendario</option>
+                <option value="24">DV24 — Milagro</option>
+              </select></div>
+          </div>
+        </div>
+
+        <!-- DAÑO -->
+        <div id="roll-panel-daño" style="display:none">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">
+            <div><div style="font-family:var(--font-m);font-size:8px;color:var(--g);margin-bottom:4px">DADOS (NdX)</div>
+              <select id="dmg-dice" style="background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);padding:6px 8px;font-size:10px;outline:none;width:100%">
+                <option value="1d6">1d6 — Puño/Hoja</option>
+                <option value="2d6" selected>2d6 — Pistola/SMG</option>
+                <option value="3d6">3d6 — Pesada/Escopeta</option>
+                <option value="4d6">4d6</option>
+                <option value="5d6">5d6 — Rifle/Franco</option>
+                <option value="6d6">6d6 — Granada</option>
+              </select></div>
+            <div><div style="font-family:var(--font-m);font-size:8px;color:var(--g);margin-bottom:4px">SP ARMADURA</div>
+              <input type="number" id="dmg-sp" value="0" min="0" max="20" style="background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);padding:6px 8px;font-size:12px;outline:none;width:100%"></div>
+            <div><div style="font-family:var(--font-m);font-size:8px;color:var(--g);margin-bottom:4px">BONIF. DAÑO</div>
+              <input type="number" id="dmg-bonus" value="0" min="-10" max="20" style="background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);padding:6px 8px;font-size:12px;outline:none;width:100%"></div>
+          </div>
+        </div>
+
+        <!-- INICIATIVA -->
+        <div id="roll-panel-iniciativa" style="display:none">
+          <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:10px;max-width:200px;margin:0 auto 10px">
+            <div><div style="font-family:var(--font-m);font-size:8px;color:var(--g);margin-bottom:4px">TU REF</div>
+              <input type="number" id="init-ref" value="5" min="0" max="10" style="background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);padding:6px 8px;font-size:12px;outline:none;width:100%"></div>
+          </div>
+        </div>
+
+        <!-- CONTROL PH -->
+        <div id="roll-panel-ph" style="display:none">
+          <div style="background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.3);padding:10px 14px;font-family:var(--font-m);font-size:9px;color:var(--r3);line-height:1.9;margin-bottom:10px">
+            Cuando tu PH cae por debajo del 40%, el GM puede pedir tirada de control en situaciones de estrés. Fallo = el GM toma el control del personaje ese turno.
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:260px;margin:0 auto 10px">
+            <div><div style="font-family:var(--font-m);font-size:8px;color:var(--g);margin-bottom:4px">PH ACTUAL %</div>
+              <input type="number" id="ph-ctrl-pct" value="40" min="0" max="100" style="background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);padding:6px 8px;font-size:12px;outline:none;width:100%"></div>
+            <div><div style="font-family:var(--font-m);font-size:8px;color:var(--g);margin-bottom:4px">WILL</div>
+              <input type="number" id="ph-ctrl-will" value="4" min="0" max="10" style="background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);padding:6px 8px;font-size:12px;outline:none;width:100%"></div>
+          </div>
+        </div>
+
+        <div class="d-res-wrap"><div class="d-num" id="d-res">—</div><div class="d-det" id="d-det" style="white-space:pre-wrap;text-align:center">Selecciona tipo y presiona TIRAR</div></div>
         <button class="roll-btn" onclick="rollDice()">⚄ TIRAR</button>
       </div>
-      <div class="rule"><h3>DAÑO POR ARMA</h3><ul><li>Pistola ligera / SMG: 2d6</li><li>Pistola pesada / Escopeta: 3d6</li><li>Rifle de Asalto: 5d6</li><li>Francotirador: 5d6</li><li>Puño / Patada: 1d6 · Arma CaC: 1d6-2d6</li></ul></div>
+
+      <div class="rule"><h3>TABLA DE DIFICULTADES (DV)</h3><ul>
+        <li><b>DV 9</b> — Fácil. Cualquier edgerunner competente lo logra.</li>
+        <li><b>DV 13</b> — Difícil. Requiere habilidad y algo de suerte.</li>
+        <li><b>DV 15</b> — Combate estándar. DV base para atacar en combate.</li>
+        <li><b>DV 17</b> — Muy difícil. Solo los mejores.</li>
+        <li><b>DV 21</b> — Casi imposible. Necesitas stats altos Y suerte.</li>
+        <li><b>DV 24</b> — Legendario. Candidato a historia del barrio.</li>
+      </ul></div>
+      <div class="rule"><h3>DAÑO POR ARMA</h3><ul>
+        <li>Puño / Patada: 1d6</li>
+        <li>Hoja ligera / Monofilo: 1d6 (+2 o ignora SP1)</li>
+        <li>Pistola ligera / SMG: 2d6</li>
+        <li>Pistola pesada / Escopeta: 3d6</li>
+        <li>Rifle de Asalto: 5d6</li>
+        <li>Francotirador: 5d6 (ventaja a larga distancia)</li>
+        <li>Granada: 6d6 en área de 3m</li>
+        <li>Hoja Mantis (cromo): 2d6</li>
+        <li>Brazo de Combate (cromo): 3d6</li>
+      </ul></div>
     </div>
+
     <div class="tpage" id="tut-combat">
-      <div class="rule"><h3>INICIATIVA</h3><div class="formula">INICIATIVA = 1d10 + REF</div><p>Cada turno: <b>Mover + Acción</b>. Movimiento = MOVE × 3 metros.</p></div>
-      <div class="rule"><h3>ATACAR</h3><div class="formula">1d10 + REF + Habilidad de Arma vs. DV del Objetivo</div><p>DV base en combate: 15. Cobertura añade +2 a +6. Si aciertas, tira daño menos la Armadura (SP) del objetivo.</p></div>
-      <div class="rule"><h3>HP Y DAÑO CRÍTICO</h3><p><b>HP = 10 + BODY×5</b>. A mitad de HP: −2 a todas las tiradas. Con 8+ daño de un golpe → posible Critical Injury (efectos graves y duraderos).</p></div>
+      <div class="rule"><h3>ORDEN DE COMBATE</h3><ol style="padding-left:16px;color:var(--t2);font-size:13px;line-height:2">
+        <li>Todos tiran <b>Iniciativa</b> (1d10 + REF). Orden descendente.</li>
+        <li>En tu turno: <b>Mover</b> (MOVE×3m) + <b>1 Acción</b></li>
+        <li>Declaras ataque → tiras 1d10 + REF + Habilidad vs DV15 (o más con cobertura)</li>
+        <li>Si impactas: tiras daño del arma − SP de armadura del objetivo</li>
+        <li>El GM narra el resultado</li>
+      </ol></div>
+      <div class="rule"><h3>ATACAR</h3><div class="formula">1d10 + REF + Habilidad de Arma vs. DV del Objetivo</div>
+        <ul><li>DV base en combate: <b>15</b></li><li>Cobertura parcial: +2 DV · Cobertura total: +6 DV</li><li>Objetivo en movimiento: +2 DV · Distancia larga: +4 DV</li><li>Apuntar (gasta acción): −2 DV al siguiente ataque</li></ul></div>
+      <div class="rule"><h3>DAÑO Y ARMADURA</h3><div class="formula">Daño recibido = Dados de arma − SP de armadura</div>
+        <ul><li>SP de armadura se degrada −1 por cada impacto que lo supere</li><li>A mitad de HP: −2 a todas las tiradas</li><li>Con 8+ daño de un golpe: tirada de <b>Critical Injury</b> (tabla del GM)</li><li>HP = 0: incapacitado. Mueres sin atención médica en 1d6 minutos</li></ul></div>
+      <div class="rule"><h3>ACCIONES ESPECIALES</h3><ul>
+        <li><b>Disparo en ráfaga (SMG/AR):</b> −2 DV del objetivo, gasta 10 balas</li>
+        <li><b>Disparo al vuelo:</b> Puedes moverte Y atacar pero −4 a la tirada</li>
+        <li><b>Apuntar parte del cuerpo:</b> +4 DV pero efectos especiales si aciertas</li>
+        <li><b>Esquivar/Evadir:</b> Reacción con 1d10 + DEX o REF contra el ataque</li>
+        <li><b>Forcejear:</b> 1d10 + BODY + Brawling vs 1d10 + BODY del rival</li>
+      </ul></div>
+      <div class="rule"><h3>CRITICAL INJURIES (D10)</h3><ul>
+        <li>1-2: Herida en brazo — −2 a acciones con ese brazo</li>
+        <li>3-4: Herida en pierna — velocidad reducida a la mitad</li>
+        <li>5-6: Herida en torso — −2 a todas las tiradas</li>
+        <li>7: Herida en cabeza — −4 a INT/COOL/WILL durante la sesión</li>
+        <li>8: Implante dañado — uno al azar deja de funcionar</li>
+        <li>9-10: Herida crítica — incapacitado, necesita cirugía o muere en 1d6 rondas</li>
+      </ul></div>
     </div>
+
+    <div class="tpage" id="tut-netrun">
+      <div class="rule"><h3>REQUISITOS PARA HACKEAR</h3><p>Para usar cualquier hackeo en partida necesitas <b>ambos</b>:</p><ul>
+        <li><b>Neurovínculo Básico</b> — interfaz cerebro-máquina</li>
+        <li><b>Cyberdeck</b> — hardware para ejecutar programas (integrado o externo)</li>
+      </ul><p style="margin-top:8px;color:var(--r3)">Sin ambos implantes, los hackeos no están disponibles aunque seas Netrunner de rol.</p></div>
+      <div class="rule"><h3>CÓMO FUNCIONA INTERFACE</h3><div class="formula">1d10 + INT + Interface vs DV del sistema / ICE</div><ul>
+        <li>Cada hackeo cuesta RAM. Tu deck tiene RAM máxima.</li>
+        <li>La RAM se recupera al desconectarte del Ciberespacio</li>
+        <li>Si tu RAM llega a 0: desconexión forzada + posible daño mental</li>
+        <li>ICE (Intrusion Countermeasures Electronics) defiende redes enemigas</li>
+      </ul></div>
+      <div class="rule"><h3>EL CIBERESPACIO EN 2045</h3><p>Desde la <b>Cuarta Guerra Corporativa</b>, el Ciberespacio está fragmentado. La <b>Blackwall</b> separa la red pública del Viejo Net, infestado de IAs salvajes. Los Netrunners navegan redes locales, no el Net global — demasiado peligroso. Sigue siendo mortal.</p></div>
+      <div class="rule"><h3>RAM Y PROGRAMAS</h3><ul>
+        <li>Cada programa ocupa 1 slot de tu deck</li>
+        <li>Ejecutar un programa gasta su coste en RAM</li>
+        <li>RAM básica: 4 (deck básico) · Avanzada: 7–10</li>
+        <li>Daño que supere tu RAM máxima → Critical Injury mental</li>
+      </ul></div>
+      <div class="rule"><h3>HACKEOS CATEGORIZADOS</h3><ul>
+        <li><b style="color:var(--r2)">Ataque:</b> Zap, Neural Spike, System Collapse — dañan targets</li>
+        <li><b style="color:var(--c)">Defensa:</b> Phantom, Ghost — protegen o camuflan</li>
+        <li><b style="color:var(--y2)">Control:</b> Remote Override, Memory Wipe — controlan sistemas</li>
+        <li><b style="color:var(--green)">Virus:</b> Contagion — efectos persistentes y propagables</li>
+        <li><b style="color:#9b59b6">Utility:</b> Breach Protocol — acceso e intrusión</li>
+      </ul></div>
+    </div>
+
     <div class="tpage" id="tut-cyber">
-      <div class="rule"><h3>CYBERPSICOSIS</h3><p>Demasiado cromo disocia tu psique. Pierdes empatía, te vuelves paranoico y violento. La <b>PH (Puntuación de Humanidad)</b> mide cuánto queda de humano en ti.</p><div class="formula">PH Máxima = EMP × 10</div></div>
+      <div class="rule"><h3>CYBERPSICOSIS — LA ENFERMEDAD DE NIGHT CITY</h3><p>Cada implante te cuesta Humanidad. El cromo no mata tu alma — el abandono lo hace. La cyberpsicosis es el resultado de trauma acumulado sin apoyo, usando el cromo como mecanismo de escape.</p><div class="formula">PH Máxima = EMP × 10</div></div>
       <div style="background:var(--d2);border:1px solid var(--g3);padding:16px;margin-bottom:14px">
         <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;margin-bottom:10px">// SIMULADOR DE HUMANIDAD //</div>
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
@@ -801,11 +962,48 @@ nav a.active{color:var(--r2);border-bottom-color:var(--r)}
         <div class="ph-bar-wrap"><div class="ph-bar" id="ph-sim-bar" style="width:75%"></div></div>
         <div class="ph-state" id="ph-sim-state"></div>
       </div>
+      <div class="rule"><h3>TIRADA DE CONTROL DE HUMANIDAD</h3><div class="formula">1d10 + WILL vs DV variable (GM decide por estrés)</div><ul>
+        <li>PH &gt;80%: Solo en situaciones extremas</li>
+        <li>PH 60-80%: Situaciones de estrés moderado</li>
+        <li>PH 40-60%: Cualquier violencia intensa</li>
+        <li>PH 20-40%: Cada vez que el personaje es herido</li>
+        <li>PH &lt;20%: Inicio de cada turno en combate</li>
+        <li>PH 0%: GM toma control total del personaje</li>
+      </ul></div>
+      <div class="rule"><h3>RECUPERAR HUMANIDAD</h3><ul>
+        <li>Terapia entre sesiones: 2d6 PH (requiere terapeuta y tiempo)</li>
+        <li>Extraer un implante voluntariamente: recupera su costo en PH</li>
+        <li>Roleplay excepcional de humanidad: 1d6 PH (a discreción del GM)</li>
+        <li>Medtech con habilidad de terapia: 1d6 PH por sesión de terapia</li>
+      </ul></div>
+      <div class="rule" style="border-left-color:var(--r)"><h3>ESTO NO ES UN MONSTRUO</h3><p>Ezra Dach no eligió convertirse en el Carnicero. El Proyecto Anima, Militech, el sistema — todos son cómplices. La cyberpsicosis en esta campaña es una metáfora del trauma institucionalizado. La pregunta no es "¿cómo lo matamos?" sino "¿cómo evitamos convertirnos en él?"</p></div>
     </div>
+
+    <div class="tpage" id="tut-roles">
+      <div class="rule"><h3>SOLO — COMBATE AWARENESS</h3><p>Por cada nivel de Combate Awareness: +1 a todas las defensas y evasión. El Solo ve amenazas antes de que existan. Acceso prioritario a cromo ofensivo/defensivo militar. En esta campaña: el más expuesto a la violencia y al riesgo de PH.</p></div>
+      <div class="rule"><h3>NETRUNNER — INTERFACE</h3><p>Ejecuta Programas contra objetivos en rango de Interface. Cada nivel desbloquea Programas más potentes. <b>Requiere Neurovínculo + Cyberdeck.</b> En esta campaña: la clave para hackear los archivos del Proyecto Anima.</p></div>
+      <div class="rule"><h3>TECHIE — FABRICAR/REPARAR</h3><p>Puede fabricar equipo, reparar cromo y modificar armas con tiempo y materiales. Reduce costos de instalación de implantes. En esta campaña: el único que puede potencialmente desarrollar una cura para la cyberpsicosis.</p></div>
+      <div class="rule"><h3>MEDTECH — MEDICINA DE CAMPO</h3><p>Trata Critical Injuries, realiza cirugías de emergencia, instala/extrae cromo. Puede recuperar PH mediante terapia entre sesiones (1d6 por paciente). En esta campaña: rol narrativo central — ¿salvas a Ezra o lo reportas?</p></div>
+      <div class="rule"><h3>CORPO — RECURSOS CORPORATIVOS</h3><p>Acceso a información clasificada, equipo de alta gama y contactos corporativos (Arasaka, Militech, Kang Tao). Especialmente útil para investigar el Proyecto Anima desde dentro. Alerta: alguien en Militech ya sabe quién eres.</p></div>
+      <div class="rule"><h3>ROCKERBOY — CARISMA INSPIRACIONAL</h3><p>Inspira o manipula grupos. Tu música y reputación son armas. Útil para mover a las masas y exponer el escándalo Anima a los medios. El más humano del grupo — y el más en riesgo de perder esa humanidad si el sistema lo rompe.</p></div>
+    </div>
+
     <div class="tpage" id="tut-tips">
-      <div class="rule"><h3>FALLA CON ESTILO</h3><p>Cuando fallas, aprovecha el drama. Las mejores historias nacen cuando todo sale mal.</p></div>
-      <div class="rule"><h3>EL CROMO NO TE DEFINE</h3><p>La trampa clásica: hacerte una lista de implantes. Tu personaje son sus miedos, motivaciones y contradicciones — no su inventario de cromo.</p></div>
-      <div class="rule"><h3>EL CARNICERO ES UN ESPEJO</h3><p>Ezra Dach no es un monstruo que matar. Es lo que pasa cuando nadie ayuda. La pregunta de la campaña no es "¿cómo lo detenemos?" — es "¿cómo nos aseguramos de que ninguno de nosotros llegue ahí?"</p></div>
+      <div class="rule"><h3>FALLA CON ESTILO</h3><p>Cuando fallas, aprovecha el drama. Las mejores historias de Night City nacen cuando todo sale mal. Un 1 en el dado no es el fin — es el comienzo de algo peor y más interesante.</p></div>
+      <div class="rule"><h3>EL CROMO NO TE DEFINE</h3><p>La trampa clásica: hacerte una lista de implantes. Tu personaje son sus miedos, motivaciones y contradicciones — no su inventario. El Carnicero tenía 47 implantes. También recordaba el nombre de cada persona que dañó.</p></div>
+      <div class="rule"><h3>SESIÓN CERO — OBLIGATORIA</h3><ul>
+        <li>Define tus líneas rojas como jugador (no solo como personaje)</li>
+        <li>Establece el tono: esta campaña es noir y horror, no power fantasy</li>
+        <li>Conecta tu trasfondo con el tema de la cyberpsicosis</li>
+        <li>Elige cómo tu personaje conoce a los demás</li>
+        <li>El GM debe preguntar: ¿alguien en tu vida ha sufrido trauma de cromo?</li>
+      </ul></div>
+      <div class="rule"><h3>HERRAMIENTAS DEL GM</h3><ul>
+        <li><b>El reloj de amenaza:</b> 6 segmentos. Cada vez que Militech gana terreno, avanza. A 6: los archivos desaparecen.</li>
+        <li><b>La humanidad del grupo:</b> Si el grupo colectivamente pierde 50+ PH en una sesión, la PH del siguiente enemigo baja 10.</li>
+        <li><b>Escenas sin violencia:</b> Por cada escena de acción, incluye una de conversación. Night City no es solo balas.</li>
+      </ul></div>
+      <div class="rule" style="border-left-color:var(--r)"><h3>EL CARNICERO ES UN ESPEJO</h3><p>Ezra Dach no es un monstruo que matar. Es lo que pasa cuando nadie ayuda. La pregunta de la campaña no es "¿cómo lo detenemos?" — es "¿cómo nos aseguramos de que ninguno de nosotros llegue ahí?"</p></div>
     </div>
   </div>
 </div>
@@ -918,15 +1116,80 @@ function checkNpc(btn,pass){
 
 // === TUTORIAL ===
 let selDiceN=10;
+let currentRollType='libre';
 function selDice(n,btn){selDiceN=n;document.querySelectorAll('.d-btn').forEach(b=>b.classList.remove('act'));btn.classList.add('act');}
+function setRollType(type,btn){
+  currentRollType=type;
+  document.querySelectorAll('#roll-type-btns .d-btn').forEach(b=>b.classList.remove('act'));
+  btn.classList.add('act');
+  ['libre','dv','daño','iniciativa','ph'].forEach(t=>{
+    const el=document.getElementById('roll-panel-'+t);
+    if(el)el.style.display=t===type?'block':'none';
+  });
+  document.getElementById('d-res').textContent='—';
+  document.getElementById('d-det').textContent='Presiona TIRAR';
+}
 function rollDice(){
-  const cnt=parseInt(document.getElementById('dc').value)||1;
-  let res=[],tot=0;
-  for(let i=0;i<cnt;i++){const r=Math.floor(Math.random()*selDiceN)+1;res.push(r);tot+=r;}
   const rEl=document.getElementById('d-res'),dEl=document.getElementById('d-det');
-  rEl.textContent=tot;
-  rEl.style.color=tot===selDiceN&&cnt===1?'#ff4444':tot===1&&cnt===1?'var(--c)':'var(--y)';
-  dEl.textContent=cnt>1?'['+res.join('+')+'] = '+tot:tot===selDiceN?'¡CRÍTICO!':tot===1?'¡FUMBLE!':'1d'+selDiceN+' → '+tot;
+  if(currentRollType==='libre'){
+    const cnt=parseInt(document.getElementById('dc').value)||1;
+    let res=[],tot=0;
+    for(let i=0;i<cnt;i++){const r=Math.floor(Math.random()*selDiceN)+1;res.push(r);tot+=r;}
+    rEl.textContent=tot;
+    rEl.style.color=tot===selDiceN&&cnt===1?'#ff4444':tot===1&&cnt===1?'var(--c)':'var(--y)';
+    dEl.textContent=cnt>1?'['+res.join('+')+'] = '+tot:tot===selDiceN?'¡CRÍTICO!':tot===1?'¡FUMBLE!':'1d'+selDiceN+' → '+tot;
+  }else if(currentRollType==='dv'){
+    const stat=parseInt(document.getElementById('dv-stat').value)||0;
+    const skill=parseInt(document.getElementById('dv-skill').value)||0;
+    const dv=parseInt(document.getElementById('dv-target').value)||13;
+    const dado=Math.floor(Math.random()*10)+1;
+    let extra=0,critico=dado===10,fumble=false;
+    if(dado===10){extra=Math.floor(Math.random()*10)+1;}
+    if(dado===1){const c2=Math.floor(Math.random()*10)+1;if(c2===1)fumble=true;}
+    const total=dado+extra+stat+skill;
+    const exito=total>=dv;
+    rEl.textContent=total;
+    rEl.style.color=fumble?'#888':exito?'var(--green)':'var(--r2)';
+    let det=`Dado: ${dado}${extra>0?'+'+extra:''} + STAT:${stat} + HABIL:${skill} = ${total}\nvs DV${dv} → `;
+    if(fumble)det+='⚠ FUMBLE';
+    else if(critico)det+='★ CRÍTICO — '+( exito?'ÉXITO':'FALLO — el GM decide');
+    else det+=exito?'✓ ÉXITO':'✗ FALLO (por '+(dv-total)+')';
+    dEl.textContent=det;
+  }else if(currentRollType==='daño'){
+    const diceStr=document.getElementById('dmg-dice').value;
+    const sp=parseInt(document.getElementById('dmg-sp').value)||0;
+    const bonus=parseInt(document.getElementById('dmg-bonus').value)||0;
+    const [nStr,xStr]=diceStr.split('d');
+    const n=parseInt(nStr),x=parseInt(xStr);
+    let res=[],tot=0;
+    for(let i=0;i<n;i++){const r=Math.floor(Math.random()*x)+1;res.push(r);tot+=r;}
+    tot+=bonus;
+    const final=Math.max(0,tot-sp);
+    rEl.textContent=final;
+    rEl.style.color=final===0?'var(--g)':final>=8?'var(--r)':'var(--y)';
+    let det=`[${res.join('+')}]${bonus!==0?(bonus>0?'+'+bonus:bonus):''}=Bruto:${tot} − SP:${sp} = ${final} daño`;
+    if(final===0)det+='\n✓ ARMADURA ABSORBE TODO';
+    else if(final>=8)det+='\n⚠ 8+ DAÑO — posible Critical Injury';
+    dEl.textContent=det;
+  }else if(currentRollType==='iniciativa'){
+    const ref=parseInt(document.getElementById('init-ref').value)||0;
+    const dado=Math.floor(Math.random()*10)+1;
+    const total=dado+ref;
+    rEl.textContent=total;
+    rEl.style.color='var(--y)';
+    dEl.textContent=`1d10(${dado}) + REF(${ref}) = ${total}\n${dado===10?'¡Primer turno garantizado!':dado===1?'Último en actuar posiblemente':'Iniciativa registrada'}`;
+  }else if(currentRollType==='ph'){
+    const pct=parseInt(document.getElementById('ph-ctrl-pct').value)||0;
+    const will=parseInt(document.getElementById('ph-ctrl-will').value)||0;
+    let dvCtrl=pct>80?9:pct>60?11:pct>40?13:pct>20?15:17;
+    const dado=Math.floor(Math.random()*10)+1;
+    let extra=0;if(dado===10)extra=Math.floor(Math.random()*10)+1;
+    const total=dado+extra+will;
+    const exito=total>=dvCtrl;
+    rEl.textContent=total;
+    rEl.style.color=exito?'var(--green)':'var(--r2)';
+    dEl.textContent=`1d10(${dado}${extra?'+'+extra:''}) + WILL(${will}) = ${total}\nvs DV${dvCtrl} (PH ${pct}%) → ${exito?'✓ MANTIENES EL CONTROL':'✗ PIERDES EL CONTROL — GM actúa'}`;
+  }
 }
 function showTut(id,btn){
   document.querySelectorAll('.tpage').forEach(p=>p.classList.remove('active'));

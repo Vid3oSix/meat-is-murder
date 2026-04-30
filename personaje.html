@@ -550,12 +550,13 @@ input[type=file]{display:none}
   </div>
 
   <div class="sh">Catálogo de Cromo Oficial</div>
-  <div class="cw-filter" id="cw-filter">
+ <div class="cw-filter" id="cw-filter">
     <button class="cwf active" onclick="filterCW('all',this)">TODO</button>
     <button class="cwf" onclick="filterCW('Neural',this)">NEURAL</button>
     <button class="cwf" onclick="filterCW('Óptico',this)">ÓPTICO</button>
     <button class="cwf" onclick="filterCW('Cuerpo',this)">CUERPO</button>
     <button class="cwf" onclick="filterCW('Orgánico',this)">ORGÁNICO</button>
+    <button class="cwf" onclick="filterCW('Cyberdeck',this)" style="border-color:rgba(52,152,219,.4);color:#5dade2">CYBERDECKS</button>
   </div>
   <div class="cw-list" id="cw-list"></div>
 
@@ -818,6 +819,12 @@ const CW_DB=[
   {n:'Corazón de Titanio',t:'Orgánico',cost:21,req:'Solo/Medtech',desc:'Funciona hasta 20% de HP. Resistencia extrema a trauma cardíaco.',tag:'solo'},
   {n:'Supra-Adrenales',t:'Orgánico',cost:14,req:'Solo/Corpo',desc:'1 vez/sesión: +3 a TODAS las acciones durante 1 ronda completa.',tag:'solo'},
   {n:'Parche Biométrico Corp',t:'Orgánico',cost:7,req:'Corpo',desc:'Biometría corporativa. Puertas y sistemas de seguridad de corp te reconocen.',tag:'cor'},
+  // CYBERDECKS
+  {n:'Cyberdeck Básico (Militech Paraline)',t:'Cyberdeck',cost:0,req:'Netrunner',desc:'Deck de entrada. RAM: 4. Slots de programa: 3. Velocidad de Interface: estándar. Compatible con Neurovínculo.',tag:'net'},
+  {n:'Cyberdeck Avanzado (Raven Microcyb)',t:'Cyberdeck',cost:0,req:'Netrunner',desc:'RAM: 7. Slots de programa: 5. +1 a tiradas de Interface. Cifrado integrado nivel 2.',tag:'net'},
+  {n:'Cyberdeck Militar (Arasaka MK.IV)',t:'Cyberdeck',cost:0,req:'Netrunner',desc:'RAM: 10. Slots: 8. Bypass de ICE básico automático. Acceso a redes militares. Ilegal.',tag:'net'},
+  {n:'Cyberdeck Callejero (Homemade Rig)',t:'Cyberdeck',cost:0,req:'Netrunner',desc:'RAM: 3. Slots: 2. Poco fiable — 1/sesión puede fallar en el momento crítico. Barato e indetectable.',tag:'net'},
+  {n:'Cyberdeck Corpo (NetWatch Issue)',t:'Cyberdeck',cost:0,req:'Netrunner/Corpo',desc:'RAM: 6. Slots: 4. Monitorizado por NetWatch — puede dejar rastro. Acceso a redes corporativas.',tag:'net'},
 ];
 const HACKS=[
   {n:'Zap',cost:'1 RAM',atk:'Interface vs DV8',desc:'Descarga eléctrica. 1d6 daño eléctrico a cromo del objetivo.'},
@@ -1223,6 +1230,17 @@ function filterCW(f,btn){
   document.querySelectorAll('.cwf').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
   renderCWList();
 }
+function hasImplant(name){
+  const offHas=S.cyberware.some(i=>CW_DB[i].n.toLowerCase().includes(name.toLowerCase()));
+  const custHas=(S.customCW||[]).some(c=>c.equipped&&c.name.toLowerCase().includes(name.toLowerCase()));
+  return offHas||custHas;
+}
+function netrunnerCanHack(){
+  return hasImplant('Neurovínculo')||hasImplant('neurovínculo')||hasImplant('neurovinculo');
+}
+function netrunnerHasDeck(){
+  return hasImplant('Deck')||hasImplant('deck')||hasImplant('Interface Integrado')||hasImplant('Danza Fantasma');
+}
 function renderCyware(){
   updPH();
   renderCWList();
@@ -1230,10 +1248,45 @@ function renderCyware(){
   const hs=document.getElementById('hack-section');
   if(hs)hs.style.display=S.role==='Netrunner'?'block':'none';
   if(S.role==='Netrunner'){
+    const canHack=netrunnerCanHack();
+    const hasDeck=netrunnerHasDeck();
+    const hackLock=document.getElementById('hack-lock-msg');
+    if(hackLock)hackLock.remove();
     const hl=document.getElementById('hack-list');if(!hl)return;
-    hl.innerHTML=HACKS.map(h=>`<div class="hack"><div class="hack-n">${h.n}</div><div class="hack-m">${h.cost} · ${h.atk}</div><div class="hack-d">${h.desc}</div></div>`).join('');
+    if(!canHack||!hasDeck){
+      const msg=document.createElement('div');
+      msg.id='hack-lock-msg';
+      msg.style.cssText='background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.4);border-left:3px solid var(--r2);padding:14px 18px;font-family:var(--font-m);font-size:10px;color:var(--r3);line-height:2;letter-spacing:.5px;margin-bottom:12px';
+      const missing=[];
+      if(!canHack)missing.push('Neurovínculo Básico');
+      if(!hasDeck)missing.push('Deck de Interface Integrado o Interfaz Danza Fantasma');
+      msg.innerHTML=`🔒 ACCESO DENEGADO — Para usar hackeos necesitas:<br>${missing.map(m=>`<span style="color:var(--r2)">✕ ${m}</span>`).join('<br>')}`;
+      hl.parentElement.insertBefore(msg,hl);
+      hl.innerHTML=HACKS.map(h=>`<div class="hack" style="opacity:.35;pointer-events:none"><div class="hack-n">${h.n}</div><div class="hack-m">${h.cost} · ${h.atk}</div><div class="hack-d">${h.desc}</div></div>`).join('');
+    }else{
+      hl.innerHTML=HACKS.map((h,i)=>{
+        const sel=(S.selectedHacks||[]).includes(i);
+        return `<div class="hack${sel?' sel-hack':''}" style="cursor:pointer;border-left-color:${sel?'var(--green)':'#3498db'};background:${sel?'rgba(39,174,96,.07)':'var(--d4)'}" onclick="toggleHack(${i})">
+          <div style="display:flex;align-items:flex-start;gap:8px">
+            <div style="width:12px;height:12px;border:1px solid ${sel?'var(--green)':'#3498db'};flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#fff;background:${sel?'var(--green)':'transparent'}">${sel?'✓':''}</div>
+            <div>
+              <div class="hack-n">${h.n}</div>
+              <div class="hack-m">${h.cost} · ${h.atk}</div>
+              <div class="hack-d">${h.desc}</div>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    }
     renderCustomHackList();
   }
+}
+function toggleHack(i){
+  if(!S.selectedHacks)S.selectedHacks=[];
+  const idx=S.selectedHacks.indexOf(i);
+  if(idx>=0)S.selectedHacks.splice(idx,1);
+  else S.selectedHacks.push(i);
+  renderCyware();sc();
 }
 function renderCWList(){
   const g=document.getElementById('cw-list');if(!g)return;g.innerHTML='';
@@ -1477,15 +1530,29 @@ function checkLvlUp(){
 // ===================== SUMMARY =====================
 function renderSummary(){
   pullFormData();
-  const emp=S.stats.EMP,maxPH=emp*10;
+  const emp=S.stats.EMP||0,maxPH=emp*10;
   const offCost=S.cyberware.reduce((a,i)=>a+CW_DB[i].cost,0);
-  const custCost=S.customCW.filter(c=>c.equipped).reduce((a,c)=>a+parseInt(c.ph||0),0);
+  const custCost=(S.customCW||[]).filter(c=>c.equipped).reduce((a,c)=>a+parseInt(c.ph||0),0);
   const currPH=Math.max(0,maxPH-(offCost+custCost));
-  const cwNames=[...S.cyberware.map(i=>CW_DB[i].n),...S.customCW.filter(c=>c.equipped).map(c=>c.name)].join(', ')||'Sin cromo';
-  const topSk=ALL_SKILLS.filter(s=>S.skillLvl[s.n]>0).sort((a,b)=>((S.stats[b.s]||0)+(S.skillLvl[b.n]||0))-((S.stats[a.s]||0)+(S.skillLvl[a.n]||0))).slice(0,8);
+  const cwNames=[...S.cyberware.map(i=>CW_DB[i].n),...(S.customCW||[]).filter(c=>c.equipped).map(c=>c.name)].join(', ')||'Sin cromo';
+  const topSk=ALL_SKILLS.filter(s=>(S.skillLvl[s.n]||0)>0).sort((a,b)=>((S.stats[b.s]||0)+(S.skillLvl[b.n]||0))-((S.stats[a.s]||0)+(S.skillLvl[a.n]||0))).slice(0,8);
+  const allSk=ALL_SKILLS.filter(s=>(S.skillLvl[s.n]||0)>0).sort((a,b)=>((S.stats[b.s]||0)+(S.skillLvl[b.n]||0))-((S.stats[a.s]||0)+(S.skillLvl[a.n]||0)));
   const photoHtml=S.photo?`<img src="${S.photo}" style="width:90px;height:115px;object-fit:cover;border:1px solid var(--g3);flex-shrink:0">`:`<div style="width:90px;height:115px;border:1px dashed var(--g3);display:flex;align-items:center;justify-content:center;font-family:var(--font-m);font-size:8px;color:var(--g);text-align:center;flex-shrink:0">SIN<br>FOTO</div>`;
 
+  // Build skill options for roll calculator
+  const skillOpts=allSk.map(s=>{
+    const tot=(S.stats[s.s]||0)+(S.skillLvl[s.n]||0);
+    return `<option value="${tot}" data-name="${s.n}">${s.n} (${tot})</option>`;
+  }).join('');
+
+  // Weapon options for damage calc
+  const wpnOpts=[
+    ...S.weapons.map(w=>`<option value="${w.stat}">${w.name} — ${w.stat}</option>`),
+    ...S.cac.map(w=>`<option value="${w.stat}">${w.name} [CaC] — ${w.stat}</option>`),
+  ].join('')||'<option value="2d6">Sin armas — 2d6</option>';
+
   document.getElementById('summary-content').innerHTML=`
+    <!-- HEADER -->
     <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px">
       ${photoHtml}
       <div style="flex:1;min-width:150px">
@@ -1505,32 +1572,201 @@ function renderSummary(){
         </div>
       </div>
     </div>
-    <div class="sum-grid">
+
+    <!-- STATS + BONIFICACIONES -->
+    <div class="sum-grid" style="margin-bottom:14px">
       <div class="sum-block">
-        <div class="sum-t">ESTADÍSTICAS</div>
-        ${Object.entries(S.stats).map(([k,v])=>`<div class="sum-row"><span class="sum-k">${k}</span><span class="sum-v">${v}</span></div>`).join('')}
+        <div class="sum-t">ESTADÍSTICAS Y BONIFICACIONES</div>
+        ${Object.entries(S.stats).map(([k,v])=>{
+          const mods={'INT':['Hacking','Percepción','Ciencia'],'REF':['Iniciativa','Armas','Evasión'],'DEX':['Atletismo','Sigilo','CaC'],'TECH':['Reparar','Fabricar','Cybertech'],'COOL':['Persuasión','Intimidar','Calle'],'WILL':['Resistir','Concentración'],'LUCK':['Gasto en tiradas'],'MOVE':['Sprint '+(v*3)+'m/turno'],'BODY':['HP +'+(v*5),'Fuerza'],'EMP':['PH '+(v*10),'Empatía']}[k]||[];
+          return `<div class="sum-row" style="flex-direction:column;align-items:flex-start;padding:5px 0">
+            <div style="display:flex;justify-content:space-between;width:100%">
+              <span class="sum-k" style="color:var(--c)">${k}</span>
+              <span class="sum-v" style="color:var(--y);font-size:14px">${v}</span>
+            </div>
+            <div style="font-family:var(--font-m);font-size:8px;color:var(--g2);padding-left:2px">${mods.join(' · ')}</div>
+          </div>`;
+        }).join('')}
       </div>
+
       <div class="sum-block">
-        <div class="sum-t">HABILIDADES PRINCIPALES</div>
-        ${topSk.length?topSk.map(s=>`<div class="sum-row"><span class="sum-k">${s.n}</span><span class="sum-v">${(S.stats[s.s]||0)+(S.skillLvl[s.n]||0)} <span style="color:var(--c)">≈${((S.stats[s.s]||0)+(S.skillLvl[s.n]||0)+5.5).toFixed(1)}</span></span></div>`).join(''):'<div style="color:var(--g);font-size:10px">Sin habilidades distribuidas</div>'}
+        <div class="sum-t">HABILIDADES CON TOTAL</div>
+        ${allSk.length?allSk.map(s=>{
+          const base=S.stats[s.s]||0;const lv=S.skillLvl[s.n]||0;const tot=base+lv;const avg=(tot+5.5).toFixed(1);
+          const barW=Math.min(100,(tot/18)*100);
+          return `<div style="margin-bottom:8px">
+            <div style="display:flex;justify-content:space-between;font-family:var(--font-m);font-size:9px;margin-bottom:3px">
+              <span style="color:var(--t2)">${s.n} <span style="color:var(--g)">(${s.s}${base}+Habil${lv})</span></span>
+              <span style="color:var(--y)">${tot} <span style="color:var(--c)">≈${avg}</span></span>
+            </div>
+            <div style="height:4px;background:var(--d4);border:1px solid var(--g3)"><div style="height:100%;width:${barW}%;background:var(--r2)"></div></div>
+          </div>`;
+        }).join(''):'<div style="color:var(--g);font-size:10px;font-family:var(--font-m)">Sin habilidades distribuidas</div>'}
       </div>
+
       <div class="sum-block">
         <div class="sum-t">CROMO INSTALADO</div>
-        <div style="font-family:var(--font-m);font-size:9px;color:var(--t2);line-height:2">${cwNames.split(', ').map(c=>`<span style="display:block">${c}</span>`).join('')}</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--t2);line-height:2.2">
+          ${[...S.cyberware.map(i=>`<div style="display:flex;justify-content:space-between"><span>${CW_DB[i].n}</span><span style="color:var(--r3)">−${CW_DB[i].cost} PH</span></div>`),(S.customCW||[]).filter(c=>c.equipped).map(c=>`<div style="display:flex;justify-content:space-between"><span style="color:var(--y2)">${c.name}</span><span style="color:var(--r3)">−${c.ph} PH</span></div>`)].flat().join('')||'<span style="color:var(--g)">Sin cromo</span>'}
+        </div>
+        <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--g3);font-family:var(--font-m);font-size:9px">
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--g)">PH perdida por cromo</span><span style="color:var(--r3)">−${offCost+custCost}</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--g)">EMP efectiva actual</span><span style="color:var(--c)">${Math.floor(currPH/10)}</span></div>
+        </div>
       </div>
+
       <div class="sum-block">
         <div class="sum-t">HISTORIA</div>
         <div class="sum-row"><span class="sum-k">Miedo</span><span class="sum-v" style="font-size:9px">${S.fear||'—'}</span></div>
         <div class="sum-row"><span class="sum-k">Ancla</span><span class="sum-v" style="font-size:9px">${S.anchor||'—'}</span></div>
         <div class="sum-row"><span class="sum-k">Motivac.</span><span class="sum-v" style="font-size:9px">${S.motive||'—'}</span></div>
+        ${S.weapons.length||S.cac.length||S.armor.length?`
+        <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--g3)">
+          ${S.weapons.map(w=>`<div class="sum-row"><span class="sum-k">${w.name}</span><span class="sum-v" style="font-size:9px">${w.stat}</span></div>`).join('')}
+          ${S.cac.map(w=>`<div class="sum-row"><span class="sum-k">${w.name} [CaC]</span><span class="sum-v" style="font-size:9px">${w.stat}</span></div>`).join('')}
+          ${S.armor.map(a=>`<div class="sum-row"><span class="sum-k">${a.name}</span><span class="sum-v" style="font-size:9px">${a.stat}</span></div>`).join('')}
+        </div>`:''}
       </div>
-      ${(S.weapons.length||S.cac.length||S.armor.length)?`<div class="sum-block" style="grid-column:1/-1">
-        <div class="sum-t">ARMAMENTO</div>
-        ${S.weapons.map(w=>`<div class="sum-row"><span class="sum-k">${w.name}</span><span class="sum-v">${w.stat}</span></div>`).join('')}
-        ${S.cac.map(w=>`<div class="sum-row"><span class="sum-k">${w.name} [CaC]</span><span class="sum-v">${w.stat}</span></div>`).join('')}
-        ${S.armor.map(a=>`<div class="sum-row"><span class="sum-k">${a.name}</span><span class="sum-v">${a.stat}</span></div>`).join('')}
-      </div>`:''}
+    </div>
+
+    <!-- CALCULADORA DE TIRADAS -->
+    <div style="background:var(--d2);border:1px solid var(--g3);border-top:2px solid var(--r);padding:18px;margin-bottom:14px">
+      <div style="font-family:var(--font-t);font-size:10px;color:var(--r2);letter-spacing:3px;margin-bottom:14px">// CALCULADORA DE TIRADAS DE PERSONAJE</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div>
+          <div style="font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:2px;margin-bottom:5px">TIPO DE TIRADA</div>
+          <select id="calc-type" onchange="updateCalcPanel()" style="background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);font-size:10px;padding:8px 10px;width:100%;outline:none">
+            <option value="skill">Habilidad</option>
+            <option value="attack">Ataque</option>
+            <option value="damage">Daño</option>
+            <option value="initiative">Iniciativa</option>
+            <option value="ph">Control PH</option>
+          </select>
+        </div>
+        <div id="calc-panel-skill">
+          <div style="font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:2px;margin-bottom:5px">HABILIDAD</div>
+          <select id="calc-skill" style="background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);font-size:10px;padding:8px 10px;width:100%;outline:none">
+            ${skillOpts||'<option value="0">Sin habilidades</option>'}
+          </select>
+        </div>
+        <div id="calc-panel-attack" style="display:none">
+          <div style="font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:2px;margin-bottom:5px">HABILIDAD DE ATAQUE</div>
+          <select id="calc-atk-skill" style="background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);font-size:10px;padding:8px 10px;width:100%;outline:none">
+            ${skillOpts||'<option value="0">Sin habilidades</option>'}
+          </select>
+        </div>
+        <div id="calc-panel-damage" style="display:none">
+          <div style="font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:2px;margin-bottom:5px">ARMA</div>
+          <select id="calc-weapon" style="background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);font-size:10px;padding:8px 10px;width:100%;outline:none">${wpnOpts}</select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+        <div id="calc-dv-wrap">
+          <div style="font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:2px;margin-bottom:5px">DV OBJETIVO</div>
+          <select id="calc-dv" style="background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);font-size:10px;padding:8px 10px;width:100%;outline:none">
+            <option value="9">DV9 — Fácil</option>
+            <option value="13" selected>DV13 — Difícil</option>
+            <option value="15">DV15 — Combate</option>
+            <option value="17">DV17 — Imposible</option>
+            <option value="21">DV21 — Legendario</option>
+          </select>
+        </div>
+        <div id="calc-sp-wrap" style="display:none">
+          <div style="font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:2px;margin-bottom:5px">SP ARMADURA</div>
+          <input type="number" id="calc-sp" value="0" min="0" max="20" style="background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);font-size:12px;padding:8px 10px;width:100%;outline:none">
+        </div>
+        <div>
+          <div style="font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:2px;margin-bottom:5px">BONIFICACIÓN EXTRA</div>
+          <input type="number" id="calc-bonus" value="0" min="-10" max="20" style="background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);font-size:12px;padding:8px 10px;width:100%;outline:none">
+        </div>
+        <div>
+          <div style="font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:2px;margin-bottom:5px">SUERTE A GASTAR</div>
+          <input type="number" id="calc-luck" value="0" min="0" max="${S.stats.LUCK||0}" style="background:var(--d3);border:1px solid var(--g3);color:var(--t);font-family:var(--font-m);font-size:12px;padding:8px 10px;width:100%;outline:none">
+        </div>
+      </div>
+      <button onclick="calcRoll()" style="width:100%;padding:12px;background:var(--r);color:#fff;border:none;font-family:var(--font-t);font-size:11px;letter-spacing:3px;cursor:pointer;transition:background .15s;margin-bottom:12px" onmouseover="this.style.background='var(--r2)'" onmouseout="this.style.background='var(--r)'">⚄ TIRAR</button>
+      <div id="calc-result" style="display:none;background:var(--d3);border:1px solid var(--g3);padding:16px;text-align:center">
+        <div id="calc-res-num" style="font-family:var(--font-t);font-size:48px;font-weight:900;line-height:1"></div>
+        <div id="calc-res-detail" style="font-family:var(--font-m);font-size:10px;color:var(--t2);margin-top:8px;line-height:2;white-space:pre-wrap"></div>
+        <div id="calc-res-verdict" style="font-family:var(--font-t);font-size:11px;letter-spacing:2px;margin-top:8px"></div>
+      </div>
     </div>`;
+
+  // Setup calc panel logic after rendering
+  setTimeout(()=>{
+    window.updateCalcPanel=function(){
+      const type=document.getElementById('calc-type').value;
+      document.getElementById('calc-panel-skill').style.display=type==='skill'?'block':'none';
+      document.getElementById('calc-panel-attack').style.display=type==='attack'?'block':'none';
+      document.getElementById('calc-panel-damage').style.display=type==='damage'?'block':'none';
+      document.getElementById('calc-sp-wrap').style.display=type==='damage'?'block':'none';
+      document.getElementById('calc-dv-wrap').style.display=type==='damage'||type==='initiative'?'none':'block';
+    };
+    window.calcRoll=function(){
+      const type=document.getElementById('calc-type').value;
+      const bonus=parseInt(document.getElementById('calc-bonus').value)||0;
+      const luck=parseInt(document.getElementById('calc-luck').value)||0;
+      const resEl=document.getElementById('calc-result');
+      const numEl=document.getElementById('calc-res-num');
+      const detEl=document.getElementById('calc-res-detail');
+      const verdEl=document.getElementById('calc-res-verdict');
+      resEl.style.display='block';
+
+      const rollD10=()=>Math.floor(Math.random()*10)+1;
+      let dado=rollD10(),extra=0,fumble=false;
+      if(dado===10){extra=rollD10();if(extra===10)extra+=rollD10();}
+      if(dado===1){const c2=rollD10();if(c2===1)fumble=true;}
+
+      if(type==='skill'||type==='attack'){
+        const sel=document.getElementById(type==='skill'?'calc-skill':'calc-atk-skill');
+        const skillTotal=parseInt(sel.value)||0;
+        const dv=parseInt(document.getElementById('calc-dv').value)||13;
+        const total=dado+extra+skillTotal+bonus+luck;
+        const exito=total>=dv;
+        numEl.textContent=total;
+        numEl.style.color=fumble?'var(--g)':exito?'var(--green)':'var(--r2)';
+        const skName=sel.options[sel.selectedIndex]?.getAttribute('data-name')||'';
+        detEl.textContent=`Dado: ${dado}${extra>0?'+'+extra:''} + ${skName}(${skillTotal})${bonus?'+Bonus('+bonus+')':''}${luck?'+Suerte('+luck+')':''} = ${total}\nvs DV${dv}`;
+        if(fumble){verdEl.textContent='⚠ FUMBLE';verdEl.style.color='var(--g)';}
+        else if(dado===10&&extra>0){verdEl.textContent=exito?'★ CRÍTICO — ÉXITO':'★ CRÍTICO — pero FALLO';verdEl.style.color=exito?'var(--y)':'var(--r2)';}
+        else{verdEl.textContent=exito?'✓ ÉXITO':'✗ FALLO (por '+(dv-total)+')';verdEl.style.color=exito?'var(--green)':'var(--r2)';}
+      }else if(type==='damage'){
+        const wpnStr=document.getElementById('calc-weapon').value;
+        const sp=parseInt(document.getElementById('calc-sp').value)||0;
+        const match=wpnStr.match(/(\d+)d(\d+)/);
+        let rawDmg=0,rolls=[];
+        if(match){const n=parseInt(match[1]),x=parseInt(match[2]);for(let i=0;i<n;i++){const r=rollD10()%x+1;rolls.push(r);rawDmg+=r;}}
+        rawDmg+=bonus;
+        const final=Math.max(0,rawDmg-sp);
+        numEl.textContent=final;
+        numEl.style.color=final===0?'var(--g)':final>=8?'var(--r)':'var(--y)';
+        detEl.textContent=`[${rolls.join('+')}]${bonus?'+'+bonus:''} = ${rawDmg} bruto − SP(${sp}) = ${final} daño`;
+        verdEl.textContent=final===0?'✓ ARMADURA ABSORBE TODO':final>=8?'⚠ CRITICAL INJURY POSIBLE':'Daño aplicado';
+        verdEl.style.color=final===0?'var(--green)':final>=8?'var(--r)':'var(--y)';
+      }else if(type==='initiative'){
+        const ref=S.stats.REF||0;
+        const total=dado+extra+ref+bonus+luck;
+        numEl.textContent=total;
+        numEl.style.color='var(--y)';
+        numEl.style.color='var(--y)';
+        detEl.textContent=`1d10(${dado}${extra?'+'+extra:''}) + REF(${ref})${bonus?'+'+bonus:''} = ${total}`;
+        verdEl.textContent=dado===10?'¡PRIMERO EN ACTUAR!':dado===1&&fumble?'⚠ FUMBLE':'Iniciativa: '+total;
+        verdEl.style.color=dado===10?'var(--y)':dado===1&&fumble?'var(--g)':'var(--t)';
+      }else if(type==='ph'){
+        const will=S.stats.WILL||0;
+        const phPct=maxPH>0?Math.round((currPH/maxPH)*100):100;
+        const dvCtrl=phPct>80?9:phPct>60?11:phPct>40?13:phPct>20?15:17;
+        const total=dado+extra+will+bonus+luck;
+        const exito=total>=dvCtrl;
+        numEl.textContent=total;
+        numEl.style.color=exito?'var(--green)':'var(--r2)';
+        detEl.textContent=`1d10(${dado}${extra?'+'+extra:''}) + WILL(${will})${bonus?'+'+bonus:''} = ${total}\nvs DV${dvCtrl} (PH actual: ${phPct}%)`;
+        verdEl.textContent=fumble?'⚠ FUMBLE — GM actúa':exito?'✓ MANTIENES EL CONTROL':'✗ PIERDES EL CONTROL';
+        verdEl.style.color=fumble?'var(--g)':exito?'var(--green)':'var(--r)';
+      }
+    };
+    updateCalcPanel();
+  },100);
 }
 
 // ===================== SHARE =====================
