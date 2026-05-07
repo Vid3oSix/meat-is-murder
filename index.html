@@ -1521,9 +1521,18 @@ function viewFullChar(idx){
   const r=_rosterData[idx];
   if(!r||!r.full_data){showHubNotif('Sin datos de ficha disponibles.');return;}
   try{
-    sessionStorage.setItem('mim_view_char', r.full_data);
-    sessionStorage.setItem('mim_view_mode','1');
-    window.open('personaje.html?view=1','_blank');
+    // Si el personaje es del usuario actual, abrir en modo edición
+    const isOwn=currentUser&&r.user_id&&currentUser.id===r.user_id;
+    if(isOwn){
+      sessionStorage.setItem('mim_edit_char', r.full_data);
+      sessionStorage.setItem('mim_edit_mode','1');
+      sessionStorage.setItem('mim_edit_gm','0');
+      window.open('personaje.html?edit=1','_blank');
+    }else{
+      sessionStorage.setItem('mim_view_char', r.full_data);
+      sessionStorage.setItem('mim_view_mode','1');
+      window.open('personaje.html?view=1','_blank');
+    }
   }catch(e){showHubNotif('Error al abrir ficha: '+e.message);}
 }
 

@@ -769,52 +769,7 @@ input[type=file]{display:none}
     </div>
   </div>
 
-    <!-- Supabase status -->
-    <div id="pj-sb-status" style="font-family:var(--font-m);font-size:9px;letter-spacing:1px;margin-bottom:14px;padding:8px 12px;border:1px solid var(--g3);color:var(--g)">
-      ● SUPABASE: Buscando configuración...
-    </div>
 
-    <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;margin-bottom:10px">Nombre que verá el GM en la sala:</div>
-    <input type="text" id="share-playername" placeholder="Tu nombre de jugador" style="margin-bottom:10px" oninput="sc()">
-
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-      <button class="copy-btn" onclick="pushToSupabase()" id="sb-push-btn" style="background:var(--green);flex:1">↑ GUARDAR EN SALA</button>
-      <button class="copy-btn" onclick="genShare()" style="background:var(--r);flex:1">GENERAR CÓDIGO MANUAL</button>
-    </div>
-
-    <div id="sb-push-ok" style="display:none;font-family:var(--font-m);font-size:9px;color:var(--green);letter-spacing:1px;text-align:center;margin-bottom:8px">✓ FICHA ENVIADA — EL GM LA VE AHORA EN TIEMPO REAL</div>
-    <div id="sb-push-err" style="display:none;font-family:var(--font-m);font-size:9px;color:var(--r2);letter-spacing:1px;text-align:center;margin-bottom:8px"></div>
-
-    <div style="margin-top:4px;padding-top:12px;border-top:1px solid var(--g3)">
-      <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;margin-bottom:8px">ZONA DE PELIGRO</div>
-      <button onclick="deleteSelfFromSala()" style="width:100%;padding:9px;background:transparent;border:1px solid var(--r);color:var(--r2);font-family:var(--font-m);font-size:9px;letter-spacing:2px;cursor:pointer;transition:all .15s" onmouseover="this.style.background='rgba(192,57,43,.15)'" onmouseout="this.style.background='transparent'">✕ ELIMINAR MI FICHA DE LA SALA</button>
-      <div id="self-del-ok" style="display:none;font-family:var(--font-m);font-size:9px;color:var(--green);text-align:center;margin-top:6px;letter-spacing:1px">✓ FICHA ELIMINADA DE LA SALA</div>
-      <div id="self-del-err" style="display:none;font-family:var(--font-m);font-size:9px;color:var(--r2);text-align:center;margin-top:6px;letter-spacing:1px"></div>
-    </div>
-
-    <div id="share-code-out" style="display:none">
-      <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:5px">CÓDIGO MANUAL (sin Supabase):</div>
-      <div class="share-url" id="share-url-txt"></div>
-      <button class="copy-btn" onclick="copyCode()" style="margin-top:8px">COPIAR CÓDIGO</button>
-      <div class="copy-ok" id="copy-ok">✓ COPIADO</div>
-    </div>
-
-    <!-- Supabase config inline (for players who need to set it) -->
-    <details style="margin-top:14px">
-      <summary style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;cursor:pointer;user-select:none">⚙ CONFIGURAR SUPABASE</summary>
-      <div style="margin-top:10px;display:grid;gap:8px">
-        <div>
-          <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:4px">PROJECT URL</div>
-          <input type="text" id="pj-sb-url" placeholder="https://xxxx.supabase.co" style="font-size:11px">
-        </div>
-        <div>
-          <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:4px">ANON KEY</div>
-          <input type="text" id="pj-sb-key" placeholder="eyJhbGciOiJIUzI1NiIs..." style="font-size:11px">
-        </div>
-        <button onclick="savePjSbConfig()" style="padding:9px;background:var(--y2);color:#000;border:none;font-family:var(--font-m);font-size:9px;letter-spacing:2px;cursor:pointer">GUARDAR CREDENCIALES</button>
-        <div style="font-family:var(--font-m);font-size:9px;color:var(--g);line-height:1.8">El GM te dará la URL y la clave. Solo necesitas configurarlo una vez — se guarda en tu navegador.</div>
-      </div>
-    </details>
   </div>
 
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
@@ -1393,9 +1348,13 @@ function saveCW(){
   }else{
     S.customCW.push({name,desc,ph,type,roleTag,equipped:false});
   }
-  document.getElementById('cw-name').value='';document.getElementById('cw-desc').value='';document.getElementById('cw-ph').value=7;
+  document.getElementById('cw-name').value='';
+  document.getElementById('cw-desc').value='';
+  document.getElementById('cw-ph').value=7;
   try{localStorage.setItem('cpred_mim_shared_cw',JSON.stringify(S.customCW));}catch(e){}
-  renderCustomCWList();updPH();sc();showNotif('Cromo personalizado guardado');
+  pushSharedData();
+  renderCustomCWList();updPH();sc();
+  showNotif('Cromo personalizado guardado y sincronizado');
 }
 function cancelCWEdit(){
   editingCWIdx=-1;
@@ -1464,8 +1423,51 @@ function saveHack(){
   document.getElementById('hk-atk').value='';
   document.getElementById('hk-desc').value='';
   try{localStorage.setItem('cpred_mim_shared_hacks',JSON.stringify(S.customHacks));}catch(e){}
+  pushSharedData();
   renderCustomHackList();sc();
-  showNotif('Hackeo personalizado guardado');
+  showNotif('Hackeo personalizado guardado y sincronizado');
+}
+
+async function pushSharedData(){
+  if(!pjSbClient)return;
+  try{
+    await pjSbClient.from('campaign_shared').upsert([
+      {key:'custom_cw', data:JSON.stringify(S.customCW||[]), updated_at:new Date().toISOString()},
+      {key:'custom_hacks', data:JSON.stringify(S.customHacks||[]), updated_at:new Date().toISOString()}
+    ],{onConflict:'key'});
+  }catch(e){console.warn('pushSharedData error',e);}
+}
+
+async function pullSharedData(){
+  if(!pjSbClient)return;
+  try{
+    const {data,error}=await pjSbClient
+      .from('campaign_shared')
+      .select('key,data')
+      .in('key',['custom_cw','custom_hacks']);
+    if(error||!data)return;
+    data.forEach(row=>{
+      if(row.key==='custom_cw'){
+        const parsed=JSON.parse(row.data||'[]');
+        if(parsed.length>0){
+          // Merge: mantener equipped state local, añadir nuevos del servidor
+          const localMap={};
+          (S.customCW||[]).forEach(c=>localMap[c.name]=c.equipped||false);
+          S.customCW=parsed.map(c=>({...c,equipped:localMap[c.name]??c.equipped??false}));
+          try{localStorage.setItem('cpred_mim_shared_cw',JSON.stringify(S.customCW));}catch(e){}
+        }
+      }
+      if(row.key==='custom_hacks'){
+        const parsed=JSON.parse(row.data||'[]');
+        if(parsed.length>0){
+          S.customHacks=parsed;
+          try{localStorage.setItem('cpred_mim_shared_hacks',JSON.stringify(S.customHacks));}catch(e){}
+        }
+      }
+    });
+    renderCustomCWList();
+    renderCustomHackList();
+  }catch(e){console.warn('pullSharedData error',e);}
 }
 
 function cancelHackEdit(){
@@ -1504,18 +1506,35 @@ function renderCustomHackList(){
   if(!S.customHacks||!S.customHacks.length){
     g.innerHTML='<div style="font-family:var(--font-m);font-size:9px;color:var(--g2);padding:8px">Sin hackeos personalizados aún.</div>';return;
   }
+  const canHack=netrunnerCanHack&&netrunnerCanHack();
+  const hasDeck=netrunnerHasDeck&&netrunnerHasDeck();
+  const locked=!canHack||!hasDeck;
   const catColor={Ataque:'var(--r2)',Defensa:'var(--c)',Utility:'var(--y2)',Virus:'var(--green)',Control:'#9b59b6'};
-  g.innerHTML=S.customHacks.map((h,i)=>`
-    <div class="ccw-item" style="border-left-color:${catColor[h.cat]||'var(--c)'}">
-      <div style="width:13px;height:13px;border:1px solid ${catColor[h.cat]||'var(--c)'};flex-shrink:0;margin-top:2px;background:${catColor[h.cat]||'var(--c)'}22"></div>
+  if(!S.selectedCustomHacks)S.selectedCustomHacks=[];
+  g.innerHTML=S.customHacks.map((h,i)=>{
+    const sel=!locked&&(S.selectedCustomHacks||[]).includes(i);
+    const cc=catColor[h.cat]||'var(--c)';
+    return `<div class="ccw-item${sel?' sel':''}" style="border-left-color:${sel?'var(--green)':cc};opacity:${locked?'.4':'1'};${locked?'pointer-events:none':'cursor:pointer'}" onclick="toggleCustomHack_hack(${i})">
+      <div style="width:13px;height:13px;border:1px solid ${sel?'var(--green)':cc};flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#fff;background:${sel?'var(--green)':cc+'22'};">${sel?'✓':''}</div>
       <div class="cw-inf" style="flex:1">
-        <div class="cw-n" style="color:${catColor[h.cat]||'var(--c)'}">${h.name}</div>
-        <div class="cw-m">${h.cost||'—'} · ${h.atk||'—'} · <span style="color:${catColor[h.cat]||'var(--c)'}">${h.cat||''}</span></div>
+        <div class="cw-n" style="color:${sel?'var(--green)':cc}">${h.name}</div>
+        <div class="cw-m">${h.cost||'—'} · ${h.atk||'—'} · <span style="color:${cc}">${h.cat||''}</span></div>
         <div class="cw-d">${h.desc||''}</div>
       </div>
-      <button class="ccw-edit-btn" style="border-color:${catColor[h.cat]||'var(--c)'};color:${catColor[h.cat]||'var(--c)'}" onclick="editHack(${i})">EDITAR</button>
-      <button class="ccw-del-btn" onclick="deleteHack(${i})">×</button>
-    </div>`).join('');
+      <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+        <button class="ccw-edit-btn" style="border-color:${cc};color:${cc}" onclick="event.stopPropagation();editHack(${i})">EDITAR</button>
+        <button class="ccw-del-btn" onclick="event.stopPropagation();deleteHack(${i})">×</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleCustomHack_hack(i){
+  if(!S.selectedCustomHacks)S.selectedCustomHacks=[];
+  const idx=S.selectedCustomHacks.indexOf(i);
+  if(idx>=0)S.selectedCustomHacks.splice(idx,1);
+  else S.selectedCustomHacks.push(i);
+  renderCustomHackList();sc();
 }
 
 // ===================== GEAR =====================
@@ -2133,9 +2152,12 @@ window.addEventListener('DOMContentLoaded', () => {
     const sharedHacks=JSON.parse(localStorage.getItem('cpred_mim_shared_hacks')||'null');
     if(sharedHacks&&sharedHacks.length>0&&(!S.customHacks||S.customHacks.length===0)){S.customHacks=sharedHacks;}
   }catch(e){}
-  (async()=>{
+(async()=>{
     const cfg=getPjSbConfig();
-    if(cfg)await initPjSupabase(cfg.url,cfg.key);
+    if(cfg){
+      await initPjSupabase(cfg.url,cfg.key);
+      await pullSharedData();
+    }
   })();
 });
 </script>
