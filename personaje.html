@@ -702,6 +702,73 @@ input[type=file]{display:none}
   <div class="share-panel">
     <div class="share-title">SINCRONIZAR CON LA SALA</div>
 
+    <!-- AUTH STATUS -->
+    <div id="pj-auth-out" style="background:var(--d3);border:1px solid #5865F2;border-left:3px solid #5865F2;padding:14px 16px;margin-bottom:14px">
+      <div style="font-family:var(--font-m);font-size:9px;color:#7289da;letter-spacing:1px;margin-bottom:8px">IDENTIFICACIÓN REQUERIDA</div>
+      <p style="font-size:12px;color:var(--t2);margin-bottom:12px">Entra con Discord para guardar tu personaje y editarlo desde cualquier dispositivo.</p>
+      <button onclick="pjLoginDiscord()" style="display:flex;align-items:center;gap:8px;padding:10px 18px;background:#5865F2;color:#fff;border:none;font-family:var(--font-m);font-size:10px;letter-spacing:2px;cursor:pointer;width:100%;justify-content:center">
+        <svg width="16" height="12" viewBox="0 0 127.14 96.36" fill="#fff"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
+        ENTRAR CON DISCORD
+      </button>
+    </div>
+
+    <div id="pj-auth-in" style="display:none">
+      <!-- USUARIO LOGUEADO -->
+      <div style="display:flex;align-items:center;gap:10px;background:rgba(39,174,96,.08);border:1px solid rgba(39,174,96,.3);padding:10px 14px;margin-bottom:14px">
+        <div style="width:28px;height:28px;border-radius:50%;background:#5865F2;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;flex-shrink:0">✓</div>
+        <div style="flex:1">
+          <div style="font-family:var(--font-m);font-size:8px;color:var(--green);letter-spacing:1px">SESIÓN DISCORD ACTIVA</div>
+          <div id="pj-auth-name" style="font-family:var(--font-b);font-size:14px;color:#fff;font-weight:700"></div>
+        </div>
+        <button onclick="pjLogout()" style="padding:5px 10px;background:transparent;border:1px solid var(--g3);color:var(--g);font-family:var(--font-m);font-size:8px;cursor:pointer">SALIR</button>
+      </div>
+
+      <!-- CLAIM (solo si el personaje no está vinculado) -->
+      <div id="pj-claim-panel" style="display:none;background:rgba(241,196,15,.06);border:1px solid rgba(241,196,15,.3);border-left:3px solid var(--y2);padding:14px 16px;margin-bottom:14px">
+        <div style="font-family:var(--font-t);font-size:10px;color:var(--y2);letter-spacing:2px;margin-bottom:8px">RECLAMAR PERSONAJE EXISTENTE</div>
+        <p style="font-size:12px;color:var(--t2);margin-bottom:10px">Si ya tenías un personaje creado antes del nuevo sistema, introduce el PIN que te dio el GM para vincularlo a tu cuenta.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+          <div style="flex:1;min-width:120px">
+            <div style="font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:2px;margin-bottom:4px">NOMBRE DE JUGADOR</div>
+            <input type="text" id="claim-playername" placeholder="Tu nombre en la sala" style="font-size:11px">
+          </div>
+          <div style="width:100px">
+            <div style="font-family:var(--font-m);font-size:8px;color:var(--g);letter-spacing:2px;margin-bottom:4px">PIN DEL GM</div>
+            <input type="password" id="claim-pin" placeholder="••••" maxlength="8" style="font-size:14px;letter-spacing:4px">
+          </div>
+          <button onclick="claimCharacter()" style="padding:10px 16px;background:var(--y2);color:#000;border:none;font-family:var(--font-m);font-size:9px;letter-spacing:2px;cursor:pointer;flex-shrink:0">VINCULAR</button>
+        </div>
+        <div id="claim-ok" style="display:none;font-family:var(--font-m);font-size:9px;color:var(--green);margin-top:8px;letter-spacing:1px">✓ PERSONAJE VINCULADO — ahora es tuyo para siempre</div>
+        <div id="claim-err" style="display:none;font-family:var(--font-m);font-size:9px;color:var(--r2);margin-top:8px;letter-spacing:1px"></div>
+      </div>
+
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;margin-bottom:10px">Tu nombre de jugador visible en la sala:</div>
+      <input type="text" id="share-playername" placeholder="Tu nombre de jugador" style="margin-bottom:10px" oninput="sc()">
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+        <button class="copy-btn" onclick="pushToSupabase()" id="sb-push-btn" style="background:var(--green);flex:1">↑ GUARDAR EN SALA</button>
+        <button class="copy-btn" onclick="genShare()" style="background:var(--r);flex:1">CÓDIGO MANUAL</button>
+      </div>
+
+      <div id="sb-push-ok" style="display:none;font-family:var(--font-m);font-size:9px;color:var(--green);letter-spacing:1px;text-align:center;margin-bottom:8px">✓ FICHA GUARDADA EN LA SALA</div>
+      <div id="sb-push-err" style="display:none;font-family:var(--font-m);font-size:9px;color:var(--r2);letter-spacing:1px;text-align:center;margin-bottom:8px"></div>
+
+      <div style="margin-top:4px;padding-top:12px;border-top:1px solid var(--g3)">
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;margin-bottom:8px">ZONA DE PELIGRO</div>
+        <button onclick="deleteSelfFromSala()" style="width:100%;padding:9px;background:transparent;border:1px solid var(--r);color:var(--r2);font-family:var(--font-m);font-size:9px;letter-spacing:2px;cursor:pointer;transition:all .15s" onmouseover="this.style.background='rgba(192,57,43,.15)'" onmouseout="this.style.background='transparent'">✕ ELIMINAR MI FICHA DE LA SALA</button>
+        <div id="self-del-ok" style="display:none;font-family:var(--font-m);font-size:9px;color:var(--green);text-align:center;margin-top:6px;letter-spacing:1px">✓ FICHA ELIMINADA</div>
+        <div id="self-del-err" style="display:none;font-family:var(--font-m);font-size:9px;color:var(--r2);text-align:center;margin-top:6px;letter-spacing:1px"></div>
+      </div>
+    </div>
+
+    <div id="share-code-out" style="display:none;margin-top:12px">
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:5px">CÓDIGO MANUAL:</div>
+      <div class="share-url" id="share-url-txt"></div>
+      <button class="copy-btn" onclick="copyCode()" style="margin-top:8px">COPIAR CÓDIGO</button>
+      <div class="copy-ok" id="copy-ok">✓ COPIADO</div>
+    </div>
+  </div>
+
     <!-- Supabase status -->
     <div id="pj-sb-status" style="font-family:var(--font-m);font-size:9px;letter-spacing:1px;margin-bottom:14px;padding:8px 12px;border:1px solid var(--g3);color:var(--g)">
       ● SUPABASE: Buscando configuración...
@@ -1835,11 +1902,11 @@ function showNotif(msg){
 }
 
 
-// === SUPABASE (personaje.html) ===
+// === SUPABASE + AUTH (personaje.html) ===
 let pjSbClient=null;
+let pjCurrentUser=null;
 
 function getPjSbConfig(){
-  // Embedded credentials — no manual setup needed
   const _URL='https://fnmtkxxpimlvyqtcgily.supabase.co';
   const _KEY='sb_publishable_rbzFrcJLnyuVk3smcJFW8g_6rl0eoUN';
   try{
@@ -1847,17 +1914,8 @@ function getPjSbConfig(){
     return stored||{url:_URL,key:_KEY};
   }catch(e){return{url:_URL,key:_KEY};}
 }
-function savePjSbConfig(){
-  const url=document.getElementById('pj-sb-url').value.trim();
-  const key=document.getElementById('pj-sb-key').value.trim();
-  if(!url||!key){showNotif('Rellena URL y Key');return;}
-  localStorage.setItem('mim_sb_config',JSON.stringify({url,key}));
-  initPjSupabase(url,key);
-}
 
 async function initPjSupabase(url,key){
-  const statusEl=document.getElementById('pj-sb-status');
-  if(statusEl)statusEl.textContent='● SUPABASE: Conectando...';
   if(!window.supabase){
     await new Promise((res,rej)=>{
       const s=document.createElement('script');
@@ -1869,31 +1927,122 @@ async function initPjSupabase(url,key){
     pjSbClient=window.supabase.createClient(url,key);
     const {error}=await pjSbClient.from('personajes').select('id').limit(1);
     if(error)throw error;
-    if(statusEl){statusEl.textContent='● SUPABASE: CONECTADO ✓';statusEl.style.color='var(--green)';statusEl.style.borderColor='rgba(39,174,96,.3)';}
-    showNotif('Supabase conectado');
+    // Auth state
+    const {data:{session}}=await pjSbClient.auth.getSession();
+    if(session)onPjAuth(session.user);
+    pjSbClient.auth.onAuthStateChange((_,session)=>{
+      onPjAuth(session?session.user:null);
+    });
   }catch(e){
-    if(statusEl){statusEl.textContent='● SUPABASE: ERROR — '+((e&&e.message)||'Credenciales inválidas');statusEl.style.color='var(--r2)';}
+    console.warn('Supabase init error',e);
     pjSbClient=null;
   }
 }
 
-async function pushToSupabase(){
-  if(!pjSbClient){showNotif('Supabase no conectado. Configúralo primero.');return;}
-  pullFormData();
-  const playerName=gv('share-playername')||S.name||'Jugador';
-  S.playerName=playerName;
+function onPjAuth(user){
+  pjCurrentUser=user;
+  const outEl=document.getElementById('pj-auth-out');
+  const inEl=document.getElementById('pj-auth-in');
+  const nameEl=document.getElementById('pj-auth-name');
+  if(!outEl||!inEl)return;
+  if(user){
+    const name=user.user_metadata?.full_name||user.user_metadata?.name||user.email||'Jugador';
+    if(nameEl)nameEl.textContent=name;
+    // Prefill player name if empty
+    const pnEl=document.getElementById('share-playername');
+    if(pnEl&&!pnEl.value)pnEl.value=S.playerName||name;
+    outEl.style.display='none';
+    inEl.style.display='block';
+    // Show claim panel only if char has no user_id yet
+    checkClaimNeeded();
+  }else{
+    outEl.style.display='block';
+    inEl.style.display='none';
+  }
+}
 
+async function checkClaimNeeded(){
+  if(!pjSbClient||!pjCurrentUser)return;
+  const charName=S.name||'';
+  const playerName=document.getElementById('share-playername')?.value||S.playerName||'';
+  if(!charName||!playerName)return;
+  const {data}=await pjSbClient
+    .from('personajes')
+    .select('user_id,claimed,claim_pin')
+    .eq('player_name',playerName)
+    .eq('char_name',charName)
+    .maybeSingle();
+  const claimPanel=document.getElementById('pj-claim-panel');
+  if(!claimPanel)return;
+  if(data&&!data.claimed&&!data.user_id){
+    // Personaje existe pero no vinculado
+    claimPanel.style.display='block';
+    const inp=document.getElementById('claim-playername');
+    if(inp)inp.value=playerName;
+  }else{
+    claimPanel.style.display='none';
+  }
+}
+
+async function claimCharacter(){
+  if(!pjSbClient||!pjCurrentUser){showNotif('Entra con Discord primero.');return;}
+  const playerName=document.getElementById('claim-playername').value.trim();
+  const pin=document.getElementById('claim-pin').value.trim();
+  const okEl=document.getElementById('claim-ok');
+  const errEl=document.getElementById('claim-err');
+  okEl.style.display='none';errEl.style.display='none';
+  if(!playerName||!pin){errEl.textContent='// Rellena nombre y PIN';errEl.style.display='block';return;}
+  // Buscar personaje con ese nombre y PIN
+  const {data,error}=await pjSbClient
+    .from('personajes')
+    .select('player_name,char_name,claim_pin,claimed,user_id')
+    .eq('player_name',playerName)
+    .maybeSingle();
+  if(error||!data){errEl.textContent='// Personaje no encontrado';errEl.style.display='block';return;}
+  if(data.claimed||data.user_id){errEl.textContent='// Este personaje ya está vinculado a otra cuenta';errEl.style.display='block';return;}
+  if(data.claim_pin!==pin){errEl.textContent='// PIN incorrecto';errEl.style.display='block';return;}
+  // Vincular
+  const {error:upErr}=await pjSbClient
+    .from('personajes')
+    .update({user_id:pjCurrentUser.id,claimed:true})
+    .eq('player_name',playerName);
+  if(upErr){errEl.textContent='// Error al vincular: '+upErr.message;errEl.style.display='block';return;}
+  okEl.style.display='block';
+  document.getElementById('pj-claim-panel').style.display='none';
+  showNotif('¡Personaje vinculado a tu cuenta Discord!');
+}
+
+async function pjLoginDiscord(){
+  if(!pjSbClient){showNotif('Conectando...');return;}
+  await pjSbClient.auth.signInWithOAuth({
+    provider:'discord',
+    options:{redirectTo:window.location.href}
+  });
+}
+
+async function pjLogout(){
+  if(!pjSbClient)return;
+  await pjSbClient.auth.signOut();
+  pjCurrentUser=null;
+  const outEl=document.getElementById('pj-auth-out');
+  const inEl=document.getElementById('pj-auth-in');
+  if(outEl)outEl.style.display='block';
+  if(inEl)inEl.style.display='none';
+}
+
+async function pushToSupabase(){
+  if(!pjSbClient){showNotif('Supabase no conectado.');return;}
+  if(!pjCurrentUser){showNotif('Entra con Discord primero para guardar.');return;}
+  pullFormData();
+  const playerName=document.getElementById('share-playername')?.value||S.playerName||S.name||'Jugador';
+  S.playerName=playerName;
   const emp=S.stats.EMP||0;const maxPH=emp*10;
-  // Use stored CW_DB costs
-  const cwCosts=[7,14,21,7,14,14,7,14,7,21,28,14,21,35,14,21,21,14,21,14,7,21,14,7,14,21,7,14];
+  const cwCosts=[7,14,21,7,14,14,7,14,7,21,28,14,21,35,14,21,21,14,21,14,7,21,14,7,14,21,7,14,0,0,0,0,0];
   const offCost=(S.cyberware||[]).reduce((a,i)=>a+(cwCosts[i]||0),0);
   const custCost=(S.customCW||[]).filter(c=>c.equipped).reduce((a,c)=>a+parseInt(c.ph||0),0);
   const currPH=Math.max(0,maxPH-(offCost+custCost));
-
-  // Compress photo to smaller size for DB storage
   let photoData=S.photo||'';
   if(photoData&&photoData.length>50000){
-    // Shrink photo via canvas
     try{
       const img=new Image();img.src=photoData;
       await new Promise(r=>img.onload=r);
@@ -1902,75 +2051,44 @@ async function pushToSupabase(){
       photoData=c.toDataURL('image/jpeg',0.5);
     }catch(e){}
   }
-
   const fullData=JSON.stringify({S,statPts,skillPts,playerName,timestamp:Date.now()});
-
   const btn=document.getElementById('sb-push-btn');
   btn.textContent='ENVIANDO...';btn.disabled=true;
   const okEl=document.getElementById('sb-push-ok');
   const errEl=document.getElementById('sb-push-err');
   okEl.style.display='none';errEl.style.display='none';
-
   try{
-    // Check if we have original identifiers from an edit session
     let origIdent=null;
     try{origIdent=JSON.parse(localStorage.getItem('mim_edit_orig')||'null');}catch(e){}
-
     let error;
     if(origIdent&&origIdent.player_name&&origIdent.char_name){
-      // UPDATE the existing row using the original player_name+char_name
-      // This ensures renaming the character doesn't create a duplicate
       ({error}=await pjSbClient.from('personajes')
         .update({
-          player_name: playerName,
-          char_name: S.name||'Sin nombre',
-          role: S.role||'',
-          role_ability: S.roleAbility||'',
-          hp: S.hp||10,
-          hp_max: S.hpMax||10,
-          ph_curr: currPH,
-          ph_max: maxPH,
-          level: S.level||1,
-          xp: S.xp||0,
-          photo: photoData,
-          full_data: fullData,
-          updated_at: new Date().toISOString()
+          player_name:playerName,char_name:S.name||'Sin nombre',
+          role:S.role||'',role_ability:S.roleAbility||'',
+          hp:S.hp||10,hp_max:S.hpMax||10,
+          ph_curr:currPH,ph_max:maxPH,
+          level:S.level||1,xp:S.xp||0,
+          photo:photoData,full_data:fullData,
+          user_id:pjCurrentUser.id,claimed:true,
+          updated_at:new Date().toISOString()
         })
-        .eq('player_name', origIdent.player_name)
-        .eq('char_name', origIdent.char_name));
-      if(!error){
-        // Update stored original to reflect new names for subsequent saves
-        localStorage.setItem('mim_edit_orig', JSON.stringify({
-          player_name: playerName,
-          char_name: S.name||'Sin nombre'
-        }));
-      }
-    } else {
-      // INSERT new row (first time saving, or normal mode)
+        .eq('player_name',origIdent.player_name)
+        .eq('char_name',origIdent.char_name));
+    }else{
       ({error}=await pjSbClient.from('personajes').upsert({
-        player_name: playerName,
-        char_name: S.name||'Sin nombre',
-        role: S.role||'',
-        role_ability: S.roleAbility||'',
-        hp: S.hp||10,
-        hp_max: S.hpMax||10,
-        ph_curr: currPH,
-        ph_max: maxPH,
-        level: S.level||1,
-        xp: S.xp||0,
-        photo: photoData,
-        full_data: fullData,
-        updated_at: new Date().toISOString()
+        player_name:playerName,char_name:S.name||'Sin nombre',
+        role:S.role||'',role_ability:S.roleAbility||'',
+        hp:S.hp||10,hp_max:S.hpMax||10,
+        ph_curr:currPH,ph_max:maxPH,
+        level:S.level||1,xp:S.xp||0,
+        photo:photoData,full_data:fullData,
+        user_id:pjCurrentUser.id,claimed:true,
+        updated_at:new Date().toISOString()
       },{onConflict:'player_name,char_name',ignoreDuplicates:false}));
-      if(!error){
-        // Store originals for any subsequent saves this session
-        localStorage.setItem('mim_edit_orig', JSON.stringify({
-          player_name: playerName,
-          char_name: S.name||'Sin nombre'
-        }));
-      }
     }
     if(error)throw error;
+    localStorage.setItem('mim_edit_orig',JSON.stringify({player_name:playerName,char_name:S.name||'Sin nombre'}));
     okEl.style.display='block';
     setTimeout(()=>okEl.style.display='none',3000);
   }catch(e){
@@ -1983,20 +2101,17 @@ async function pushToSupabase(){
 
 async function deleteSelfFromSala(){
   if(!pjSbClient){showNotif('Supabase no conectado.');return;}
+  if(!pjCurrentUser){showNotif('Entra con Discord primero.');return;}
   pullFormData();
-  const playerName=gv('share-playername')||S.playerName||S.name;
+  const playerName=document.getElementById('share-playername')?.value||S.playerName||S.name;
   const charName=S.name||'Sin nombre';
-  if(!playerName){showNotif('Introduce tu nombre de jugador primero.');return;}
-  if(!confirm(`¿Eliminar "${charName}" de la sala de campaña?\n\nEsto no borra tu ficha local — solo la quita del panel del GM.`))return;
+  if(!confirm(`¿Eliminar "${charName}" de la sala?\n\nTu ficha local se mantiene intacta.`))return;
   const okEl=document.getElementById('self-del-ok');
   const errEl=document.getElementById('self-del-err');
   okEl.style.display='none';errEl.style.display='none';
   try{
-    const {error}=await pjSbClient
-      .from('personajes')
-      .delete()
-      .eq('player_name',playerName)
-      .eq('char_name',charName);
+    const {error}=await pjSbClient.from('personajes').delete()
+      .eq('player_name',playerName).eq('char_name',charName);
     if(error)throw error;
     okEl.style.display='block';
     setTimeout(()=>okEl.style.display='none',3000);
@@ -2010,24 +2125,15 @@ async function deleteSelfFromSala(){
 // ===================== INIT =====================
 window.addEventListener('DOMContentLoaded', () => {
   loadChar();
-  // Sync shared CW and hacks from localStorage
   try{
     const sharedCW=JSON.parse(localStorage.getItem('cpred_mim_shared_cw')||'null');
     if(sharedCW&&sharedCW.length>0&&(!S.customCW||S.customCW.length===0)){S.customCW=sharedCW;renderCustomCWList();}
     const sharedHacks=JSON.parse(localStorage.getItem('cpred_mim_shared_hacks')||'null');
     if(sharedHacks&&sharedHacks.length>0&&(!S.customHacks||S.customHacks.length===0)){S.customHacks=sharedHacks;}
   }catch(e){}
-  // Init Supabase if config exists
   (async()=>{
     const cfg=getPjSbConfig();
-    const statusEl=document.getElementById('pj-sb-status');
-    if(cfg){
-      if(document.getElementById('pj-sb-url'))document.getElementById('pj-sb-url').value=cfg.url;
-      if(document.getElementById('pj-sb-key'))document.getElementById('pj-sb-key').value=cfg.key;
-      await initPjSupabase(cfg.url,cfg.key);
-    }else{
-      if(statusEl){statusEl.textContent='● SUPABASE: No configurado — Configúralo abajo';statusEl.style.color='var(--y2)';}
-    }
+    if(cfg)await initPjSupabase(cfg.url,cfg.key);
   })();
 });
 </script>

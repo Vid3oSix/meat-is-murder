@@ -581,34 +581,54 @@ nav a.active{color:var(--r2);border-bottom-color:var(--r)}
       </details>
     </div>
 
-    <!-- STATUS BAR -->
+<!-- STATUS BAR -->
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
       <div class="sh" style="margin:0">Sala de Campaña</div>
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <div id="sb-status-badge" class="live-badge" style="display:none"><div class="live-dot"></div>SUPABASE CONECTADO</div>
+        <div id="sb-status-badge" class="live-badge" style="display:none"><div class="live-dot"></div>CONECTADO</div>
         <div id="sb-offline-badge" style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:1px;padding:4px 10px;border:1px solid var(--g3)">SIN CONEXIÓN</div>
-        <div id="gm-mode-badge" style="display:none;font-family:var(--font-m);font-size:9px;color:var(--r2);letter-spacing:1px;padding:4px 10px;border:1px solid rgba(192,57,43,.4);background:rgba(192,57,43,.08)">GM ACTIVO</div>
-        <button id="gm-login-btn" onclick="toggleGmLogin()" style="background:none;border:1px solid var(--g3);color:var(--g);font-family:var(--font-m);font-size:8px;padding:4px 10px;cursor:pointer;letter-spacing:1px;transition:all .15s" onmouseover="this.style.borderColor='var(--r)';this.style.color='var(--r2)'" onmouseout="this.style.borderColor='var(--g3)';this.style.color='var(--g)'">GM LOGIN</button>
-        <button id="sb-config-btn" onclick="toggleSbSetup()" style="background:none;border:1px solid var(--g3);color:var(--g);font-family:var(--font-m);font-size:8px;padding:4px 10px;cursor:pointer;letter-spacing:1px;transition:all .15s" onmouseover="this.style.borderColor='var(--y2)';this.style.color='var(--y2)'" onmouseout="this.style.borderColor='var(--g3)';this.style.color='var(--g)'">⚙ CONFIGURAR</button>
+        <div id="gm-mode-badge" style="display:none;font-family:var(--font-m);font-size:9px;color:var(--r2);letter-spacing:1px;padding:4px 10px;border:1px solid rgba(192,57,43,.4);background:rgba(192,57,43,.08)">⚔ GM ACTIVO</div>
+        <button id="sb-config-btn" onclick="toggleSbSetup()" style="background:none;border:1px solid var(--g3);color:var(--g);font-family:var(--font-m);font-size:8px;padding:4px 10px;cursor:pointer;letter-spacing:1px;transition:all .15s" onmouseover="this.style.borderColor='var(--y2)';this.style.color='var(--y2)'" onmouseout="this.style.borderColor='var(--g3)';this.style.color='var(--g)'">⚙ CONFIG</button>
       </div>
     </div>
 
-    <!-- GM LOGIN PANEL -->
-    <div id="gm-login-panel" style="display:none;background:var(--d3);border:1px solid var(--r);border-left:3px solid var(--r);padding:18px 20px;margin-bottom:16px">
-      <div style="font-family:var(--font-t);font-size:10px;color:var(--r2);letter-spacing:2px;margin-bottom:12px">AUTENTICACIÓN GM</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
-        <div style="flex:1;min-width:130px">
-          <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:4px">USUARIO</div>
-          <input class="room-input" type="text" id="gm-user-inp" placeholder="Usuario GM" style="margin:0" onkeydown="if(event.key==='Enter')document.getElementById('gm-pass-inp').focus()">
+    <!-- AUTH PANEL -->
+    <div style="background:var(--d3);border:1px solid var(--g3);border-left:3px solid #5865F2;padding:16px 20px;margin-bottom:16px">
+      <div id="auth-logged-out" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div style="flex:1">
+          <div style="font-family:var(--font-t);font-size:10px;color:#5865F2;letter-spacing:2px;margin-bottom:4px">IDENTIFICACIÓN DE JUGADOR</div>
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--g)">Entra con Discord para editar tu personaje desde cualquier dispositivo</div>
         </div>
-        <div style="flex:1;min-width:130px">
-          <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:4px">CONTRASEÑA</div>
-          <input class="room-input" type="password" id="gm-pass-inp" placeholder="Contraseña" style="margin:0" onkeydown="if(event.key==='Enter')loginGM()">
-        </div>
-        <button class="btn btn-r" onclick="loginGM()" style="flex-shrink:0">ENTRAR</button>
-        <button class="btn btn-s" onclick="logoutGM()" id="gm-logout-btn" style="display:none;flex-shrink:0">SALIR</button>
+        <button onclick="loginWithDiscord()" style="display:flex;align-items:center;gap:8px;padding:10px 18px;background:#5865F2;color:#fff;border:none;font-family:var(--font-m);font-size:10px;letter-spacing:2px;cursor:pointer;transition:opacity .15s;flex-shrink:0" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          <svg width="18" height="14" viewBox="0 0 127.14 96.36" fill="#fff"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
+          ENTRAR CON DISCORD
+        </button>
       </div>
-      <div id="gm-login-err" style="font-family:var(--font-m);font-size:9px;color:var(--r2);margin-top:8px;display:none;letter-spacing:1px">// CREDENCIALES INCORRECTAS</div>
+      <div id="auth-logged-in" style="display:none;align-items:center;gap:14px;flex-wrap:wrap">
+        <div style="width:36px;height:36px;border-radius:50%;background:#5865F2;display:flex;align-items:center;justify-content:center;font-family:var(--font-t);font-size:14px;color:#fff;flex-shrink:0">✓</div>
+        <div style="flex:1">
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--green);letter-spacing:1px">SESIÓN ACTIVA</div>
+          <div id="auth-status-name" style="font-family:var(--font-b);font-size:15px;color:#fff;font-weight:700"></div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button onclick="activateGmMode()" id="gm-activate-btn" style="padding:7px 14px;background:transparent;border:1px solid rgba(192,57,43,.5);color:var(--r2);font-family:var(--font-m);font-size:8px;letter-spacing:1px;cursor:pointer;transition:all .15s" onmouseover="this.style.background='rgba(192,57,43,.15)'" onmouseout="this.style.background='transparent'">⚔ MODO GM</button>
+          <button onclick="logoutDiscord()" style="padding:7px 14px;background:transparent;border:1px solid var(--g3);color:var(--g);font-family:var(--font-m);font-size:8px;letter-spacing:1px;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--r)';this.style.color='var(--r2)'" onmouseout="this.style.borderColor='var(--g3)';this.style.color='var(--g)'">SALIR</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GM ACTIVATE PANEL -->
+    <div id="gm-activate-panel" style="display:none;background:var(--d3);border:1px solid var(--r);border-left:3px solid var(--r);padding:16px 20px;margin-bottom:16px">
+      <div style="font-family:var(--font-t);font-size:10px;color:var(--r2);letter-spacing:2px;margin-bottom:10px">VERIFICACIÓN GM</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+        <div style="flex:1;min-width:160px">
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--g);letter-spacing:2px;margin-bottom:4px">CONTRASEÑA GM</div>
+          <input class="room-input" type="password" id="gm-verify-pass" placeholder="Contraseña maestra" style="margin:0" onkeydown="if(event.key==='Enter')verifyGM()">
+        </div>
+        <button class="btn btn-r" onclick="verifyGM()" style="flex-shrink:0">VERIFICAR</button>
+        <button class="btn btn-s" onclick="document.getElementById('gm-activate-panel').style.display='none'" style="flex-shrink:0">CANCELAR</button>
+      </div>
+      <div id="gm-verify-err" style="font-family:var(--font-m);font-size:9px;color:var(--r2);margin-top:8px;display:none;letter-spacing:1px">// CONTRASEÑA INCORRECTA</div>
     </div>
 
     <!-- REALTIME PLAYER ROSTER -->
@@ -1230,8 +1250,7 @@ function saveSbConfig(url,key){
   localStorage.setItem('mim_sb_config',JSON.stringify({url,key}));
 }
 
-async function initSupabase(url, key){
-  // Dynamically load Supabase JS CDN
+async function loadSupabaseLib(){
   if(!window.supabase){
     await new Promise((res,rej)=>{
       const s=document.createElement('script');
@@ -1239,12 +1258,59 @@ async function initSupabase(url, key){
       s.onload=res;s.onerror=rej;document.head.appendChild(s);
     });
   }
+}
+async function initSupabase(url, key){
+  await loadSupabaseLib();
   sbClient=window.supabase.createClient(url,key);
-  // Test connection
   const {error}=await sbClient.from('personajes').select('id').limit(1);
   if(error)throw error;
+  // Check auth session
+  const {data:{session}}=await sbClient.auth.getSession();
+  if(session)onAuthStateChange(session.user);
+  sbClient.auth.onAuthStateChange((_,session)=>{
+    onAuthStateChange(session?session.user:null);
+  });
   return sbClient;
 }
+function onAuthStateChange(user){
+  currentUser=user;
+  if(user){
+    const discordName=user.user_metadata?.full_name||user.user_metadata?.name||user.email||'Usuario';
+    document.getElementById('auth-status-name').textContent=discordName;
+    document.getElementById('auth-logged-out').style.display='none';
+    document.getElementById('auth-logged-in').style.display='flex';
+    // Check if GM
+    const gmId=localStorage.getItem('mim_gm_uid');
+    if(gmId&&gmId===user.id){
+      gmModeActive=true;
+      document.getElementById('gm-mode-badge').style.display='inline-flex';
+    }
+  }else{
+    document.getElementById('auth-logged-out').style.display='flex';
+    document.getElementById('auth-logged-in').style.display='none';
+    gmModeActive=false;
+    document.getElementById('gm-mode-badge').style.display='none';
+  }
+  if(sbClient)loadRoster();
+}
+async function loginWithDiscord(){
+  if(!sbClient)return;
+  await sbClient.auth.signInWithOAuth({
+    provider:'discord',
+    options:{redirectTo:window.location.href}
+  });
+}
+async function logoutDiscord(){
+  if(!sbClient)return;
+  await sbClient.auth.signOut();
+  currentUser=null;
+  gmModeActive=false;
+  document.getElementById('auth-logged-out').style.display='flex';
+  document.getElementById('auth-logged-in').style.display='none';
+  document.getElementById('gm-mode-badge').style.display='none';
+  loadRoster();
+}
+let currentUser=null;
 
 async function saveSupabaseConfig(){
   const url=document.getElementById('sb-url').value.trim();
@@ -1306,7 +1372,7 @@ function renderRoster(rows){
     const avatar=r.photo
       ?`<img src="${r.photo}" style="width:100%;height:100%;object-fit:cover">`
       :`<span style="font-family:var(--font-t);font-size:16px;color:var(--r2)">${(r.char_name||'?').charAt(0).toUpperCase()}</span>`;
-    const isOwn=localPlayerName&&r.player_name&&localPlayerName.trim().toLowerCase()===r.player_name.trim().toLowerCase();
+    const isOwn=currentUser&&r.user_id&&currentUser.id===r.user_id;
     const canEdit=gmModeActive||isOwn;
     const canDelete=gmModeActive||isOwn;
     const editBtn=canEdit
@@ -1355,52 +1421,39 @@ function renderRoster(rows){
 // El Carnicero no eligió ese nombre. Alguien se lo puso. Alguien que lo conocía antes.
 // Los archivos del Proyecto Anima mencionan un "Sujeto_00". Solo una nota: "Control."
 let gmModeActive=false;
-const GM_USER='I_Varela';
 const GM_PASS='NCbutcher45';
 
-function toggleGmLogin(){
-  const p=document.getElementById('gm-login-panel');
-  p.style.display=p.style.display==='none'?'block':'none';
+function activateGmMode(){
+  if(!currentUser){showHubNotif('Entra con Discord primero.');return;}
+  const panel=document.getElementById('gm-activate-panel');
+  panel.style.display=panel.style.display==='none'?'block':'none';
 }
-function loginGM(){
-  const u=document.getElementById('gm-user-inp').value.trim();
-  const p=document.getElementById('gm-pass-inp').value.trim();
-  const err=document.getElementById('gm-login-err');
-  if(u===GM_USER&&p===GM_PASS){
+function verifyGM(){
+  const pass=document.getElementById('gm-verify-pass').value.trim();
+  const err=document.getElementById('gm-verify-err');
+  if(pass===GM_PASS){
     gmModeActive=true;
     document.getElementById('gm-mode-badge').style.display='inline-flex';
-    document.getElementById('gm-login-btn').style.display='none';
-    document.getElementById('gm-logout-btn').style.display='';
-    document.getElementById('gm-login-panel').style.display='none';
-    document.getElementById('gm-login-err').style.display='none';
+    document.getElementById('gm-activate-panel').style.display='none';
+    document.getElementById('gm-verify-pass').value='';
+    document.getElementById('gm-verify-err').style.display='none';
+    // Guardar uid como GM en este dispositivo
+    try{localStorage.setItem('mim_gm_uid',currentUser.id);}catch(e){}
     try{sessionStorage.setItem('mim_gm_mode','1');}catch(e){}
-    loadRoster(); // re-render with delete buttons
+    showHubNotif('Modo GM activado');
+    loadRoster();
   }else{
     err.style.display='block';
-    document.getElementById('gm-pass-inp').value='';
+    document.getElementById('gm-verify-pass').value='';
     setTimeout(()=>err.style.display='none',3000);
   }
-}
-function logoutGM(){
-  gmModeActive=false;
-  document.getElementById('gm-mode-badge').style.display='none';
-  document.getElementById('gm-login-btn').style.display='';
-  document.getElementById('gm-logout-btn').style.display='none';
-  document.getElementById('gm-user-inp').value='';
-  document.getElementById('gm-pass-inp').value='';
-  try{sessionStorage.removeItem('mim_gm_mode');}catch(e){}
-  loadRoster();
 }
 // Restore GM session
 (function(){
   try{if(sessionStorage.getItem('mim_gm_mode')==='1'){
     gmModeActive=true;
     const b=document.getElementById('gm-mode-badge');
-    const lb=document.getElementById('gm-login-btn');
-    const lo=document.getElementById('gm-logout-btn');
     if(b)b.style.display='inline-flex';
-    if(lb)lb.style.display='none';
-    if(lo)lo.style.display='';
   }}catch(e){}
 })();
 
