@@ -1297,7 +1297,9 @@ async function loginWithDiscord(){
   if(!sbClient)return;
   await sbClient.auth.signInWithOAuth({
     provider:'discord',
-    options:{redirectTo:window.location.href}
+    options:{
+      redirectTo:'https://vid3osix.github.io/meat-is-murder/index.html'
+    }
   });
 }
 async function logoutDiscord(){

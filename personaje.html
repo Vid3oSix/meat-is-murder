@@ -2016,7 +2016,9 @@ async function pjLoginDiscord(){
   if(!pjSbClient){showNotif('Conectando...');return;}
   await pjSbClient.auth.signInWithOAuth({
     provider:'discord',
-    options:{redirectTo:window.location.href}
+    options:{
+      redirectTo:'https://vid3osix.github.io/meat-is-murder/personaje.html'
+    }
   });
 }
 
